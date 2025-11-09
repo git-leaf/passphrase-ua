@@ -1,7 +1,7 @@
 # Product Requirements Document: Passphrase UA
 
-**Version:** 1.0  
-**Last Updated:** November 8, 2025  
+**Version:** 1.0.1  
+**Last Updated:** November 9, 2025  
 **Status:** Draft
 
 ---
@@ -983,7 +983,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - [ ] **Ukrainian dictionary completion**: When will dictionaries be ready?
   - **Action**: Confirm timeline with dictionary creator
 - [ ] **English dictionary licensing**: Verify we can redistribute
-  - **Action**: Review licenses (CC-BY 4.0 confirmed for Original Diceware)
+  - **Action**: Review licenses (CC-BY 3.0 confirmed for Original Diceware and EFF lists, Public Domain for Beale)
 
 ### Launch Decisions
 - [ ] **Domain name**: passphrase.ua, diceware.ua, or other?
@@ -1202,7 +1202,8 @@ Time = (2^entropy / attempts_per_second) / 2  (average case)
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
-| 1.0 | 2025-11-08 | Project Founder | Initial PRD creation based on project founder input |
+| 1.0.0 | 2025-11-08 | Project Founder | Initial PRD creation |
+| 1.0.1 | 2025-11-09 | Project Founder | Reviewed and refined PRD |
 
 ---
 
