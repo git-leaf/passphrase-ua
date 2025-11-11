@@ -1,3 +1,11 @@
+# Name: English EFF Long Diceware Dictionary
+# Format: INDEX WORD
+# Language: en
+# Dice: 5
+# Size: 7776
+# Source: https://www.eff.org/dice
+# License: Creative Commons CC-BY 3.0
+
 11111 abacus
 11112 abdomen
 11113 abdominal
