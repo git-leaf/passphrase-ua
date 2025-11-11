@@ -1,3 +1,11 @@
+# Name: English EFF Short Diceware Dictionary
+# Format: INDEX WORD
+# Language: en
+# Dice: 4
+# Size: 1296
+# Source: https://www.eff.org/dice
+# License: Creative Commons CC-BY 3.0
+
 1111 acid
 1112 acorn
 1113 acre

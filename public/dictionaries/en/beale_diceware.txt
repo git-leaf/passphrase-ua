@@ -1,3 +1,11 @@
+# Name: English Beale Diceware Dictionary
+# Format: INDEX WORD
+# Language: en
+# Dice: 5
+# Size: 7776
+# Source: https://theworld.com/~reinhold/beale.wordlist.asc
+# License: Public Domain (compiled by Alan Beale)
+
 11111 a
 11112 a's
 11113 a-1
