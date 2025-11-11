@@ -6,6 +6,46 @@
 
 ---
 
+## Table of Contents
+
+1. [Executive Summary](#1-executive-summary)
+2. [Background & Context](#2-background--context)
+3. [Target Users](#3-target-users)
+4. [Product Scope](#4-product-scope)
+5. [Technical Architecture](#5-technical-architecture)
+6. [Functional Requirements](#6-functional-requirements)
+   - [FR-1: Random Character Password Generation](#fr-1-random-character-password-generation)
+   - [FR-2: Diceware Passphrase Generation](#fr-2-diceware-passphrase-generation)
+   - [FR-3: Strength Meter](#fr-3-strength-meter)
+   - [FR-4: User Actions](#fr-4-user-actions)
+   - [FR-5: Offline Support](#fr-5-offline-support)
+   - [FR-6: Theme Support](#fr-6-theme-support)
+   - [FR-7: Settings Persistence](#fr-7-settings-persistence)
+7. [Non-Functional Requirements](#7-non-functional-requirements)
+   - [NFR-1: Security](#nfr-1-security)
+   - [NFR-2: Privacy](#nfr-2-privacy)
+   - [NFR-3: Performance](#nfr-3-performance)
+   - [NFR-4: Accessibility](#nfr-4-accessibility)
+   - [NFR-5: Browser Compatibility](#nfr-5-browser-compatibility)
+   - [NFR-6: Maintainability](#nfr-6-maintainability)
+   - [NFR-7: Extensibility](#nfr-7-extensibility)
+8. [User Interface & Experience](#8-user-interface--experience)
+9. [Success Metrics](#9-success-metrics)
+10. [Security & Privacy](#10-security--privacy)
+11. [Dictionaries](#11-dictionaries)
+12. [Roadmap](#12-roadmap)
+13. [Open Questions & Decisions Needed](#13-open-questions--decisions-needed)
+14. [Success Criteria & Definition of Done](#14-success-criteria--definition-of-done)
+15. [Resources & References](#15-resources--references)
+16. [Glossary](#16-glossary)
+17. [Approval & Sign-off](#17-approval--sign-off)
+18. [Appendices](#appendices)
+    - [Appendix A: Entropy Calculations](#appendix-a-entropy-calculations)
+    - [Appendix B: Example User Flows](#appendix-b-example-user-flows)
+19. [Revision History](#revision-history)
+
+---
+
 ## 1. Executive Summary
 
 **Passphrase UA** is a client-side password and passphrase generator with first-class support for Ukrainian language dictionaries. The project aims to fill the gap in Ukrainian-language Diceware implementations while providing a secure, privacy-focused, and user-friendly tool for generating strong passwords and passphrases across multiple languages.
