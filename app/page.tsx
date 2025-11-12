@@ -13,6 +13,18 @@ import { Input } from "@/app/components/ui/input"
 import { Copy, RefreshCw, Shield, Github, Mail } from "lucide-react"
 import { useToast } from "@/app/hooks/use-toast"
 import { ThemeToggle } from "@/app/components/theme-toggle"
+import { 
+  generatePassword, 
+  type PasswordConfig 
+} from "@/lib/generators/password"
+import { 
+  assessStrength, 
+  calculateTimeToCrack, 
+  calculateCostToCrack,
+  calculateCombinations,
+  GUESS_RATES,
+  COST_ESTIMATES
+} from "@/lib/generators/entropy"
 
 export default function Home() {
   const { toast } = useToast()
@@ -44,65 +56,41 @@ export default function Home() {
   // Generated output
   const [generatedPassword, setGeneratedPassword] = useState("")
   const [entropy, setEntropy] = useState(0)
-  const [combinations, setCombinations] = useState(BigInt(0))
-
-  const calculateEntropy = (charsetSize: number, length: number) => {
-    return Math.log2(charsetSize) * length
-  }
-
-  const calculatePasswordMetrics = (charsetSize: number, length: number) => {
-    const ent = calculateEntropy(charsetSize, length)
-    const combs = BigInt(charsetSize) ** BigInt(length)
-    setEntropy(ent)
-    setCombinations(combs)
-  }
 
   const calculatePassphraseMetrics = (wordlistSize: number, wordCt: number, hasNumbers: boolean) => {
     let ent = Math.log2(wordlistSize) * wordCt
     if (hasNumbers) {
       ent += Math.log2(10000) // 4-digit number adds ~13.3 bits
     }
-    const combs = BigInt(wordlistSize) ** BigInt(wordCt) * (hasNumbers ? BigInt(10000) : BigInt(1))
     setEntropy(ent)
-    setCombinations(combs)
   }
 
-  const generatePassword = () => {
-    let charset = ""
-    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    const lowercase = "abcdefghijklmnopqrstuvwxyz"
-    const numbers = "0123456789"
-    const symbols = "!@#$%^&*()_+-=[]{}|;:,.<>?"
-    const ambiguous = "il1Lo0O"
+  const handleGeneratePassword = () => {
+    try {
+      // Build configuration from UI state
+      const config: PasswordConfig = {
+        length: passwordLength[0],
+        includeLowercase,
+        includeUppercase,
+        includeNumbers,
+        includeSymbols,
+        excludeAmbiguous,
+      }
 
-    if (includeUppercase) charset += uppercase
-    if (includeLowercase) charset += lowercase
-    if (includeNumbers) charset += numbers
-    if (includeSymbols) charset += symbols
+      // Generate password using secure generator
+      const result = generatePassword(config)
 
-    if (excludeAmbiguous) {
-      charset = charset
-        .split("")
-        .filter((char) => !ambiguous.includes(char))
-        .join("")
-    }
-
-    if (charset.length === 0) {
+      // Update UI state
+      setGeneratedPassword(result.password)
+      setEntropy(result.entropy)
+    } catch (error) {
+      // Handle errors (e.g., invalid configuration)
       toast({
         title: "Error",
-        description: "Please select at least one character type",
+        description: error instanceof Error ? error.message : "Failed to generate password",
         variant: "destructive",
       })
-      return
     }
-
-    let password = ""
-    for (let i = 0; i < passwordLength[0]; i++) {
-      password += charset.charAt(Math.floor(Math.random() * charset.length))
-    }
-
-    setGeneratedPassword(password)
-    calculatePasswordMetrics(charset.length, passwordLength[0])
   }
 
   const generatePassphrase = () => {
@@ -186,10 +174,8 @@ export default function Home() {
   }
 
   const getStrengthFromEntropy = (ent: number) => {
-    if (ent < 40) return { label: "Weak", color: "bg-destructive" }
-    if (ent < 60) return { label: "Fair", color: "bg-amber-500" }
-    if (ent < 80) return { label: "Strong", color: "bg-emerald-500" }
-    return { label: "Very Strong", color: "bg-emerald-600" }
+    const strength = assessStrength(ent)
+    return { label: strength.label, color: strength.color }
   }
 
   const getGuessRateValue = () => {
@@ -206,41 +192,20 @@ export default function Home() {
     return Number.parseFloat(costPer32)
   }
 
-  const formatTime = (seconds: number) => {
-    if (seconds < 60) return `${seconds.toFixed(2)} seconds`
-    if (seconds < 3600) return `${(seconds / 60).toFixed(2)} minutes`
-    if (seconds < 86400) return `${(seconds / 3600).toFixed(2)} hours`
-    if (seconds < 31536000) return `${(seconds / 86400).toFixed(2)} days`
-    if (seconds < 31536000000) return `${(seconds / 31536000).toFixed(2)} years`
-    return `${(seconds / 31536000000).toFixed(2)} millennia`
-  }
-
-  const formatCost = (cost: number) => {
-    if (cost < 1000) return `$${cost.toFixed(2)}`
-    if (cost < 1000000) return `$${(cost / 1000).toFixed(2)}K`
-    if (cost < 1000000000) return `$${(cost / 1000000).toFixed(2)}M`
-    if (cost < 1000000000000) return `$${(cost / 1000000000).toFixed(2)}B`
-    return `$${(cost / 1000000000000).toFixed(2)}T`
-  }
-
-  const formatNumber = (num: bigint) => {
-    const str = num.toString()
-    if (str.length <= 15) return str.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-    const exp = str.length - 1
-    return `~10^${exp}`
-  }
-
-  const calculateTimeToCrack = () => {
+  const getTimeToCrackFormatted = () => {
     const rate = getGuessRateValue()
-    const avgGuesses = Number(combinations) / 2 // Average case
-    return avgGuesses / rate
+    const result = calculateTimeToCrack(entropy, rate)
+    return result.formatted
   }
 
-  const calculateCostToCrack = () => {
+  const getCostToCrackFormatted = () => {
     const costPer = getCostPer32Value()
-    const avgGuesses = Number(combinations) / 2
-    const numBlocks = avgGuesses / Math.pow(2, 32)
-    return numBlocks * costPer
+    const result = calculateCostToCrack(entropy, costPer)
+    return result.formatted
+  }
+
+  const getCombinationsFormatted = () => {
+    return calculateCombinations(entropy)
   }
 
   const copyToClipboard = () => {
@@ -337,7 +302,7 @@ export default function Home() {
                 </Accordion>
 
                 {/* Generate Button */}
-                <Button onClick={generatePassword} size="lg" className="w-full text-lg">
+                <Button onClick={handleGeneratePassword} size="lg" className="w-full text-lg">
                   <RefreshCw className="mr-2 h-5 w-5" />
                   Generate Password
                 </Button>
@@ -734,7 +699,7 @@ export default function Home() {
                       <Button
                         size="icon"
                         variant="ghost"
-                        onClick={activeTab === "password" ? generatePassword : generatePassphrase}
+                        onClick={activeTab === "password" ? handleGeneratePassword : generatePassphrase}
                         className="h-8 w-8"
                       >
                         <RefreshCw className="h-4 w-4" />
@@ -766,15 +731,15 @@ export default function Home() {
                     </div>
                     <div className="space-y-1">
                       <p className="text-muted-foreground">Combinations</p>
-                      <p className="font-mono font-medium">{formatNumber(combinations)}</p>
+                      <p className="font-mono font-medium">{getCombinationsFormatted()}</p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-muted-foreground">Time to Crack (avg)</p>
-                      <p className="font-mono font-medium">{formatTime(calculateTimeToCrack())}</p>
+                      <p className="font-mono font-medium">{getTimeToCrackFormatted()}</p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-muted-foreground">Cost to Crack (avg)</p>
-                      <p className="font-mono font-medium">{formatCost(calculateCostToCrack())}</p>
+                      <p className="font-mono font-medium">{getCostToCrackFormatted()}</p>
                     </div>
                   </div>
 
