@@ -18,6 +18,18 @@ export {
   type PasswordResult,
 } from './password';
 
+// Passphrase Generator
+export {
+  generatePassphrase,
+  generatePassphraseWithDictionary,
+  validatePassphraseConfig,
+  calculatePassphraseEntropy,
+  DEFAULT_PASSPHRASE_CONFIG,
+  type PassphraseConfig,
+  type PassphraseResult,
+  type CapitalizationStyle,
+} from './passphrase';
+
 // Entropy and Strength Utilities
 export {
   assessStrength,

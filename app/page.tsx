@@ -17,6 +17,10 @@ import {
   generatePassword, 
   type PasswordConfig 
 } from "@/lib/generators/password"
+import {
+  generatePassphraseWithDictionary,
+  type CapitalizationStyle
+} from "@/lib/generators/passphrase"
 import { 
   assessStrength, 
   calculateTimeToCrack, 
@@ -25,6 +29,7 @@ import {
   GUESS_RATES,
   COST_ESTIMATES
 } from "@/lib/generators/entropy"
+import { AVAILABLE_DICTIONARIES } from "@/lib/dictionaries/types"
 
 export default function Home() {
   const { toast } = useToast()
@@ -42,11 +47,12 @@ export default function Home() {
   const [wordCount, setWordCount] = useState([6])
   const [separator, setSeparator] = useState("-")
   const [customSeparator, setCustomSeparator] = useState("")
-  const [capitalize, setCapitalize] = useState(false)
+  const [capitalization, setCapitalization] = useState<CapitalizationStyle>("none")
   const [includeNumbers2, setIncludeNumbers2] = useState(false)
-  const [sourceLanguage, setSourceLanguage] = useState("english")
-  const [wordlist, setWordlist] = useState("eff-long")
+  const [sourceLanguage, setSourceLanguage] = useState<"en" | "uk">("uk")
+  const [wordlist, setWordlist] = useState("wordlist")
   const [showTransliteration, setShowTransliteration] = useState(false)
+  const [isGeneratingPassphrase, setIsGeneratingPassphrase] = useState(false)
 
   const [guessRate, setGuessRate] = useState("1e12") // 1 trillion guesses/sec
   const [customGuessRate, setCustomGuessRate] = useState("")
@@ -56,14 +62,6 @@ export default function Home() {
   // Generated output
   const [generatedPassword, setGeneratedPassword] = useState("")
   const [entropy, setEntropy] = useState(0)
-
-  const calculatePassphraseMetrics = (wordlistSize: number, wordCt: number, hasNumbers: boolean) => {
-    let ent = Math.log2(wordlistSize) * wordCt
-    if (hasNumbers) {
-      ent += Math.log2(10000) // 4-digit number adds ~13.3 bits
-    }
-    setEntropy(ent)
-  }
 
   const handleGeneratePassword = () => {
     try {
@@ -93,84 +91,39 @@ export default function Home() {
     }
   }
 
-  const generatePassphrase = () => {
-    // Mock wordlists for UI demonstration
-    const wordlists: Record<string, Record<string, string[]>> = {
-      english: {
-        "eff-long": [
-          "correct", "horse", "battery", "staple", "mountain", "river", "ocean", "forest",
-          "thunder", "lightning", "crystal", "phoenix", "dragon", "wizard", "castle", "kingdom",
-          "warrior", "champion", "victory", "triumph", "journey", "adventure", "treasure", "golden",
-          "silver", "bronze", "diamond", "emerald", "sapphire", "ruby",
-        ],
-        "eff-short": [
-          "cat", "dog", "sun", "moon", "tree", "rock", "fire", "wind",
-          "star", "cloud", "wave", "leaf", "seed", "bird", "fish", "bear",
-        ],
-        "original": [
-          "able", "acid", "aged", "also", "area", "army", "away", "baby",
-          "back", "ball", "band", "bank", "bare", "barn", "base", "bath",
-        ],
-        "beale": [
-          "aardvark", "absurd", "accrue", "acme", "adrift", "adult", "afflict", "ahead",
-          "aimless", "algol", "allow", "alone", "ammo", "ancient", "apple", "artist",
-        ],
-      },
-      ukrainian: {
-        "small": [
-          "кіт", "дім", "сон", "ліс", "море", "ріка", "гора", "місто",
-          "книга", "вікно", "двері", "стіл", "сонце", "зірка", "хмара", "вітер",
-        ],
-        "normal": [
-          "гора", "ріка", "море", "ліс", "грім", "блискавка", "кристал", "фенікс",
-          "дракон", "чарівник", "замок", "королівство", "воїн", "чемпіон", "перемога", "тріумф",
-          "подорож", "пригода", "скарб", "золотий", "срібний", "бронзовий", "діамант", "смарагд",
-        ],
-        "large": [
-          "абетка", "вибори", "галузь", "дерево", "економіка", "живопис", "завдання", "історія",
-          "кампанія", "література", "маршрут", "населення", "обладнання", "парламент", "розвиток", "суспільство",
-        ],
-      },
+  const handleGeneratePassphrase = async () => {
+    setIsGeneratingPassphrase(true)
+    
+    try {
+      // Determine separator
+      const actualSeparator = separator === "custom" ? customSeparator : separator
+
+      // Generate passphrase using the secure generator
+      const result = await generatePassphraseWithDictionary(
+        sourceLanguage,
+        wordlist,
+        {
+          wordCount: wordCount[0],
+          separator: actualSeparator,
+          capitalization,
+          includeNumber: includeNumbers2,
+          useTransliteration: showTransliteration,
+        }
+      )
+
+      // Update UI state
+      setGeneratedPassword(result.passphrase)
+      setEntropy(result.entropy)
+    } catch (error) {
+      // Handle errors (e.g., dictionary loading failure)
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to generate passphrase",
+        variant: "destructive",
+      })
+    } finally {
+      setIsGeneratingPassphrase(false)
     }
-
-    const transliterationMap: Record<string, Record<string, string>> = {
-      ukrainian: {
-        а: "a", б: "b", в: "v", г: "h", ґ: "g", д: "d", е: "e", є: "ye",
-        ж: "zh", з: "z", и: "y", і: "i", ї: "yi", й: "y", к: "k", л: "l",
-        м: "m", н: "n", о: "o", п: "p", р: "r", с: "s", т: "t", у: "u",
-        ф: "f", х: "kh", ц: "ts", ч: "ch", ш: "sh", щ: "shch", ь: "", ю: "yu", я: "ya",
-      },
-    }
-
-    const words = wordlists[sourceLanguage]?.[wordlist] || wordlists.english["eff-long"]
-
-    const passphrase = []
-    for (let i = 0; i < wordCount[0]; i++) {
-      let word = words[Math.floor(Math.random() * words.length)]
-      if (capitalize) {
-        word = word.charAt(0).toUpperCase() + word.slice(1)
-      }
-      passphrase.push(word)
-    }
-
-    const actualSeparator = separator === "custom" ? customSeparator : separator === " " ? " " : separator
-
-    let result = passphrase.join(actualSeparator)
-
-    if (includeNumbers2) {
-      result += actualSeparator + Math.floor(Math.random() * 9999)
-    }
-
-    if (showTransliteration && sourceLanguage !== "english" && transliterationMap[sourceLanguage]) {
-      const map = transliterationMap[sourceLanguage]
-      result = result
-        .split("")
-        .map((char) => map[char.toLowerCase()] || char)
-        .join("")
-    }
-
-    setGeneratedPassword(result)
-    calculatePassphraseMetrics(words.length, wordCount[0], includeNumbers2)
   }
 
   const getStrengthFromEntropy = (ent: number) => {
@@ -329,13 +282,24 @@ export default function Home() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label>Source Language</Label>
-                      <Select value={sourceLanguage} onValueChange={setSourceLanguage}>
+                      <Select 
+                        value={sourceLanguage} 
+                        onValueChange={(value) => {
+                          setSourceLanguage(value as "en" | "uk")
+                          // Reset to first available dictionary when language changes
+                          if (value === "en") {
+                            setWordlist("eff-large")
+                          } else {
+                            setWordlist("wordlist")
+                          }
+                        }}
+                      >
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="english">English</SelectItem>
-                          <SelectItem value="ukrainian">Ukrainian</SelectItem>
+                          <SelectItem value="en">English</SelectItem>
+                          <SelectItem value="uk">Ukrainian</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -347,19 +311,21 @@ export default function Home() {
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {sourceLanguage === "english" && (
+                          {sourceLanguage === "en" && (
                             <>
-                              <SelectItem value="eff-long">EFF Long List (7,776 words)</SelectItem>
-                              <SelectItem value="eff-short">EFF Short List (1,296 words)</SelectItem>
-                              <SelectItem value="original">Original Diceware (7,776 words)</SelectItem>
-                              <SelectItem value="beale">Beale List (7,776 words)</SelectItem>
+                              <SelectItem value="eff-large">{AVAILABLE_DICTIONARIES.en["eff-large"].description}</SelectItem>
+                              <SelectItem value="eff-short">{AVAILABLE_DICTIONARIES.en["eff-short"].description}</SelectItem>
+                              <SelectItem value="eff-short-2">{AVAILABLE_DICTIONARIES.en["eff-short-2"].description}</SelectItem>
+                              <SelectItem value="original">{AVAILABLE_DICTIONARIES.en.original.description}</SelectItem>
+                              <SelectItem value="beale">{AVAILABLE_DICTIONARIES.en.beale.description}</SelectItem>
                             </>
                           )}
-                          {sourceLanguage === "ukrainian" && (
+                          {sourceLanguage === "uk" && (
                             <>
-                              <SelectItem value="small">Small (1,296 words)</SelectItem>
-                              <SelectItem value="normal">Normal (7,776 words)</SelectItem>
-                              <SelectItem value="large">Large (46,656 words)</SelectItem>
+                              <SelectItem value="wordlist">{AVAILABLE_DICTIONARIES.uk.wordlist.description}</SelectItem>
+                              <SelectItem value="small">{AVAILABLE_DICTIONARIES.uk.small.description}</SelectItem>
+                              <SelectItem value="normal">{AVAILABLE_DICTIONARIES.uk.normal.description}</SelectItem>
+                              <SelectItem value="large">{AVAILABLE_DICTIONARIES.uk.large.description}</SelectItem>
                             </>
                           )}
                         </SelectContent>
@@ -367,27 +333,40 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="flex items-center justify-between space-x-2">
-                      <Label htmlFor="capitalize">Capitalize Words</Label>
-                      <Switch id="capitalize" checked={capitalize} onCheckedChange={setCapitalize} />
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>Capitalization</Label>
+                      <Select value={capitalization} onValueChange={(value) => setCapitalization(value as CapitalizationStyle)}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">None (lowercase)</SelectItem>
+                          <SelectItem value="first">First Letter</SelectItem>
+                          <SelectItem value="random">Random Letter</SelectItem>
+                          <SelectItem value="all">All Uppercase</SelectItem>
+                          <SelectItem value="random-word">Random Word Uppercase</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
-                    <div className="flex items-center justify-between space-x-2">
-                      <Label htmlFor="numbers2">Add Numbers</Label>
-                      <Switch id="numbers2" checked={includeNumbers2} onCheckedChange={setIncludeNumbers2} />
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="flex items-center justify-between space-x-2">
+                        <Label htmlFor="numbers2">Add Numbers</Label>
+                        <Switch id="numbers2" checked={includeNumbers2} onCheckedChange={setIncludeNumbers2} />
+                      </div>
+                      {sourceLanguage === "uk" && (
+                        <div className="flex items-center justify-between space-x-2">
+                          <Label htmlFor="transliteration">Transliteration</Label>
+                          <Switch
+                            id="transliteration"
+                            checked={showTransliteration}
+                            onCheckedChange={setShowTransliteration}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
-
-                  {sourceLanguage !== "english" && (
-                    <div className="flex items-center justify-between space-x-2">
-                      <Label htmlFor="transliteration">Show Transliteration (Latin)</Label>
-                      <Switch
-                        id="transliteration"
-                        checked={showTransliteration}
-                        onCheckedChange={setShowTransliteration}
-                      />
-                    </div>
-                  )}
                 </div>
 
                 {/* Advanced Options */}
@@ -434,9 +413,14 @@ export default function Home() {
                 </Accordion>
 
                 {/* Generate Button */}
-                <Button onClick={generatePassphrase} size="lg" className="w-full text-lg">
-                  <RefreshCw className="mr-2 h-5 w-5" />
-                  Generate Passphrase
+                <Button 
+                  onClick={handleGeneratePassphrase} 
+                  size="lg" 
+                  className="w-full text-lg"
+                  disabled={isGeneratingPassphrase}
+                >
+                  <RefreshCw className={`mr-2 h-5 w-5 ${isGeneratingPassphrase ? "animate-spin" : ""}`} />
+                  {isGeneratingPassphrase ? "Generating..." : "Generate Passphrase"}
                 </Button>
               </TabsContent>
 
@@ -699,10 +683,11 @@ export default function Home() {
                       <Button
                         size="icon"
                         variant="ghost"
-                        onClick={activeTab === "password" ? handleGeneratePassword : generatePassphrase}
+                        onClick={activeTab === "password" ? handleGeneratePassword : handleGeneratePassphrase}
                         className="h-8 w-8"
+                        disabled={activeTab === "passphrase" && isGeneratingPassphrase}
                       >
-                        <RefreshCw className="h-4 w-4" />
+                        <RefreshCw className={`h-4 w-4 ${isGeneratingPassphrase ? "animate-spin" : ""}`} />
                       </Button>
                     </div>
                   </div>
