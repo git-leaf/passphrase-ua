@@ -143,7 +143,14 @@ export function formatTime(seconds: number): string {
     return `${(years / 1000000000).toFixed(2)} billion years`;
   }
 
-  return `${(years / 1000000000000).toFixed(2)} trillion years`;
+  if (years < 1e15) {
+    return `${(years / 1000000000000).toFixed(2)} trillion years`;
+  }
+
+  // For extremely large values, use scientific notation
+  const exp = Math.floor(Math.log10(years));
+  const mantissa = years / Math.pow(10, exp);
+  return `${mantissa.toFixed(2)} × 10^${exp} years`;
 }
 
 /**
@@ -190,7 +197,7 @@ export function formatCost(usd: number): string {
   }
 
   if (usd < 1) {
-    return `$${usd.toFixed(4)}`;
+    return `$${usd.toFixed(2)}`;
   }
 
   if (usd < 1000) {
@@ -209,7 +216,14 @@ export function formatCost(usd: number): string {
     return `$${(usd / 1000000000).toFixed(2)}B`;
   }
 
-  return `$${(usd / 1000000000000).toFixed(2)}T`;
+  if (usd < 1e15) {
+    return `$${(usd / 1000000000000).toFixed(2)}T`;
+  }
+
+  // For extremely large values, use scientific notation
+  const exp = Math.floor(Math.log10(usd));
+  const mantissa = usd / Math.pow(10, exp);
+  return `$${mantissa.toFixed(2)} × 10^${exp}`;
 }
 
 /**

@@ -716,15 +716,15 @@ export default function Home() {
                     </div>
                     <div className="space-y-1">
                       <p className="text-muted-foreground">Combinations</p>
-                      <p className="font-mono font-medium">{getCombinationsFormatted()}</p>
+                      <p className="font-mono font-medium text-xs sm:text-sm">{getCombinationsFormatted()}</p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-muted-foreground">Time to Crack (avg)</p>
-                      <p className="font-mono font-medium">{getTimeToCrackFormatted()}</p>
+                      <p className="font-mono font-medium text-xs sm:text-sm">{getTimeToCrackFormatted()}</p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-muted-foreground">Cost to Crack (avg)</p>
-                      <p className="font-mono font-medium">{getCostToCrackFormatted()}</p>
+                      <p className="font-mono font-medium text-xs sm:text-sm">{getCostToCrackFormatted()}</p>
                     </div>
                   </div>
 
