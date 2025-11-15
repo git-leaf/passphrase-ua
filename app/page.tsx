@@ -333,39 +333,50 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label>Capitalization</Label>
-                      <Select value={capitalization} onValueChange={(value) => setCapitalization(value as CapitalizationStyle)}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="none">None (lowercase)</SelectItem>
-                          <SelectItem value="first">First Letter</SelectItem>
-                          <SelectItem value="random">Random Letter</SelectItem>
-                          <SelectItem value="all">All Uppercase</SelectItem>
-                          <SelectItem value="random-word">Random Word Uppercase</SelectItem>
-                        </SelectContent>
-                      </Select>
+                  <div className="space-y-2">
+                    <Label>Word Separator</Label>
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { value: "-", label: "Dash", symbol: "-" },
+                        { value: "_", label: "Underscore", symbol: "_" },
+                        { value: " ", label: "Space", symbol: "␣" },
+                        { value: ".", label: "Period", symbol: "." },
+                        { value: "", label: "None", symbol: "∅" },
+                        { value: "custom", label: "Custom", symbol: "..." },
+                      ].map((sep) => (
+                        <Button
+                          key={sep.value}
+                          variant={separator === sep.value ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => setSeparator(sep.value)}
+                          className="w-full"
+                        >
+                          {sep.label} <span className="ml-1">{sep.symbol}</span>
+                        </Button>
+                      ))}
                     </div>
+                    {separator === "custom" && (
+                      <Input
+                        placeholder="Enter separator (e.g., *, |)"
+                        value={customSeparator}
+                        onChange={(e) => setCustomSeparator(e.target.value)}
+                        maxLength={3}
+                        className="mt-2"
+                      />
+                    )}
+                  </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    {sourceLanguage === "uk" && (
                       <div className="flex items-center justify-between space-x-2">
-                        <Label htmlFor="numbers2">Add Numbers</Label>
-                        <Switch id="numbers2" checked={includeNumbers2} onCheckedChange={setIncludeNumbers2} />
+                        <Label htmlFor="transliteration">Transliteration</Label>
+                        <Switch
+                          id="transliteration"
+                          checked={showTransliteration}
+                          onCheckedChange={setShowTransliteration}
+                        />
                       </div>
-                      {sourceLanguage === "uk" && (
-                        <div className="flex items-center justify-between space-x-2">
-                          <Label htmlFor="transliteration">Transliteration</Label>
-                          <Switch
-                            id="transliteration"
-                            checked={showTransliteration}
-                            onCheckedChange={setShowTransliteration}
-                          />
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
                 </div>
 
@@ -377,36 +388,26 @@ export default function Home() {
                     </AccordionTrigger>
                     <AccordionContent className="space-y-4 pt-4">
                       <div className="space-y-2">
-                        <Label>Word Separator</Label>
-                        <div className="grid grid-cols-3 gap-2">
-                          {[
-                            { value: "-", label: "Dash" },
-                            { value: "_", label: "Underscore" },
-                            { value: " ", label: "Space" },
-                            { value: ".", label: "Period" },
-                            { value: "", label: "None" },
-                            { value: "custom", label: "Custom" },
-                          ].map((sep) => (
-                            <Button
-                              key={sep.value}
-                              variant={separator === sep.value ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => setSeparator(sep.value)}
-                              className="w-full"
-                            >
-                              {sep.label}
-                            </Button>
-                          ))}
+                        <Label>Capitalization</Label>
+                        <Select value={capitalization} onValueChange={(value) => setCapitalization(value as CapitalizationStyle)}>
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="none">None (lowercase)</SelectItem>
+                            <SelectItem value="first">First Letter</SelectItem>
+                            <SelectItem value="random">Random Letter</SelectItem>
+                            <SelectItem value="all">All Uppercase</SelectItem>
+                            <SelectItem value="random-word">Random Word Uppercase</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center justify-between space-x-2">
+                          <Label htmlFor="numbers2">Add Numbers</Label>
+                          <Switch id="numbers2" checked={includeNumbers2} onCheckedChange={setIncludeNumbers2} />
                         </div>
-                        {separator === "custom" && (
-                          <Input
-                            placeholder="Enter separator (e.g., *, |)"
-                            value={customSeparator}
-                            onChange={(e) => setCustomSeparator(e.target.value)}
-                            maxLength={3}
-                            className="mt-2"
-                          />
-                        )}
                       </div>
                     </AccordionContent>
                   </AccordionItem>
@@ -712,7 +713,7 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div className="space-y-1">
                       <p className="text-muted-foreground">Entropy</p>
-                      <p className="font-mono font-medium">{entropy.toFixed(2)} bits</p>
+                      <p className="font-mono font-medium text-xs sm:text-sm">{entropy.toFixed(2)} bits</p>
                     </div>
                     <div className="space-y-1">
                       <p className="text-muted-foreground">Combinations</p>
