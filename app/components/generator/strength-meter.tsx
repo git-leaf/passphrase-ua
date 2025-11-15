@@ -108,10 +108,10 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="1e6">1 Million (1e6)</SelectItem>
-                    <SelectItem value="1e9">1 Billion (1e9)</SelectItem>
-                    <SelectItem value="1e12">1 Trillion (1e12)</SelectItem>
-                    <SelectItem value="1e15">1 Quadrillion (1e15)</SelectItem>
+                    <SelectItem value="1e6">1 Million (10^6)</SelectItem>
+                    <SelectItem value="1e9">1 Billion (10^9)</SelectItem>
+                    <SelectItem value="1e12">1 Trillion (10^12)</SelectItem>
+                    <SelectItem value="1e15">1 Quadrillion (10^15)</SelectItem>
                     <SelectItem value="custom">Custom</SelectItem>
                   </SelectContent>
                 </Select>
