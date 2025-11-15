@@ -126,10 +126,7 @@ export default function Home() {
     }
   }
 
-  const getStrengthFromEntropy = (ent: number) => {
-    const strength = assessStrength(ent)
-    return { label: strength.label, color: strength.color }
-  }
+  const strengthAssessment = assessStrength(entropy)
 
   const getGuessRateValue = () => {
     if (guessRate === "custom") {
@@ -699,12 +696,12 @@ export default function Home() {
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Strength</span>
-                      <span className="font-medium">{getStrengthFromEntropy(entropy).label}</span>
+                      <span className="font-medium">{strengthAssessment.label}</span>
                     </div>
                     <div className="h-2 w-full overflow-hidden rounded-full bg-secondary">
                       <div
-                        className={`h-full transition-all duration-500 ${getStrengthFromEntropy(entropy).color}`}
-                        style={{ width: `${Math.min((entropy / 128) * 100, 100)}%` }}
+                        className={`h-full transition-all duration-500 ${strengthAssessment.color}`}
+                        style={{ width: `${strengthAssessment.percentage}%` }}
                       />
                     </div>
                   </div>

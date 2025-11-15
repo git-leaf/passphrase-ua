@@ -8,7 +8,7 @@
 /**
  * Strength level based on entropy
  */
-export type StrengthLevel = 'weak' | 'fair' | 'strong' | 'very-strong';
+export type StrengthLevel = 'weak' | 'fair' | 'strong' | 'very-strong' | 'excessive';
 
 /**
  * Strength assessment result
@@ -48,16 +48,17 @@ export interface CostToCrackEstimate {
  * Assesses password strength based on entropy
  * 
  * Entropy levels based on NIST and industry standards:
- * - < 40 bits: Weak - Vulnerable to attacks
+ * - <= 40 bits: Weak - Vulnerable to attacks
  * - 40-60 bits: Fair - Minimum for basic security
  * - 60-80 bits: Strong - Secure for most uses
- * - 80+ bits: Very Strong - Highly secure
+ * - 80-120 bits: Very Strong - Highly secure
+ * - 120+ bits: Excessive - Highly secure, but not practical for most uses
  * 
  * @param entropy - Entropy in bits
  * @returns Strength assessment
  */
 export function assessStrength(entropy: number): StrengthAssessment {
-  if (entropy < 40) {
+  if (entropy <= 40) {
     return {
       level: 'weak',
       label: 'Weak',
@@ -66,29 +67,38 @@ export function assessStrength(entropy: number): StrengthAssessment {
     };
   }
 
-  if (entropy < 60) {
+  if (entropy <= 60) {
     return {
       level: 'fair',
       label: 'Fair',
       color: 'bg-amber-500',
-      percentage: 25 + ((entropy - 40) / 20) * 25,
+      percentage: 25 + ((entropy - 40) / 20) * 50,
     };
   }
 
-  if (entropy < 80) {
+  if (entropy <= 80) {
     return {
       level: 'strong',
       label: 'Strong',
       color: 'bg-emerald-500',
-      percentage: 50 + ((entropy - 60) / 20) * 25,
+      percentage: 75 + ((entropy - 60) / 20) * 25,
+    };
+  }
+
+  if (entropy <= 128) {
+    return {
+      level: 'very-strong',
+      label: 'Very Strong',
+      color: 'bg-emerald-600',
+      percentage: 100,
     };
   }
 
   return {
-    level: 'very-strong',
-    label: 'Very Strong',
-    color: 'bg-emerald-600',
-    percentage: Math.min(75 + ((entropy - 80) / 48) * 25, 100),
+    level: 'excessive',
+    label: 'Excessive',
+    color: 'bg-blue-500',
+    percentage: 100,
   };
 }
 
