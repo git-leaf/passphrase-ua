@@ -125,6 +125,19 @@ export function PassphraseOptions({
           </div>
         </div>
 
+        <div className="grid grid-cols-2 gap-4">
+          {sourceLanguage === "uk" && (
+            <div className="flex items-center justify-between space-x-2">
+              <Label htmlFor="transliteration">Transliteration</Label>
+              <Switch
+                id="transliteration"
+                checked={showTransliteration}
+                onCheckedChange={onShowTransliterationChange}
+              />
+            </div>
+          )}
+        </div>
+
         <div className="space-y-2">
           <Label>Word Separator</Label>
           <div className="grid grid-cols-3 gap-2">
@@ -158,18 +171,6 @@ export function PassphraseOptions({
           )}
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          {sourceLanguage === "uk" && (
-            <div className="flex items-center justify-between space-x-2">
-              <Label htmlFor="transliteration">Transliteration</Label>
-              <Switch
-                id="transliteration"
-                checked={showTransliteration}
-                onCheckedChange={onShowTransliterationChange}
-              />
-            </div>
-          )}
-        </div>
       </div>
 
       {/* Advanced Options */}
