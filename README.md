@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Passphrase UA 🔐
 
-## Getting Started
+**Client-side password and passphrase generator with first-class Ukrainian language support**
 
-First, run the development server:
+Passphrase UA is a secure, privacy-focused tool for generating strong passwords and memorable passphrases. It features the first comprehensive Ukrainian Diceware wordlists with transliteration support, alongside trusted English wordlists.
+
+---
+
+## ✨ Features
+
+### Generation Methods
+- **Random Passwords** — Cryptographically secure character-based passwords with customizable length and character sets
+- **Diceware Passphrases** — Memorable word-based passphrases using the proven Diceware method
+
+### Ukrainian Support (First Implementation!)
+- 🇺🇦 **Ukrainian Wordlists**: Small (1,296 words), Normal (7,776 words), Large (46,656 words)
+- 🔤 **Transliteration**: Type Ukrainian words using Latin characters (e.g., "собака" → "sobaka")
+
+### Security & Privacy
+- ✅ **100% Client-side** — All generation happens in your browser, nothing sent to servers
+- ✅ **Cryptographically Secure** — Uses `crypto.getRandomValues()` Web Crypto API
+- ✅ **No Tracking** — Zero analytics, no data collection, complete privacy
+- ✅ **Offline Support** — Works without internet connection after first load
+- ✅ **Open Source** — Fully auditable code
+
+### User Experience
+- 📊 **Strength Meter** — Real-time entropy calculation and time-to-crack estimates
+- 🎨 **Dark/Light Modes** — System preference detection with manual toggle
+- ♿ **Accessible** — WCAG 2.1 AA compliant, keyboard navigation, screen reader support
+- 📱 **Responsive** — Mobile-first design, works on all screen sizes
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 20+ and pnpm
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clone the repository
+git clone https://github.com/yourusername/passphrase-ua.git
+cd passphrase-ua
+
+# Install dependencies
+pnpm install
+
+# Run development server
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm dev      # Start development server
+pnpm build    # Build for production
+pnpm start    # Start production server
+pnpm lint     # Run linter
+```
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📚 Documentation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+For comprehensive information about the project:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **[Product Requirements Document (PRD)](docs/prd.md)** — Complete project specification, architecture, requirements, and roadmap
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🛠️ Tech Stack
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Framework**: Next.js 16 (App Router) + React 19 + TypeScript
+- **UI**: Tailwind CSS + shadcn/ui + Radix UI
+- **Security**: Web Crypto API (`crypto.getRandomValues()`)
+- **Build**: pnpm
+
+---
+
+## 🌍 Supported Languages
+
+### Ukrainian
+- Wordlist (10,000 words)
+- Small Diceware (1,296 words, 4 dice)
+- Normal Diceware (7,776 words, 5 dice)
+- Large Diceware (46,656 words, 6 dice)
+
+_All with English transliteration support_
+
+### English
+- Original Diceware (7,776 words)
+- EFF Short List (1,296 words)
+- EFF Large List (7,776 words)
+- Beale List (7,776 words)
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! While contribution guidelines are still being established, feel free to:
+
+- 💡 Submit proposals and ideas via [GitHub Issues](https://github.com/yourusername/passphrase-ua/issues)
+- 🐛 Report bugs
+- 📖 Improve documentation
+- 🌐 Suggest new wordlists or languages
+
+Please communicate with the maintainer before starting major changes.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- [Arnold G. Reinhold](https://theworld.com/~reinhold/diceware.html) — Creator of the Diceware method
+- [Electronic Frontier Foundation (EFF)](https://www.eff.org/dice) — EFF wordlists
+- Inspired by [Diceware Password Generator](https://diceware.dmuth.org/) and [StrongPhrase](https://strongphrase.net/)
+
+---
+
+## 🔒 Security Notice
+
+All password generation occurs entirely in your browser using cryptographically secure random number generation. No passwords are ever stored, logged, or transmitted to any server. For maximum security, you can verify this by inspecting the network activity in your browser's developer tools.
+
+---
+
+**Made with 🇺🇦 for privacy-conscious users worldwide**
