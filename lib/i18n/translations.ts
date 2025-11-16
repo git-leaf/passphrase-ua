@@ -123,6 +123,81 @@ export interface Translations {
     privacy: string
   }
 
+  // Privacy Policy
+  privacy: {
+    title: string
+    lastUpdated: string
+    overview: {
+      title: string
+      noDataMessage: string
+      description: string
+    }
+    whatWeDontCollect: {
+      title: string
+      passwords: string
+      accounts: string
+      ipAddresses: string
+      analytics: string
+      fingerprints: string
+      anyPersonalData: string
+    }
+    whatWeStoreLocally: {
+      title: string
+      description: string
+      themePreference: string
+      themeDescription: string
+      languagePreference: string
+      languageDescription: string
+      noPasswords: string
+      noPasswordsDescription: string
+      clearSettings: string
+    }
+    howItWorks: {
+      title: string
+      clientSideGeneration: {
+        title: string
+        description: string
+      }
+      noNetworkRequests: {
+        title: string
+        description: string
+      }
+      openSource: {
+        title: string
+        description: string
+      }
+    }
+    gdprCompliance: {
+      title: string
+      description: string
+      noPersonalData: string
+      noUserIdentifyingInfo: string
+      noTrackingCookies: string
+      userControl: string
+      noDataToManage: string
+    }
+    security: {
+      title: string
+      description: string
+      cryptoSecureRng: string
+      strictCsp: string
+      httpsWithHsts: string
+      noThirdPartyScripts: string
+      regularAudits: string
+    }
+    changesToPolicy: {
+      title: string
+      description: string
+    }
+    contact: {
+      title: string
+      description: string
+      openIssueOn: string
+      reviewSourceCode: string
+    }
+    backToGenerator: string
+  }
+
   // Theme
   theme: {
     toggleTheme: string
@@ -577,6 +652,80 @@ export const translations: Record<Locale, Translations> = {
         nistDescription: "Official U.S. government guidelines on authentication and password security",
       },
     },
+
+    privacy: {
+      title: "Privacy Policy",
+      lastUpdated: "Last Updated:",
+      overview: {
+        title: "Overview",
+        noDataMessage: "We DO NOT collect any data. Ever.",
+        description: "Passphrase UA is a completely client-side application built with privacy as the core principle. All passwords and passphrases are generated locally in your browser and are never transmitted over the network, stored on our servers, or tracked in any way."
+      },
+      whatWeDontCollect: {
+        title: "What We DON'T Collect",
+        passwords: "Passwords or generated passphrases",
+        accounts: "User accounts or email addresses",
+        ipAddresses: "IP addresses or location information",
+        analytics: "Usage analytics or telemetry",
+        fingerprints: "Device fingerprints or tracking cookies",
+        anyPersonalData: "Any personal data whatsoever"
+      },
+      whatWeStoreLocally: {
+        title: "What We Store Locally",
+        description: "In your browser (localStorage) — under your control",
+        themePreference: "Theme Preference",
+        themeDescription: "Your choice of light/dark mode (passphrase-ua-theme)",
+        languagePreference: "Language Preference",
+        languageDescription: "Your choice of Ukrainian/English (locale)",
+        noPasswords: "No Passwords",
+        noPasswordsDescription: "Passwords are never stored, even locally",
+        clearSettings: "You can clear these settings at any time by clearing site data in your browser settings."
+      },
+      howItWorks: {
+        title: "How It Works",
+        clientSideGeneration: {
+          title: "1. Client-Side Only Generation",
+          description: "All passwords and passphrases are generated locally in your browser using the Web Crypto API (crypto.getRandomValues()). The generation code is pure JavaScript function that runs exclusively on your device."
+        },
+        noNetworkRequests: {
+          title: "2. No Network Requests",
+          description: "No network requests are made during password generation. You can verify this by opening your browser's Developer Tools (Network tab) — you won't see any requests during generation."
+        },
+        openSource: {
+          title: "3. Open Source",
+          description: "All code is open source and available on GitHub for audit. You can review every line of code to verify we keep our privacy promises."
+        }
+      },
+      gdprCompliance: {
+        title: "GDPR Compliance",
+        description: "Passphrase UA is fully compliant with the General Data Protection Regulation (GDPR) and other privacy laws because we:",
+        noPersonalData: "Do not collect any personal data",
+        noUserIdentifyingInfo: "Do not process any user-identifying information",
+        noTrackingCookies: "Do not use tracking cookies",
+        userControl: "Give users full control over their settings",
+        noDataToManage: "Since we collect no data, there is no data to request, export, or delete."
+      },
+      security: {
+        title: "Security",
+        description: "We implement numerous security measures to protect your privacy:",
+        cryptoSecureRng: "Cryptographically secure random number generation (Web Crypto API)",
+        strictCsp: "Strict Content Security Policy (CSP) headers",
+        httpsWithHsts: "HTTPS by default with HSTS (HTTP Strict Transport Security)",
+        noThirdPartyScripts: "No third-party scripts or tracking",
+        regularAudits: "Regular security audits"
+      },
+      changesToPolicy: {
+        title: "Changes to This Policy",
+        description: "If we make changes to this privacy policy, we will update the \"Last Updated\" date at the top of this page. Since we don't collect contact information, we cannot notify you directly of changes. We encourage you to review this page periodically."
+      },
+      contact: {
+        title: "Contact",
+        description: "If you have questions about this privacy policy or Passphrase UA's privacy practices, you can:",
+        openIssueOn: "Open an issue on ",
+        reviewSourceCode: "Review the source code for complete transparency"
+      },
+      backToGenerator: "Back to Generator"
+    },
   },
 
   uk: {
@@ -894,6 +1043,80 @@ export const translations: Record<Locale, Translations> = {
         nistDescription:
           "Офіційні настанови уряду США щодо аутентифікації та безпеки паролів",
       },
+    },
+
+    privacy: {
+      title: "Політика конфіденційності",
+      lastUpdated: "Остання актуалізація:",
+      overview: {
+        title: "Огляд",
+        noDataMessage: "Ми НЕ збираємо жодних даних. Ніколи.",
+        description: "Passphrase UA — це повністю клієнтський застосунок, створений з акцентом на конфіденційність. Усі паролі та парольні фрази генеруються локально у вашому браузері та ніколи не передаються через мережу, не зберігаються на наших серверах і не відстежуються жодним чином."
+      },
+      whatWeDontCollect: {
+        title: "Що ми НЕ збираємо",
+        passwords: "Паролі або згенеровані парольні фрази",
+        accounts: "Облікові записи користувачів або адреси електронної пошти",
+        ipAddresses: "IP-адреси або інформацію про місцезнаходження",
+        analytics: "Аналітику використання або телеметрію",
+        fingerprints: "Відбитки пристроїв або файли cookie відстеження",
+        anyPersonalData: "Будь-які персональні дані"
+      },
+      whatWeStoreLocally: {
+        title: "Що зберігається локально",
+        description: "У вашому браузері (localStorage) — під вашим контролем",
+        themePreference: "Вибір теми",
+        themeDescription: "Ваш вибір між світлою/темною темою (passphrase-ua-theme)",
+        languagePreference: "Вибір мови",
+        languageDescription: "Ваш вибір між українською/англійською мовою (locale)",
+        noPasswords: "Без паролів",
+        noPasswordsDescription: "Паролі ніколи не зберігаються, навіть локально",
+        clearSettings: "Ви можете очистити ці налаштування в будь-який час, видаливши дані сайту в налаштуваннях вашого браузера."
+      },
+      howItWorks: {
+        title: "Як це працює",
+        clientSideGeneration: {
+          title: "1. Генерація лише на стороні клієнта",
+          description: "Усі паролі та парольні фрази генеруються локально у вашому браузері за допомогою Web Crypto API (crypto.getRandomValues()). Код генерації є чистою функцією JavaScript, яка виконується виключно на вашому пристрої."
+        },
+        noNetworkRequests: {
+          title: "2. Без мережевих запитів",
+          description: "Під час генерації паролів мережеві запити не виконуються. Ви можете перевірити це, відкривши інструменти розробника вашого браузера (вкладка Мережа) — ви не побачите жодних запитів під час генерації."
+        },
+        openSource: {
+          title: "3. Відкритий вихідний код",
+          description: "Весь код відкритий і доступний на GitHub для аудиту. Ви можете перевірити кожен рядок коду, щоб переконатися, що ми дотримуємося своїх обіцянок щодо конфіденційності."
+        }
+      },
+      gdprCompliance: {
+        title: "Відповідність GDPR",
+        description: "Passphrase UA повністю відповідає Загальному регламенту захисту даних (GDPR) та іншим законам про конфіденційність, оскільки ми:",
+        noPersonalData: "Не збираємо жодних персональних даних",
+        noUserIdentifyingInfo: "Не обробляємо жодної інформації, яка ідентифікує користувача",
+        noTrackingCookies: "Не використовуємо файли cookie для відстеження",
+        userControl: "Надаємо користувачам повний контроль над своїми налаштуваннями",
+        noDataToManage: "Оскільки ми не збираємо жодних даних, немає даних для запиту, експорту чи видалення."
+      },
+      security: {
+        title: "Безпека",
+        description: "Ми реалізували численні заходи безпеки для захисту вашої конфіденційності:",
+        cryptoSecureRng: "Криптографічно безпечна генерація випадкових чисел (Web Crypto API)",
+        strictCsp: "Суворі заголовки Політики безпеки вмісту (CSP)",
+        httpsWithHsts: "HTTPS за замовчуванням з HSTS (HTTP Strict Transport Security)",
+        noThirdPartyScripts: "Без сторонніх скриптів або відстеження",
+        regularAudits: "Регулярні аудити безпеки"
+      },
+      changesToPolicy: {
+        title: "Зміни в цій політиці",
+        description: "Якщо ми внесемо зміни до цієї політики конфіденційності, ми оновимо дату «Остання актуалізація» вгорі цієї сторінки. Оскільки ми не збираємо контактну інформацію, ми не можемо повідомити вас безпосередньо про зміни. Рекомендуємо періодично переглядати цю сторінку."
+      },
+      contact: {
+        title: "Контакт",
+        description: "Якщо у вас є питання щодо цієї політики конфіденційності або практик конфіденційності Passphrase UA, ви можете:",
+        openIssueOn: "Відкрити проблему на ",
+        reviewSourceCode: "Переглянути вихідний код для повної прозорості"
+      },
+      backToGenerator: "Повернутися до генератора"
     },
   },
 }

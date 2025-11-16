@@ -9,10 +9,10 @@ import { useI18n } from "@/lib/i18n"
 
 export default function PrivacyPage() {
   const { t, locale } = useI18n()
-  const currentDate = new Date().toLocaleDateString(locale === "uk" ? "uk-UA" : "en-US", { 
-    year: 'numeric', 
-    month: 'long', 
-    day: 'numeric' 
+  const currentDate = new Date().toLocaleDateString(locale === "uk" ? "uk-UA" : "en-US", {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
   })
 
   return (
@@ -27,13 +27,11 @@ export default function PrivacyPage() {
           <div className="mb-2 flex items-center gap-2">
             <Shield className="h-8 w-8 text-primary" />
             <h1 className="text-4xl font-bold tracking-tight">
-              {locale === "uk" ? "Політика конфіденційності" : "Privacy Policy"}
+              {t.privacy.title}
             </h1>
           </div>
           <p className="text-muted-foreground">
-            {locale === "uk" 
-              ? `Остання актуалізація: ${currentDate}` 
-              : `Last Updated: ${currentDate}`}
+            {t.privacy.lastUpdated} {currentDate}
           </p>
         </div>
 
@@ -44,19 +42,15 @@ export default function PrivacyPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Eye className="h-5 w-5" />
-                {locale === "uk" ? "Огляд" : "Overview"}
+                {t.privacy.overview.title}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-lg font-semibold text-primary">
-                {locale === "uk" 
-                  ? "Ми НЕ збираємо жодних даних. Ніколи." 
-                  : "We DO NOT collect any data. Ever."}
+                {t.privacy.overview.noDataMessage}
               </p>
               <p className="text-muted-foreground">
-                {locale === "uk"
-                  ? "Passphrase UA — це повністю клієнтський застосунок, створений з акцентом на конфіденційність. Усі паролі та парольні фрази генеруються локально у вашому браузері та ніколи не передаються через мережу, не зберігаються на наших серверах і не відстежуються жодним чином."
-                  : "Passphrase UA is a completely client-side application built with privacy as the core principle. All passwords and passphrases are generated locally in your browser and are never transmitted over the network, stored on our servers, or tracked in any way."}
+                {t.privacy.overview.description}
               </p>
             </CardContent>
           </Card>
@@ -66,58 +60,34 @@ export default function PrivacyPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Database className="h-5 w-5" />
-                {locale === "uk" ? "Що ми НЕ збираємо" : "What We DON'T Collect"}
+                {t.privacy.whatWeDontCollect.title}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-3 text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <span className="text-destructive font-bold mt-1">✗</span>
-                  <span>
-                    {locale === "uk"
-                      ? "Паролі або згенеровані парольні фрази"
-                      : "Passwords or generated passphrases"}
-                  </span>
+                  <span>{t.privacy.whatWeDontCollect.passwords}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive font-bold mt-1">✗</span>
-                  <span>
-                    {locale === "uk"
-                      ? "Облікові записи користувачів або адреси електронної пошти"
-                      : "User accounts or email addresses"}
-                  </span>
+                  <span>{t.privacy.whatWeDontCollect.accounts}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive font-bold mt-1">✗</span>
-                  <span>
-                    {locale === "uk"
-                      ? "IP-адреси або інформацію про місцезнаходження"
-                      : "IP addresses or location information"}
-                  </span>
+                  <span>{t.privacy.whatWeDontCollect.ipAddresses}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive font-bold mt-1">✗</span>
-                  <span>
-                    {locale === "uk"
-                      ? "Аналітику використання або телеметрію"
-                      : "Usage analytics or telemetry"}
-                  </span>
+                  <span>{t.privacy.whatWeDontCollect.analytics}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive font-bold mt-1">✗</span>
-                  <span>
-                    {locale === "uk"
-                      ? "Відбитки пристроїв або файли cookie відстеження"
-                      : "Device fingerprints or tracking cookies"}
-                  </span>
+                  <span>{t.privacy.whatWeDontCollect.fingerprints}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive font-bold mt-1">✗</span>
-                  <span>
-                    {locale === "uk"
-                      ? "Будь-які персональні дані"
-                      : "Any personal data whatsoever"}
-                  </span>
+                  <span>{t.privacy.whatWeDontCollect.anyPersonalData}</span>
                 </li>
               </ul>
             </CardContent>
@@ -128,12 +98,10 @@ export default function PrivacyPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Cookie className="h-5 w-5" />
-                {locale === "uk" ? "Що зберігається локально" : "What We Store Locally"}
+                {t.privacy.whatWeStoreLocally.title}
               </CardTitle>
               <CardDescription>
-                {locale === "uk"
-                  ? "У вашому браузері (localStorage) — під вашим контролем"
-                  : "In your browser (localStorage) — under your control"}
+                {t.privacy.whatWeStoreLocally.description}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -142,43 +110,35 @@ export default function PrivacyPage() {
                   <span className="text-primary font-bold mt-1">✓</span>
                   <div>
                     <span className="font-semibold text-foreground">
-                      {locale === "uk" ? "Вибір теми" : "Theme Preference"}
+                      {t.privacy.whatWeStoreLocally.themePreference}
                     </span>
                     {" — "}
-                    {locale === "uk"
-                      ? "Ваш вибір між світлою/темною темою (passphrase-ua-theme)"
-                      : "Your choice of light/dark mode (passphrase-ua-theme)"}
+                    {t.privacy.whatWeStoreLocally.themeDescription}
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-primary font-bold mt-1">✓</span>
                   <div>
                     <span className="font-semibold text-foreground">
-                      {locale === "uk" ? "Вибір мови" : "Language Preference"}
+                      {t.privacy.whatWeStoreLocally.languagePreference}
                     </span>
                     {" — "}
-                    {locale === "uk"
-                      ? "Ваш вибір між українською/англійською мовою (locale)"
-                      : "Your choice of Ukrainian/English (locale)"}
+                    {t.privacy.whatWeStoreLocally.languageDescription}
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive font-bold mt-1">✗</span>
                   <div>
                     <span className="font-semibold text-foreground">
-                      {locale === "uk" ? "Без паролів" : "No Passwords"}
+                      {t.privacy.whatWeStoreLocally.noPasswords}
                     </span>
                     {" — "}
-                    {locale === "uk"
-                      ? "Паролі ніколи не зберігаються, навіть локально"
-                      : "Passwords are never stored, even locally"}
+                    {t.privacy.whatWeStoreLocally.noPasswordsDescription}
                   </div>
                 </li>
               </ul>
               <p className="mt-4 text-sm text-muted-foreground">
-                {locale === "uk"
-                  ? "Ви можете очистити ці налаштування в будь-який час, видаливши дані сайту в налаштуваннях вашого браузера."
-                  : "You can clear these settings at any time by clearing site data in your browser settings."}
+                {t.privacy.whatWeStoreLocally.clearSettings}
               </p>
             </CardContent>
           </Card>
@@ -188,38 +148,32 @@ export default function PrivacyPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Code className="h-5 w-5" />
-                {locale === "uk" ? "Як це працює" : "How It Works"}
+                {t.privacy.howItWorks.title}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-muted-foreground">
               <div>
                 <h3 className="font-semibold text-foreground mb-2">
-                  {locale === "uk" ? "1. Генерація лише на стороні клієнта" : "1. Client-Side Only Generation"}
+                  {t.privacy.howItWorks.clientSideGeneration.title}
                 </h3>
                 <p>
-                  {locale === "uk"
-                    ? "Усі паролі та парольні фрази генеруються локально у вашому браузері за допомогою Web Crypto API (crypto.getRandomValues()). Код генерації є чистою функцією JavaScript, яка виконується виключно на вашому пристрої."
-                    : "All passwords and passphrases are generated locally in your browser using the Web Crypto API (crypto.getRandomValues()). The generation code is pure JavaScript function that runs exclusively on your device."}
+                  {t.privacy.howItWorks.clientSideGeneration.description}
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-2">
-                  {locale === "uk" ? "2. Без мережевих запитів" : "2. No Network Requests"}
+                  {t.privacy.howItWorks.noNetworkRequests.title}
                 </h3>
                 <p>
-                  {locale === "uk"
-                    ? "Під час генерації паролів мережеві запити не виконуються. Ви можете перевірити це, відкривши інструменти розробника вашого браузера (вкладка Мережа) — ви не побачите жодних запитів під час генерації."
-                    : "No network requests are made during password generation. You can verify this by opening your browser's Developer Tools (Network tab) — you won't see any requests during generation."}
+                  {t.privacy.howItWorks.noNetworkRequests.description}
                 </p>
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-2">
-                  {locale === "uk" ? "3. Відкритий вихідний код" : "3. Open Source"}
+                  {t.privacy.howItWorks.openSource.title}
                 </h3>
                 <p>
-                  {locale === "uk"
-                    ? "Весь код відкритий і доступний на GitHub для аудиту. Ви можете перевірити кожен рядок коду, щоб переконатися, що ми дотримуємося своїх обіцянок щодо конфіденційності."
-                    : "All code is open source and available on GitHub for audit. You can review every line of code to verify we keep our privacy promises."}
+                  {t.privacy.howItWorks.openSource.description}
                 </p>
               </div>
             </CardContent>
@@ -230,41 +184,21 @@ export default function PrivacyPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Lock className="h-5 w-5" />
-                {locale === "uk" ? "Відповідність GDPR" : "GDPR Compliance"}
+                {t.privacy.gdprCompliance.title}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-muted-foreground">
               <p>
-                {locale === "uk"
-                  ? "Passphrase UA повністю відповідає Загальному регламенту захисту даних (GDPR) та іншим законам про конфіденційність, оскільки ми:"
-                  : "Passphrase UA is fully compliant with the General Data Protection Regulation (GDPR) and other privacy laws because we:"}
+                {t.privacy.gdprCompliance.description}
               </p>
               <ul className="space-y-2 ml-6 list-disc">
-                <li>
-                  {locale === "uk"
-                    ? "Не збираємо жодних персональних даних"
-                    : "Do not collect any personal data"}
-                </li>
-                <li>
-                  {locale === "uk"
-                    ? "Не обробляємо жодної інформації, яка ідентифікує користувача"
-                    : "Do not process any user-identifying information"}
-                </li>
-                <li>
-                  {locale === "uk"
-                    ? "Не використовуємо файли cookie для відстеження"
-                    : "Do not use tracking cookies"}
-                </li>
-                <li>
-                  {locale === "uk"
-                    ? "Надаємо користувачам повний контроль над своїми налаштуваннями"
-                    : "Give users full control over their settings"}
-                </li>
+                <li>{t.privacy.gdprCompliance.noPersonalData}</li>
+                <li>{t.privacy.gdprCompliance.noUserIdentifyingInfo}</li>
+                <li>{t.privacy.gdprCompliance.noTrackingCookies}</li>
+                <li>{t.privacy.gdprCompliance.userControl}</li>
               </ul>
               <p>
-                {locale === "uk"
-                  ? "Оскільки ми не збираємо жодних даних, немає даних для запиту, експорту чи видалення."
-                  : "Since we collect no data, there is no data to request, export, or delete."}
+                {t.privacy.gdprCompliance.noDataToManage}
               </p>
             </CardContent>
           </Card>
@@ -274,41 +208,19 @@ export default function PrivacyPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Shield className="h-5 w-5" />
-                {locale === "uk" ? "Безпека" : "Security"}
+                {t.privacy.security.title}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-muted-foreground">
               <p>
-                {locale === "uk"
-                  ? "Ми реалізували численні заходи безпеки для захисту вашої конфіденційності:"
-                  : "We implement numerous security measures to protect your privacy:"}
+                {t.privacy.security.description}
               </p>
               <ul className="space-y-2 ml-6 list-disc">
-                <li>
-                  {locale === "uk"
-                    ? "Криптографічно безпечна генерація випадкових чисел (Web Crypto API)"
-                    : "Cryptographically secure random number generation (Web Crypto API)"}
-                </li>
-                <li>
-                  {locale === "uk"
-                    ? "Суворі заголовки Політики безпеки вмісту (CSP)"
-                    : "Strict Content Security Policy (CSP) headers"}
-                </li>
-                <li>
-                  {locale === "uk"
-                    ? "HTTPS за замовчуванням з HSTS (HTTP Strict Transport Security)"
-                    : "HTTPS by default with HSTS (HTTP Strict Transport Security)"}
-                </li>
-                <li>
-                  {locale === "uk"
-                    ? "Без сторонніх скриптів або відстеження"
-                    : "No third-party scripts or tracking"}
-                </li>
-                <li>
-                  {locale === "uk"
-                    ? "Регулярні аудити безпеки"
-                    : "Regular security audits"}
-                </li>
+                <li>{t.privacy.security.cryptoSecureRng}</li>
+                <li>{t.privacy.security.strictCsp}</li>
+                <li>{t.privacy.security.httpsWithHsts}</li>
+                <li>{t.privacy.security.noThirdPartyScripts}</li>
+                <li>{t.privacy.security.regularAudits}</li>
               </ul>
             </CardContent>
           </Card>
@@ -317,14 +229,12 @@ export default function PrivacyPage() {
           <Card>
             <CardHeader>
               <CardTitle>
-                {locale === "uk" ? "Зміни в цій політиці" : "Changes to This Policy"}
+                {t.privacy.changesToPolicy.title}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-muted-foreground">
               <p>
-                {locale === "uk"
-                  ? "Якщо ми внесемо зміни до цієї політики конфіденційності, ми оновимо дату «Остання актуалізація» вгорі цієї сторінки. Оскільки ми не збираємо контактну інформацію, ми не можемо повідомити вас безпосередньо про зміни. Рекомендуємо періодично переглядати цю сторінку."
-                  : "If we make changes to this privacy policy, we will update the \"Last Updated\" date at the top of this page. Since we don't collect contact information, we cannot notify you directly of changes. We encourage you to review this page periodically."}
+                {t.privacy.changesToPolicy.description}
               </p>
             </CardContent>
           </Card>
@@ -333,21 +243,19 @@ export default function PrivacyPage() {
           <Card>
             <CardHeader>
               <CardTitle>
-                {locale === "uk" ? "Контакт" : "Contact"}
+                {t.privacy.contact.title}
               </CardTitle>
             </CardHeader>
             <CardContent className="text-muted-foreground">
               <p>
-                {locale === "uk"
-                  ? "Якщо у вас є питання щодо цієї політики конфіденційності або практик конфіденційності Passphrase UA, ви можете:"
-                  : "If you have questions about this privacy policy or Passphrase UA's privacy practices, you can:"}
+                {t.privacy.contact.description}
               </p>
               <ul className="mt-4 space-y-2 ml-6 list-disc">
                 <li>
-                  {locale === "uk" ? "Відкрити проблему на " : "Open an issue on "}
-                  <a 
-                    href="https://github.com/git-leaf/passphrase-ua" 
-                    target="_blank" 
+                  {t.privacy.contact.openIssueOn}
+                  <a
+                    href="https://github.com/git-leaf/passphrase-ua"
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="text-primary hover:underline"
                   >
@@ -355,9 +263,7 @@ export default function PrivacyPage() {
                   </a>
                 </li>
                 <li>
-                  {locale === "uk" 
-                    ? "Переглянути вихідний код для повної прозорості"
-                    : "Review the source code for complete transparency"}
+                  {t.privacy.contact.reviewSourceCode}
                 </li>
               </ul>
             </CardContent>
@@ -366,11 +272,11 @@ export default function PrivacyPage() {
 
         {/* Back to Home */}
         <div className="mt-8 text-center">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="text-primary hover:underline inline-flex items-center gap-2"
           >
-            ← {locale === "uk" ? "Повернутися до генератора" : "Back to Generator"}
+            ← {t.privacy.backToGenerator}
           </Link>
         </div>
       </div>
