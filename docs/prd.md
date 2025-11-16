@@ -1244,6 +1244,7 @@ Time = (2^entropy / attempts_per_second) / 2  (average case)
 |---------|------|--------|---------|
 | 1.0.0 | 2025-11-08 | Project Founder | Initial PRD creation |
 | 1.0.1 | 2025-11-09 | Project Founder | Reviewed and refined PRD |
+| 1.0.2 | 2025-11-16 | Project Founder | Replaced the term "dictionary" with "wordlist" |
 
 ---
 
