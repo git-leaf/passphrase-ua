@@ -40,7 +40,7 @@ Passphrase UA is a secure, privacy-focused tool for generating strong passwords 
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/passphrase-ua.git
+git clone https://github.com/git-leaf/passphrase-ua.git
 cd passphrase-ua
 
 # Install dependencies
@@ -102,7 +102,7 @@ _All with English transliteration support_
 
 Contributions are welcome! While contribution guidelines are still being established, feel free to:
 
-- 💡 Submit proposals and ideas via [GitHub Issues](https://github.com/yourusername/passphrase-ua/issues)
+- 💡 Submit proposals and ideas via [GitHub Issues](https://github.com/git-leaf/passphrase-ua/issues)
 - 🐛 Report bugs
 - 📖 Improve documentation
 - 🌐 Suggest new wordlists or languages

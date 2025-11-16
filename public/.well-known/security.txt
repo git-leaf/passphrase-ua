@@ -1,7 +1,7 @@
 # Security Policy for Passphrase UA
 # If you discover a security vulnerability, please report it responsibly.
 
-Contact: https://github.com/passphrase-ua/passphrase-ua/security/advisories/new
+Contact: https://github.com/git-leaf/passphrase-ua/security/advisories/new
 Expires: 2026-12-31T23:59:59.000Z
 Preferred-Languages: en, uk
 Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
