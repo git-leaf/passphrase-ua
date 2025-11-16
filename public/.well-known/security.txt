@@ -1,0 +1,27 @@
+# Security Policy for Passphrase UA
+# If you discover a security vulnerability, please report it responsibly.
+
+Contact: https://github.com/passphrase-ua/passphrase-ua/security/advisories/new
+Expires: 2026-12-31T23:59:59.000Z
+Preferred-Languages: en, uk
+Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
+
+# Security Information
+# - This is a client-side only application
+# - No user data is collected or transmitted
+# - All password generation uses Web Crypto API
+# - Source code is available for audit
+
+# Vulnerability Reporting
+# Please report security vulnerabilities via GitHub Security Advisories.
+# We appreciate responsible disclosure and will respond promptly.
+
+# Out of Scope
+# - Browser vulnerabilities (report to browser vendors)
+# - Issues requiring physical access to user's device
+# - Social engineering attacks
+
+# Acknowledgments
+# We appreciate security researchers who help keep our users safe.
+# Contributors will be acknowledged in our SECURITY.md file.
+

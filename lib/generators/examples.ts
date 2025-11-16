@@ -1,9 +1,22 @@
 /**
  * Usage Examples for Password Generators
  * 
+ * ⚠️ WARNING: This file is for DOCUMENTATION and DEVELOPMENT ONLY
+ * This file MUST NOT be imported in production code as it logs passwords to the console.
+ * 
  * This file contains practical examples of how to use the password generation library.
  * These examples can be used for documentation, testing, or as a reference implementation.
+ * 
+ * Build configuration ensures this file is excluded from production bundles.
  */
+
+// Prevent accidental production use
+if (typeof process !== 'undefined' && process.env.NODE_ENV === 'production') {
+  throw new Error(
+    'examples.ts is for development and documentation only. ' +
+    'It must not be imported in production code as it logs passwords to the console.'
+  );
+}
 
 import {
   generatePassword,

@@ -395,7 +395,7 @@ export function validateConfig(config: PasswordConfig): void {
 Contact: security@example.com
 Expires: 2026-12-31T23:59:59.000Z
 Preferred-Languages: en, uk
-Canonical: https://passphrase.ua/.well-known/security.txt
+Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 ```
 
 ---
