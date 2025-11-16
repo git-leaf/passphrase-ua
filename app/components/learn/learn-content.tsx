@@ -1,37 +1,42 @@
+"use client"
+
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
+import { useI18n } from "@/lib/i18n"
 
 /**
  * Educational content about password security, Diceware method, and FAQs
  * Organized from most important/general topics to more advanced concepts
  */
 export function LearnContent() {
+  const { t } = useI18n()
+
   return (
     <div className="prose prose-sm dark:prose-invert max-w-none">
-      <h2 className="text-2xl font-bold mb-4">Password Security Guide</h2>
+      <h2 className="text-2xl font-bold mb-4">{t.learn.title}</h2>
 
       <div className="space-y-6">
         {/* Getting Started: The Basics */}
         <section className="space-y-3">
-          <h3 className="text-xl font-semibold">Getting Started</h3>
+          <h3 className="text-xl font-semibold">{t.learn.gettingStarted.title}</h3>
           <p className="text-muted-foreground leading-relaxed">
-            Strong passwords protect your digital life. This tool helps you create two types of secure passwords:
+            {t.learn.gettingStarted.description}
           </p>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
-              <p className="font-medium">🔐 Random Passwords</p>
+              <p className="font-medium">{t.learn.gettingStarted.randomTitle}</p>
               <p className="text-sm text-muted-foreground">
-                Mix of letters, numbers, and symbols. Very secure but harder to remember. Perfect for password managers.
+                {t.learn.gettingStarted.randomDescription}
               </p>
-              <p className="text-xs font-mono bg-background p-2 rounded">K9#mP2@xL5qR</p>
+              <p className="text-xs font-mono bg-background p-2 rounded">{t.learn.gettingStarted.randomExample}</p>
             </div>
 
             <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
-              <p className="font-medium">💬 Diceware Passphrases</p>
+              <p className="font-medium">{t.learn.gettingStarted.dicewareTitle}</p>
               <p className="text-sm text-muted-foreground">
-                Random words combined together. Easy to remember and type while staying secure. Great for master passwords.
+                {t.learn.gettingStarted.dicewareDescription}
               </p>
               <p className="text-xs font-mono bg-background p-2 rounded">
-                correct-horse-battery-staple
+                {t.learn.gettingStarted.dicewareExample}
               </p>
             </div>
           </div>
@@ -39,43 +44,34 @@ export function LearnContent() {
 
         {/* Why This Tool is Safe */}
         <section className="space-y-3">
-          <h3 className="text-xl font-semibold">Why This Tool is Safe</h3>
+          <h3 className="text-xl font-semibold">{t.learn.safety.title}</h3>
           <div className="rounded-lg border bg-green-500/10 border-green-500/20 p-4 space-y-2">
-            <p className="text-sm leading-relaxed">
-              <span className="font-medium">✓ Everything happens in your browser.</span> No passwords are sent over the internet.
-            </p>
-            <p className="text-sm leading-relaxed">
-              <span className="font-medium">✓ Nothing is stored.</span> Passwords are never saved anywhere unless you copy them.
-            </p>
-            <p className="text-sm leading-relaxed">
-              <span className="font-medium">✓ Cryptographically secure.</span> Uses your browser&apos;s built-in secure random number generator.
-            </p>
-            <p className="text-sm leading-relaxed">
-              <span className="font-medium">✓ Open source.</span> Anyone can review the code on GitHub.
-            </p>
+            <p className="text-sm leading-relaxed">{t.learn.safety.point1}</p>
+            <p className="text-sm leading-relaxed">{t.learn.safety.point2}</p>
+            <p className="text-sm leading-relaxed">{t.learn.safety.point3}</p>
+            <p className="text-sm leading-relaxed">{t.learn.safety.point4}</p>
           </div>
         </section>
 
         {/* When to Use Each Method */}
         <section className="space-y-3">
-          <h3 className="text-xl font-semibold">When to Use Each Method</h3>
+          <h3 className="text-xl font-semibold">{t.learn.whenToUse.title}</h3>
           <div className="space-y-3">
             <div className="rounded-lg border bg-muted/30 p-4">
-              <p className="font-medium mb-2">Use Random Passwords For:</p>
+              <p className="font-medium mb-2">{t.learn.whenToUse.randomTitle}</p>
               <ul className="text-sm space-y-1 text-muted-foreground list-disc list-inside">
-                <li>Accounts stored in a password manager</li>
-                <li>Maximum security in minimum space</li>
-                <li>Websites with character requirements</li>
+                {t.learn.whenToUse.randomList.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
               </ul>
             </div>
             
             <div className="rounded-lg border bg-muted/30 p-4">
-              <p className="font-medium mb-2">Use Diceware Passphrases For:</p>
+              <p className="font-medium mb-2">{t.learn.whenToUse.dicewareTitle}</p>
               <ul className="text-sm space-y-1 text-muted-foreground list-disc list-inside">
-                <li>Master password for your password manager</li>
-                <li>Disk encryption passwords</li>
-                <li>Wi-Fi passwords you need to share or type often</li>
-                <li>Any password you need to remember and type manually</li>
+                {t.learn.whenToUse.dicewareList.map((item, index) => (
+                  <li key={index}>{item}</li>
+                ))}
               </ul>
             </div>
           </div>
@@ -83,162 +79,138 @@ export function LearnContent() {
 
         {/* Understanding Strength */}
         <section className="space-y-3">
-          <h3 className="text-xl font-semibold">Understanding Password Strength</h3>
+          <h3 className="text-xl font-semibold">{t.learn.strength.title}</h3>
           <p className="text-muted-foreground leading-relaxed">
-            Password strength is measured in <span className="font-medium">entropy bits</span>. Each additional bit doubles the number of possible combinations, making passwords exponentially harder to crack.
+            {t.learn.strength.description}
           </p>
           <div className="rounded-lg border bg-muted/30 p-4">
-            <p className="text-sm font-medium mb-2">Strength Guidelines:</p>
+            <p className="text-sm font-medium mb-2">{t.learn.strength.guidelinesTitle}</p>
             <ul className="text-sm space-y-2 text-muted-foreground">
-              <li>🔴 <span className="font-medium">&lt;60 bits:</span> Weak — Avoid for important accounts</li>
-              <li>🟡 <span className="font-medium">60-79 bits:</span> Strong — Good for most uses</li>
-              <li>🟢 <span className="font-medium">80+ bits:</span> Very Strong — Excellent for sensitive data</li>
+              <li>{t.learn.strength.weak}</li>
+              <li>{t.learn.strength.strong}</li>
+              <li>{t.learn.strength.veryStrong}</li>
             </ul>
             <p className="text-xs text-muted-foreground mt-3 italic">
-              Example: A 6-word Diceware passphrase has ~77 bits of entropy, which would take trillions of years to crack with current technology.
+              {t.learn.strength.example}
             </p>
           </div>
         </section>
 
         {/* Common Questions */}
         <section className="space-y-3">
-          <h3 className="text-xl font-semibold">Common Questions</h3>
+          <h3 className="text-xl font-semibold">{t.learn.faq.title}</h3>
 
           <Accordion type="single" collapsible className="space-y-2">
             <AccordionItem value="faq-1" className="border rounded-lg px-4">
               <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                How many words should my passphrase have?
+                {t.learn.faq.q1}
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
-                <p>
-                  <span className="font-medium">6 words</span> is the sweet spot for most users — it provides strong security (~77 bits) while being reasonably easy to remember.
-                </p>
-                <p>
-                  Use <span className="font-medium">7-8 words</span> for master passwords protecting sensitive information like password managers or encryption keys.
-                </p>
-                <p>
-                  Avoid using fewer than 5 words, as this significantly reduces security.
-                </p>
+                {t.learn.faq.a1.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-2" className="border rounded-lg px-4">
               <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                What&apos;s a good password strategy?
+                {t.learn.faq.q2}
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
-                <p className="font-medium">The best approach:</p>
+                <p className="font-medium">{t.learn.faq.a2Title}</p>
                 <ol className="list-decimal list-inside space-y-1 ml-2">
-                  <li>Use a password manager (like Bitwarden, 1Password, or ProtonPass)</li>
-                  <li>Create one strong Diceware passphrase (6-7 words) as your master password</li>
-                  <li>Generate random passwords for all other accounts</li>
-                  <li>Enable two-factor authentication (2FA) wherever possible</li>
+                  {t.learn.faq.a2List.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ol>
-                <p className="mt-2">
-                  This way, you only memorize one password while having unique, strong passwords everywhere.
-                </p>
+                <p className="mt-2">{t.learn.faq.a2Footer}</p>
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-3" className="border rounded-lg px-4">
               <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                Why use Ukrainian wordlists?
+                {t.learn.faq.q3}
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
-                <p>
-                  Passphrases in your native language are easier to remember and feel more natural. Passphrase UA is the first tool to offer comprehensive Ukrainian Diceware wordlists.
-                </p>
-                <p>
-                  The <span className="font-medium">transliteration feature</span> lets you type Ukrainian words using a standard Latin keyboard (e.g., "собака" becomes "sobaka"), making it easier to enter on any device while maintaining Ukrainian vocabulary.
-                </p>
+                {t.learn.faq.a3.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-4" className="border rounded-lg px-4">
               <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                Should I exclude ambiguous characters in passwords?
+                {t.learn.faq.q4}
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
-                <p>
-                  If you frequently type your password manually, excluding ambiguous characters (like &apos;O&apos; vs &apos;0&apos;, &apos;l&apos; vs &apos;1&apos;) reduces typing errors. This slightly decreases entropy but improves usability.
-                </p>
-                <p>
-                  For passwords stored in a password manager that you&apos;ll copy-paste, keep all characters for maximum strength.
-                </p>
+                {t.learn.faq.a4.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-5" className="border rounded-lg px-4">
               <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                Can I use this tool offline?
+                {t.learn.faq.q5}
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground">
-                Yes! After the page loads once, you can use it without an internet connection. All generation happens locally in your browser, and wordlists are cached for offline use.
+                {t.learn.faq.a5}
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-6" className="border rounded-lg px-4">
               <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                How is &quot;time to crack&quot; calculated?
+                {t.learn.faq.q6}
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground">
-                We calculate the average time an attacker would need to guess your password by trying combinations. The calculation assumes a powerful adversary with 1 trillion guesses per second (using specialized hardware). Real-world attacks are usually much slower due to rate limiting and other protections.
+                {t.learn.faq.a6}
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-7" className="border rounded-lg px-4">
               <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                What are good use cases for Diceware passphrases?
+                {t.learn.faq.q7}
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
-                <p className="font-medium">Excellent use cases:</p>
+                <p className="font-medium">{t.learn.faq.a7GoodTitle}</p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
-                  <li>Master password for password managers</li>
-                  <li>Smart TVs and devices where typing symbols is difficult</li>
-                  <li>Wi-Fi passwords that you need to share with guests</li>
-                  <li>Shared computers where you can&apos;t install password managers</li>
-                  <li>Full-disk encryption passwords</li>
-                  <li>Any password you need to type frequently by hand</li>
+                  {t.learn.faq.a7GoodList.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
-                <p className="mt-2 font-medium">Not recommended for:</p>
+                <p className="mt-2 font-medium">{t.learn.faq.a7BadTitle}</p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
-                  <li>Cryptocurrency wallets (use hardware wallets with seed phrases instead)</li>
-                  <li>Situations where an attacker can make unlimited offline cracking attempts</li>
+                  {t.learn.faq.a7BadList.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-8" className="border rounded-lg px-4">
               <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                Should I add numbers or symbols to my passphrase?
+                {t.learn.faq.q8}
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
-                <p>
-                  Generally, <span className="font-medium">no</span> — length is more important than complexity. Adding a single number or symbol only adds a few bits of entropy, while adding another word adds ~13 bits.
-                </p>
-                <p>
-                  For example: <span className="font-mono text-xs">correct-horse-battery-staple-7</span> is barely stronger than <span className="font-mono text-xs">correct-horse-battery-staple</span>, but <span className="font-mono text-xs">correct-horse-battery-staple-magnet</span> is significantly stronger.
-                </p>
-                <p>
-                  Only add special characters if a website requires them — otherwise, keep it simple and memorable.
-                </p>
+                {t.learn.faq.a8.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
               </AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-9" className="border rounded-lg px-4">
               <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                Will a strong password protect me from phishing?
+                {t.learn.faq.q9}
               </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
-                <p>
-                  Unfortunately, no. Even the strongest password in the world won&apos;t help if you enter it on a fake website. However, using unique passwords for each service means that if one gets phished, your other accounts remain safe.
-                </p>
-                <p className="font-medium">Protect yourself from phishing:</p>
+                {t.learn.faq.a9.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+                <p className="font-medium">{t.learn.faq.a9Title}</p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
-                  <li>Always check the website URL before entering passwords</li>
-                  <li>Enable two-factor authentication (2FA) on all accounts</li>
-                  <li>Use a password manager — they won&apos;t autofill on fake sites</li>
-                  <li>Be suspicious of urgent emails asking you to log in</li>
+                  {t.learn.faq.a9List.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
                 </ul>
               </AccordionContent>
             </AccordionItem>
@@ -247,46 +219,46 @@ export function LearnContent() {
 
         {/* Method Comparison (Advanced) */}
         <section className="space-y-3">
-          <h3 className="text-xl font-semibold">Detailed Method Comparison</h3>
+          <h3 className="text-xl font-semibold">{t.learn.comparison.title}</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm border-collapse">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left p-2 font-medium">Feature</th>
-                  <th className="text-left p-2 font-medium">Random Password</th>
-                  <th className="text-left p-2 font-medium">Diceware Passphrase</th>
+                  <th className="text-left p-2 font-medium">{t.learn.comparison.feature}</th>
+                  <th className="text-left p-2 font-medium">{t.learn.comparison.randomPassword}</th>
+                  <th className="text-left p-2 font-medium">{t.learn.comparison.dicewarePassphrase}</th>
                 </tr>
               </thead>
               <tbody className="text-muted-foreground">
                 <tr className="border-b">
-                  <td className="p-2">Memorability</td>
-                  <td className="p-2">Very Difficult</td>
-                  <td className="p-2">Easy</td>
+                  <td className="p-2">{t.learn.comparison.memorability}</td>
+                  <td className="p-2">{t.learn.comparison.memorabilityRandom}</td>
+                  <td className="p-2">{t.learn.comparison.memorabilityDiceware}</td>
                 </tr>
                 <tr className="border-b">
-                  <td className="p-2">Typing Speed</td>
-                  <td className="p-2">Slow (symbols, case)</td>
-                  <td className="p-2">Fast (just words)</td>
+                  <td className="p-2">{t.learn.comparison.typingSpeed}</td>
+                  <td className="p-2">{t.learn.comparison.typingSpeedRandom}</td>
+                  <td className="p-2">{t.learn.comparison.typingSpeedDiceware}</td>
                 </tr>
                 <tr className="border-b">
-                  <td className="p-2">Typical Length</td>
-                  <td className="p-2">12-20 characters</td>
-                  <td className="p-2">30-50 characters</td>
+                  <td className="p-2">{t.learn.comparison.length}</td>
+                  <td className="p-2">{t.learn.comparison.lengthRandom}</td>
+                  <td className="p-2">{t.learn.comparison.lengthDiceware}</td>
                 </tr>
                 <tr className="border-b">
-                  <td className="p-2">Entropy per Character</td>
-                  <td className="p-2">High (~6.5 bits)</td>
-                  <td className="p-2">Lower (~2.6 bits)</td>
+                  <td className="p-2">{t.learn.comparison.entropyPerChar}</td>
+                  <td className="p-2">{t.learn.comparison.entropyRandom}</td>
+                  <td className="p-2">{t.learn.comparison.entropyDiceware}</td>
                 </tr>
                 <tr className="border-b">
-                  <td className="p-2">Total Security (similar)</td>
-                  <td className="p-2">16 chars ≈ 104 bits</td>
-                  <td className="p-2">6 words ≈ 77 bits</td>
+                  <td className="p-2">{t.learn.comparison.totalSecurity}</td>
+                  <td className="p-2">{t.learn.comparison.securityRandom}</td>
+                  <td className="p-2">{t.learn.comparison.securityDiceware}</td>
                 </tr>
                 <tr className="border-b">
-                  <td className="p-2">Best For</td>
-                  <td className="p-2">Password managers</td>
-                  <td className="p-2">Master passwords</td>
+                  <td className="p-2">{t.learn.comparison.bestFor}</td>
+                  <td className="p-2">{t.learn.comparison.bestForRandom}</td>
+                  <td className="p-2">{t.learn.comparison.bestForDiceware}</td>
                 </tr>
               </tbody>
             </table>
@@ -295,43 +267,39 @@ export function LearnContent() {
 
         {/* Security Best Practices */}
         <section className="space-y-3">
-          <h3 className="text-xl font-semibold">Security Best Practices</h3>
+          <h3 className="text-xl font-semibold">{t.learn.bestPractices.title}</h3>
           <div className="rounded-lg border bg-muted/30 p-4">
             <ul className="text-sm space-y-2 text-muted-foreground list-disc list-inside">
-              <li>Use unique passwords for every account — never reuse</li>
-              <li>Use a password manager to securely store all your passwords</li>
-              <li>Enable two-factor authentication (2FA) on all important accounts</li>
-              <li>Update passwords if there&apos;s a security breach</li>
-              <li>Never share passwords via email, text, or messaging apps</li>
-              <li>Don&apos;t use personal information (birthdays, names, pet names)</li>
-              <li>Be suspicious of phishing attempts asking for passwords</li>
+              {t.learn.bestPractices.list.map((item, index) => (
+                <li key={index}>{item}</li>
+              ))}
             </ul>
           </div>
         </section>
 
         {/* What is Diceware? (Advanced) */}
         <section className="space-y-3">
-          <h3 className="text-xl font-semibold">What is Diceware?</h3>
+          <h3 className="text-xl font-semibold">{t.learn.whatIsDiceware.title}</h3>
           <p className="text-muted-foreground leading-relaxed">
-            Diceware is a method created by Arnold G. Reinhold in 1995 for generating secure, memorable passphrases. Originally, you would roll physical dice to randomly select words from a list.
+            {t.learn.whatIsDiceware.description1}
           </p>
           <p className="text-muted-foreground leading-relaxed">
-            This tool uses the same principle but with a cryptographically secure random number generator instead of dice. The wordlists are carefully curated to include only memorable, appropriate words while maintaining maximum security.
+            {t.learn.whatIsDiceware.description2}
           </p>
           <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
-            <p className="text-sm font-medium">Available Wordlists:</p>
+            <p className="text-sm font-medium">{t.learn.whatIsDiceware.wordlistsTitle}</p>
             <ul className="text-sm space-y-1 text-muted-foreground">
-              <li>• <span className="font-medium">Ukrainian:</span> First comprehensive Ukrainian Diceware wordlists (small, normal, large) with transliteration</li>
-              <li>• <span className="font-medium">English:</span> EFF and Original Diceware wordlists — time-tested and widely trusted</li>
+              <li>• {t.learn.whatIsDiceware.ukrainian}</li>
+              <li>• {t.learn.whatIsDiceware.english}</li>
             </ul>
           </div>
         </section>
 
         {/* Similar Tools */}
         <section className="space-y-3">
-          <h3 className="text-xl font-semibold">Similar Tools</h3>
+          <h3 className="text-xl font-semibold">{t.learn.similarTools.title}</h3>
           <p className="text-sm text-muted-foreground">
-            Other excellent password generators you might find useful:
+            {t.learn.similarTools.description}
           </p>
           <div className="space-y-2">
             <a
@@ -340,9 +308,9 @@ export function LearnContent() {
               rel="noopener noreferrer"
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
-              <p className="font-medium">Diceware Password Generator by Doug Muth</p>
+              <p className="font-medium">{t.learn.similarTools.dmuth}</p>
               <p className="text-muted-foreground text-xs mt-1">
-                Interactive Diceware generator with dice animation and EFF wordlist. Great for visualizing the randomness process.
+                {t.learn.similarTools.dmuthDescription}
               </p>
             </a>
             <a
@@ -351,9 +319,9 @@ export function LearnContent() {
               rel="noopener noreferrer"
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
-              <p className="font-medium">StrongPhrase</p>
+              <p className="font-medium">{t.learn.similarTools.strongphrase}</p>
               <p className="text-muted-foreground text-xs mt-1">
-                Advanced passphrase generator with detailed password strength analysis and cracking cost estimates. Excellent for understanding security metrics.
+                {t.learn.similarTools.strongphraseDescription}
               </p>
             </a>
           </div>
@@ -361,9 +329,9 @@ export function LearnContent() {
 
         {/* Additional Resources */}
         <section className="space-y-3">
-          <h3 className="text-xl font-semibold">Educational Resources</h3>
+          <h3 className="text-xl font-semibold">{t.learn.resources.title}</h3>
           <p className="text-sm text-muted-foreground">
-            Learn more about password security and the Diceware method:
+            {t.learn.resources.description}
           </p>
           <div className="space-y-2">
             <a
@@ -372,9 +340,9 @@ export function LearnContent() {
               rel="noopener noreferrer"
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
-              <p className="font-medium">EFF&apos;s Dice-Generated Passphrases</p>
+              <p className="font-medium">{t.learn.resources.eff}</p>
               <p className="text-muted-foreground text-xs mt-1">
-                Comprehensive guide to the Diceware method with official EFF wordlists
+                {t.learn.resources.effDescription}
               </p>
             </a>
             <a
@@ -383,9 +351,9 @@ export function LearnContent() {
               rel="noopener noreferrer"
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
-              <p className="font-medium">Original Diceware by Arnold G. Reinhold</p>
+              <p className="font-medium">{t.learn.resources.original}</p>
               <p className="text-muted-foreground text-xs mt-1">
-                The original Diceware page from 1995 — the method that started it all
+                {t.learn.resources.originalDescription}
               </p>
             </a>
             <a
@@ -394,9 +362,9 @@ export function LearnContent() {
               rel="noopener noreferrer"
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
-              <p className="font-medium">XKCD: Password Strength</p>
+              <p className="font-medium">{t.learn.resources.xkcd}</p>
               <p className="text-muted-foreground text-xs mt-1">
-                Famous comic explaining why &quot;correct horse battery staple&quot; is more secure and memorable than &quot;Tr0ub4dor&amp;3&quot;
+                {t.learn.resources.xkcdDescription}
               </p>
             </a>
             <a
@@ -405,9 +373,9 @@ export function LearnContent() {
               rel="noopener noreferrer"
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
-              <p className="font-medium">NIST Digital Identity Guidelines</p>
+              <p className="font-medium">{t.learn.resources.nist}</p>
               <p className="text-muted-foreground text-xs mt-1">
-                Official U.S. government guidelines on authentication and password security
+                {t.learn.resources.nistDescription}
               </p>
             </a>
           </div>
