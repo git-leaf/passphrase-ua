@@ -1,12 +1,18 @@
+"use client"
+
+import { useI18n } from "@/lib/i18n"
+
 /**
  * Ukrainian charity donation section with trusted organizations and personal fundraising
  */
 export function DonationSection() {
+  const { t } = useI18n()
+
   return (
     <div className="space-y-4">
-      <h3 className="text-center text-sm font-semibold text-foreground">Support Ukraine 🇺🇦</h3>
+      <h3 className="text-center text-sm font-semibold text-foreground">{t.footer.supportUkraine}</h3>
       <p className="text-center text-xs text-muted-foreground max-w-2xl mx-auto">
-        Consider supporting Ukrainian defense and humanitarian efforts through these trusted organizations:
+        {t.footer.supportDescription}
       </p>
       
       {/* Main charity organizations */}
@@ -87,7 +93,9 @@ export function DonationSection() {
 
       {/* Personal fundraising */}
       <div className="flex flex-col items-center gap-3 pt-2">
-        <p className="text-xs text-muted-foreground">Or support our current fundraising:</p>
+        <p className="text-xs text-muted-foreground">
+          {t.footer.supportFundraising}
+        </p>
         <a
           href={process.env.NEXT_PUBLIC_MONOBANK_JAR_URL}
           target="_blank"

@@ -6,6 +6,8 @@ import { TabsContent } from "@/app/components/ui/tabs"
 import { Shield } from "lucide-react"
 import { useToast } from "@/app/hooks/use-toast"
 import { ThemeToggle } from "@/app/components/theme-toggle"
+import { LanguageToggle } from "@/app/components/language-toggle"
+import { useI18n } from "@/lib/i18n"
 import { 
   generatePassword, 
   type PasswordConfig 
@@ -30,6 +32,7 @@ import { FooterLinks } from "@/app/components/footer/footer-links"
 
 export default function Home() {
   const { toast } = useToast()
+  const { t } = useI18n()
   const [activeTab, setActiveTab] = useState("password")
 
   // Password options
@@ -76,8 +79,8 @@ export default function Home() {
     } catch (error) {
       // Handle errors (e.g., invalid configuration)
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to generate password",
+        title: t.toast.error,
+        description: error instanceof Error ? error.message : t.toast.errorPassword,
         variant: "destructive",
       })
     }
@@ -109,8 +112,8 @@ export default function Home() {
     } catch (error) {
       // Handle errors (e.g., wordlist loading failure)
       toast({
-        title: "Error",
-        description: error instanceof Error ? error.message : "Failed to generate passphrase",
+        title: t.toast.error,
+        description: error instanceof Error ? error.message : t.toast.errorPassphrase,
         variant: "destructive",
       })
     } finally {
@@ -132,8 +135,8 @@ export default function Home() {
     if (!generatedPassword) return
     navigator.clipboard.writeText(generatedPassword)
     toast({
-      title: "Copied!",
-      description: "Password copied to clipboard",
+      title: t.toast.copied,
+      description: t.toast.copiedDescription,
     })
   }
 
@@ -142,14 +145,15 @@ export default function Home() {
       <div className="mx-auto max-w-3xl">
         {/* Header */}
         <div className="mb-8 text-center">
-          <div className="mb-4 flex items-center justify-end">
+          <div className="mb-4 flex items-center justify-end gap-2">
+            <LanguageToggle />
             <ThemeToggle />
           </div>
           <div className="mb-2 flex items-center justify-center gap-2">
             <Shield className="h-8 w-8 text-primary" />
-            <h1 className="text-4xl font-bold tracking-tight">Passphrase UA</h1>
+            <h1 className="text-4xl font-bold tracking-tight">{t.header.title}</h1>
           </div>
-          <p className="text-muted-foreground">Generate secure passwords and memorable passphrases</p>
+          <p className="text-muted-foreground">{t.header.subtitle}</p>
         </div>
 
         <Card className="border-2">
@@ -220,7 +224,7 @@ export default function Home() {
 
         {/* Security Notice */}
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          All passwords are generated locally in your browser. Nothing is stored or transmitted.
+          {t.footer.securityNotice}
         </p>
 
         {/* Footer */}
