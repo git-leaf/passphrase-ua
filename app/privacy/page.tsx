@@ -346,7 +346,7 @@ export default function PrivacyPage() {
                 <li>
                   {locale === "uk" ? "Відкрити проблему на " : "Open an issue on "}
                   <a 
-                    href="https://github.com/passphrase-ua/passphrase-ua" 
+                    href="https://github.com/git-leaf/passphrase-ua" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-primary hover:underline"

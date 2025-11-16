@@ -7,7 +7,7 @@ We take the security of Passphrase UA seriously. If you discover a security vuln
 ### How to Report
 
 Please report security vulnerabilities via:
-- **GitHub Security Advisories**: [Create a new advisory](https://github.com/passphrase-ua/passphrase-ua/security/advisories/new)
+- **GitHub Security Advisories**: [Create a new advisory](https://github.com/git-leaf/passphrase-ua/security/advisories/new)
 - **Email**: If you prefer private disclosure, contact us via the email in the repository
 
 ### What to Include
@@ -113,8 +113,8 @@ We appreciate security researchers who help keep our users safe. Contributors wi
 ## Contact
 
 For security-related questions or concerns:
-- GitHub Issues: [passphrase-ua/passphrase-ua/issues](https://github.com/passphrase-ua/passphrase-ua/issues)
-- Security Advisories: [passphrase-ua/passphrase-ua/security](https://github.com/passphrase-ua/passphrase-ua/security)
+- GitHub Issues: [passphrase-ua/passphrase-ua/issues](https://github.com/git-leaf/passphrase-ua/issues)
+- Security Advisories: [passphrase-ua/passphrase-ua/security](https://github.com/git-leaf/passphrase-ua/security)
 
 ---
 
