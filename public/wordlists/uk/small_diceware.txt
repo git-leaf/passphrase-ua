@@ -1,4 +1,4 @@
-# Name: Ukrainian Small Diceware Dictionary
+# Name: Ukrainian Small Diceware Wordlist
 # Format: INDEX WORD TRANSLITERATION
 # Language: uk
 # Transliteration: en

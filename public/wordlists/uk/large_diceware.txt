@@ -1,4 +1,4 @@
-# Name: Ukrainian Large Diceware Dictionary
+# Name: Ukrainian Large Diceware Wordlist
 # Format: INDEX WORD TRANSLITERATION
 # Language: uk
 # Transliteration: en

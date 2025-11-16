@@ -1,14 +1,14 @@
 /**
- * Dictionary Types
+ * Wordlist Types
  * 
- * Type definitions for dictionary loading and management.
+ * Type definitions for wordlist loading and management.
  */
 
 /**
- * Dictionary metadata from file header
+ * Wordlist metadata from file header
  */
-export interface DictionaryMetadata {
-  /** Dictionary name */
+export interface WordlistMetadata {
+  /** Wordlist name */
   name: string;
   /** Format (e.g., "INDEX WORD", "INDEX WORD TRANSLITERATION") */
   format: string;
@@ -18,7 +18,7 @@ export interface DictionaryMetadata {
   transliteration?: string;
   /** Number of dice (4, 5, or 6) */
   dice?: number;
-  /** Dictionary size */
+  /** Wordlist size */
   size: number;
   /** Source URL if available */
   source?: string;
@@ -27,9 +27,9 @@ export interface DictionaryMetadata {
 }
 
 /**
- * Dictionary entry (single word)
+ * Wordlist entry (single word)
  */
-export interface DictionaryEntry {
+export interface WordlistEntry {
   /** Dice number index (e.g., "11111") */
   index: string;
   /** Word in original language */
@@ -39,62 +39,62 @@ export interface DictionaryEntry {
 }
 
 /**
- * Loaded dictionary with metadata and entries
+ * Loaded wordlist with metadata and entries
  */
-export interface Dictionary {
-  /** Dictionary metadata */
-  metadata: DictionaryMetadata;
-  /** Dictionary entries (words) */
-  entries: DictionaryEntry[];
+export interface Wordlist {
+  /** Wordlist metadata */
+  metadata: WordlistMetadata;
+  /** Wordlist entries (words) */
+  entries: WordlistEntry[];
   /** Total word count */
   wordCount: number;
 }
 
 /**
- * Dictionary identifier
+ * Wordlist identifier
  */
-export interface DictionaryId {
+export interface WordlistId {
   /** Language code */
   language: 'en' | 'uk';
-  /** Dictionary name */
+  /** Wordlist name */
   name: string;
 }
 
 /**
- * Available dictionaries configuration
+ * Available wordlists configuration
  */
-export const AVAILABLE_DICTIONARIES = {
+export const AVAILABLE_WORDLISTS = {
   en: {
     'eff-large': {
-      path: '/dictionaries/en/eff_large_diceware.txt',
+      path: '/wordlists/en/eff_large_diceware.txt',
       name: 'EFF Large',
       description: 'EFF Long List (7,776 words)',
       size: 7776,
       dice: 5,
     },
     'eff-short': {
-      path: '/dictionaries/en/eff_short_diceware.txt',
+      path: '/wordlists/en/eff_short_diceware.txt',
       name: 'EFF Short',
       description: 'EFF Short List (1,296 words)',
       size: 1296,
       dice: 4,
     },
     'eff-short-2': {
-      path: '/dictionaries/en/eff_short_diceware_2.txt',
+      path: '/wordlists/en/eff_short_diceware_2.txt',
       name: 'EFF Short 2',
       description: 'EFF Short List 2 (1,296 words)',
       size: 1296,
       dice: 4,
     },
     original: {
-      path: '/dictionaries/en/original_diceware.txt',
+      path: '/wordlists/en/original_diceware.txt',
       name: 'Original Diceware',
       description: 'Original Diceware (7,776 words)',
       size: 7776,
       dice: 5,
     },
     beale: {
-      path: '/dictionaries/en/beale_diceware.txt',
+      path: '/wordlists/en/beale_diceware.txt',
       name: 'Beale',
       description: 'Beale List (7,776 words)',
       size: 7776,
@@ -103,7 +103,7 @@ export const AVAILABLE_DICTIONARIES = {
   },
   uk: {
     wordlist: {
-      path: '/dictionaries/uk/wordlist.txt',
+      path: '/wordlists/uk/wordlist.txt',
       name: 'Wordlist',
       description: 'Wordlist (10,000 words)',
       size: 10000,
@@ -111,7 +111,7 @@ export const AVAILABLE_DICTIONARIES = {
       isDiceware: false,
     },
     small: {
-      path: '/dictionaries/uk/small_diceware.txt',
+      path: '/wordlists/uk/small_diceware.txt',
       name: 'Small',
       description: 'Small (1,296 words)',
       size: 1296,
@@ -120,7 +120,7 @@ export const AVAILABLE_DICTIONARIES = {
       isDiceware: true,
     },
     normal: {
-      path: '/dictionaries/uk/normal_diceware.txt',
+      path: '/wordlists/uk/normal_diceware.txt',
       name: 'Normal',
       description: 'Normal (7,776 words)',
       size: 7776,
@@ -129,7 +129,7 @@ export const AVAILABLE_DICTIONARIES = {
       isDiceware: true,
     },
     large: {
-      path: '/dictionaries/uk/large_diceware.txt',
+      path: '/wordlists/uk/large_diceware.txt',
       name: 'Large',
       description: 'Large (46,656 words)',
       size: 46656,
@@ -141,22 +141,22 @@ export const AVAILABLE_DICTIONARIES = {
 } as const;
 
 /**
- * Dictionary language type
+ * Wordlist language type
  */
-export type DictionaryLanguage = keyof typeof AVAILABLE_DICTIONARIES;
+export type WordlistLanguage = keyof typeof AVAILABLE_WORDLISTS;
 
 /**
- * Dictionary name for English
+ * Wordlist name for English
  */
-export type EnglishDictionaryName = keyof typeof AVAILABLE_DICTIONARIES.en;
+export type EnglishWordlistName = keyof typeof AVAILABLE_WORDLISTS.en;
 
 /**
- * Dictionary name for Ukrainian
+ * Wordlist name for Ukrainian
  */
-export type UkrainianDictionaryName = keyof typeof AVAILABLE_DICTIONARIES.uk;
+export type UkrainianWordlistName = keyof typeof AVAILABLE_WORDLISTS.uk;
 
 /**
- * Any dictionary name
+ * Any wordlist name
  */
-export type DictionaryName = EnglishDictionaryName | UkrainianDictionaryName;
+export type WordlistName = EnglishWordlistName | UkrainianWordlistName;
 

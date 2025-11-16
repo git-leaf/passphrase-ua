@@ -32,7 +32,7 @@
 8. [User Interface & Experience](#8-user-interface--experience)
 9. [Success Metrics](#9-success-metrics)
 10. [Security & Privacy](#10-security--privacy)
-11. [Dictionaries](#11-dictionaries)
+11. [Wordlists](#11-wordlists)
 12. [Roadmap](#12-roadmap)
 13. [Open Questions & Decisions Needed](#13-open-questions--decisions-needed)
 14. [Success Criteria & Definition of Done](#14-success-criteria--definition-of-done)
@@ -48,14 +48,14 @@
 
 ## 1. Executive Summary
 
-**Passphrase UA** is a client-side password and passphrase generator with first-class support for Ukrainian language dictionaries. The project aims to fill the gap in Ukrainian-language Diceware implementations while providing a secure, privacy-focused, and user-friendly tool for generating strong passwords and passphrases across multiple languages.
+**Passphrase UA** is a client-side password and passphrase generator with first-class support for Ukrainian language wordlists. The project aims to fill the gap in Ukrainian-language Diceware implementations while providing a secure, privacy-focused, and user-friendly tool for generating strong passwords and passphrases across multiple languages.
 
 ### Vision
-To become the go-to passphrase generation tool for Ukrainian-speaking users while demonstrating the first comprehensive Ukrainian Diceware dictionaries, and serving as a flexible, multilingual password generation platform for privacy-conscious users worldwide.
+To become the go-to passphrase generation tool for Ukrainian-speaking users while demonstrating the first comprehensive Ukrainian Diceware wordlists, and serving as a flexible, multilingual password generation platform for privacy-conscious users worldwide.
 
 ### Primary Goals
 1. Provide secure, client-side password/passphrase generation
-2. Introduce and showcase Ukrainian Diceware dictionaries (small, normal, large)
+2. Introduce and showcase Ukrainian Diceware wordlists (small, normal, large)
 3. Support multiple generation methods with extensible architecture
 4. Ensure complete offline functionality and privacy
 
@@ -71,10 +71,10 @@ The [Diceware method](https://theworld.com/~reinhold/diceware.html) for generati
 - Multiple generation methods for different use cases
 
 ### Inspiration
-After learning about the Diceware method created by Arnold G. Reinhold, we noticed the lack of Ukrainian dictionary support. We set out to build comprehensive Ukrainian Diceware dictionaries and develop a modern web application to showcase and utilize them.
+After learning about the Diceware method created by Arnold G. Reinhold, we noticed the lack of Ukrainian wordlist support. We set out to build comprehensive Ukrainian Diceware wordlists and develop a modern web application to showcase and utilize them.
 
 ### Key Differentiators
-- **First Ukrainian Diceware implementation** with 3+ dictionaries of different sizes
+- **First Ukrainian Diceware implementation** with 3+ wordlists of different sizes
 - **Completely client-side** — no server-side generation or data transmission
 - **Modern, accessible UI** built with Next.js and shadcn/ui
 - **Extensible architecture** for adding new generation methods and languages
@@ -140,12 +140,12 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
    - Capitalization options
    - Digit/symbol insertion options
 
-#### Ukrainian Diceware Dictionaries
+#### Ukrainian Diceware Wordlists
 - **Small** (4 dice, 1,296 words)
 - **Normal** (5 dice, 7,776 words)
 - **Large** (6 dice, 46,656 words)
 
-#### English Diceware Dictionaries
+#### English Diceware Wordlists
 - **Original Diceware** (5 dice, 7,776 words)
 - **EFF Short List** (4 dice, 1,296 words)
 - **EFF Long List** (5 dice, 7,776 words)
@@ -175,7 +175,7 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 #### Technical Requirements
 - **Offline-first** — Must work without network connection
 - **Fast load time** — Initial load < 2 seconds on 3G
-- **Service Worker** — Cache dictionaries and assets
+- **Service Worker** — Cache wordlists and assets
 - **No external dependencies at runtime** — Self-contained bundles
 - **TypeScript** — Fully typed codebase
 - **Testing** — Unit tests for all generation logic
@@ -188,7 +188,7 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 - Additional generation methods:
   - Memorable password (pronounceable)
   - Bitcoin BIP39 mnemonic
-  - Custom dictionary upload
+  - Custom wordlist upload
   - Passphrase with manual dice rolls
 - Password history (local storage, encrypted)
 - Batch generation
@@ -200,7 +200,7 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 - CLI tool
 - API for developers
 - Password strength checker (separate tool)
-- Community-contributed dictionaries
+- Community-contributed wordlists
 
 ### Explicitly Excluded
 - Server-side generation
@@ -267,21 +267,21 @@ app/
 │   │   ├── random-chars.ts
 │   │   ├── diceware.ts
 │   │   └── utils.ts
-│   ├── dictionaries/        # Dictionary loaders
+│   ├── wordlists/        # Wordlist loaders
 │   │   ├── loader.ts
 │   │   └── types.ts
 │   ├── entropy/             # Entropy calculation
 │   │   └── calculator.ts
 │   └── utils.ts
 ├── public/
-│   └── dictionaries/        # Static dictionary files
-│       ├── en/              # English dictionaries
+│   └── wordlists/        # Static wordlist files
+│       ├── en/              # English wordlists
 │       │   ├── diceware.txt     # Original Diceware (7,776 words)
 │       │   ├── eff-short.txt    # EFF Short (1,296 words)
 │       │   ├── eff-long.txt     # EFF Long (7,776 words)
 │       │   └── beale.txt        # Beale (7,776 words)
-│       └── uk/              # Ukrainian dictionaries
-│           ├── dictionary.txt   # Dictionary (10,000 words)
+│       └── uk/              # Ukrainian wordlists
+│           ├── wordlist.txt   # Wordlist (10,000 words)
 │           ├── small.txt        # Small Diceware (1,296 words)
 │           ├── normal.txt       # Normal Diceware (7,776 words)
 │           └── large.txt        # Large Diceware (46,656 words)
@@ -352,10 +352,10 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 **Priority:** P0 (MVP)
 
 - **FR-2.1** User can select language: Ukrainian or English
-- **FR-2.2** User can select dictionary:
+- **FR-2.2** User can select wordlist:
   - **Ukrainian**: Small (4 dice), Normal (5 dice), Large (6 dice)
   - **English**: Original Diceware (5 dice), EFF Short List (4 dice), EFF Long List (5 dice), Beale List (5 dice)
-- **FR-2.3** For Ukrainian dictionaries, user can choose to use transliteration or not (слово -> slovo)
+- **FR-2.3** For Ukrainian wordlists, user can choose to use transliteration or not (слово -> slovo)
 - **FR-2.4** User can select word count (4-12, default: 6)
 - **FR-2.5** User can select separator: space, dash, underscore, none, custom
 - **FR-2.6** User can toggle capitalization:
@@ -365,8 +365,8 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
   - All uppercase
   - All letters uppercase of a random word 
 - **FR-2.7** User can insert random digit/symbol between words
-- **FR-2.8** Dictionary loads asynchronously with loading state
-- **FR-2.9** Entropy calculated based on dictionary size and word count
+- **FR-2.8** Wordlist loads asynchronously with loading state
+- **FR-2.9** Entropy calculated based on wordlist size and word count
 
 ### FR-3: Strength Meter
 **Priority:** P0 (MVP)
@@ -397,10 +397,10 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 **Priority:** P0 (MVP)
 
 - **FR-5.1** All generation works without network
-- **FR-5.2** Service Worker caches dictionaries
+- **FR-5.2** Service Worker caches wordlists
 - **FR-5.3** Service Worker caches app shell
 - **FR-5.4** Offline indicator in UI
-- **FR-5.5** Graceful handling of missing dictionaries
+- **FR-5.5** Graceful handling of missing wordlists
 
 ### FR-6: Theme Support
 **Priority:** P0 (MVP)
@@ -452,7 +452,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **NFR-3.2** Time to Interactive (TTI) < 3 seconds
 - **NFR-3.3** Generation completes in < 100ms (99th percentile)
 - **NFR-3.4** Lighthouse score > 90 across all metrics
-- **NFR-3.5** Dictionary loading non-blocking
+- **NFR-3.5** Wordlist loading non-blocking
 - **NFR-3.6** Bundle size < 500KB (initial, gzipped)
 
 ### NFR-4: Accessibility
@@ -492,7 +492,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 **Priority:** P1
 
 - **NFR-7.1** Plugin architecture for new generation methods
-- **NFR-7.2** Dictionary loader supports new languages/formats
+- **NFR-7.2** Wordlist loader supports new languages/formats
 - **NFR-7.3** UI components decoupled from generation logic
 - **NFR-7.4** Configuration schema validated with Zod
 
@@ -546,7 +546,7 @@ Homepage / Generator
 
 #### 2. About/FAQ Page
 - Explanation of Diceware method (link to [original](https://theworld.com/~reinhold/diceware.html))
-- Why Ukrainian dictionaries matter
+- Why Ukrainian wordlists matter
 - How the generator works (security, privacy)
 - Links to source code
 - Credits and acknowledgments
@@ -570,7 +570,7 @@ Homepage / Generator
 - 81+ bits: "Very Strong" (dark green)
 
 #### Help Text Examples
-- Diceware: "Generates memorable passphrase using random words from a dictionary. Recommended for master passwords."
+- Diceware: "Generates memorable passphrase using random words from a wordlist. Recommended for master passwords."
 - Random: "Generates completely random password. Strong but harder to remember."
 - Entropy: "Higher entropy = more secure. 60+ bits recommended for most uses, 80+ for high-security."
 
@@ -604,8 +604,8 @@ If any analytics are added (with user consent), track:
 
 ### Long-Term Success Indicators
 1. GitHub stars/forks (community interest)
-2. Community-contributed dictionaries
-3. Ukrainian dictionary adoption by other tools
+2. Community-contributed wordlists
+3. Ukrainian wordlist adoption by other tools
 4. Contributions and pull requests
 5. Mentions in security communities
 
@@ -704,15 +704,15 @@ Content-Security-Policy:
 
 ---
 
-## 11. Dictionaries
+## 11. Wordlists
 
-### Ukrainian Dictionaries (Original Contribution)
+### Ukrainian Wordlists (Original Contribution)
 
-All Ukrainian dictionaries include **transliteration support** to enable easier typing on non-Ukrainian keyboards.
+All Ukrainian wordlists include **transliteration support** to enable easier typing on non-Ukrainian keyboards.
 
-#### Dictionary (10,000 words)
+#### Wordlist (10,000 words)
 - **Format**: `WORD TRANSLITERATION`
-- **File format**: Dictionary with Transliteration
+- **File format**: Wordlist with Transliteration
 - **Use case**: Non-Diceware generation methods, custom passphrases
 - **Selection criteria**:
   - Comprehensive vocabulary coverage
@@ -722,49 +722,49 @@ All Ukrainian dictionaries include **transliteration support** to enable easier 
   - Easy to spell and type
   - No offensive or easily confused words
 
-#### Small Diceware Dictionary (4 dice, 1,296 words)
+#### Small Diceware Wordlist (4 dice, 1,296 words)
 - **Format**: `INDEX WORD TRANSLITERATION`
-- **File format**: Diceware Dictionary with Transliteration
+- **File format**: Diceware Wordlist with Transliteration
 - **Dice range**: 1111-6666
 - **Use case**: Shorter passphrases (6-8 words for 60-80 bits entropy)
 - **Selection criteria**:
   - Most common Ukrainian words
   - Easy to remember and type
   - High frequency in everyday usage
-  - Subset of larger dictionaries
+  - Subset of larger wordlists
   - No offensive or easily confused words
 
-#### Normal Diceware Dictionary (5 dice, 7,776 words)
+#### Normal Diceware Wordlist (5 dice, 7,776 words)
 - **Format**: `INDEX WORD TRANSLITERATION`
-- **File format**: Diceware Dictionary with Transliteration
+- **File format**: Diceware Wordlist with Transliteration
 - **Dice range**: 11111-66666
 - **Use case**: Standard passphrases (5-6 words for 65-77 bits entropy)
 - **Selection criteria**:
   - Balance of common and less common words
   - Diverse parts of speech
   - Cultural relevance to Ukraine
-  - Includes words from Small dictionary
+  - Includes words from Small wordlist
   - Suitable for most security needs
 
-#### Large Diceware Dictionary (6 dice, 46,656 words)
+#### Large Diceware Wordlist (6 dice, 46,656 words)
 - **Format**: `INDEX WORD TRANSLITERATION`
-- **File format**: Diceware Dictionary with Transliteration
+- **File format**: Diceware Wordlist with Transliteration
 - **Dice range**: 111111-666666
 - **Use case**: Longer passphrases with fewer words (4-5 words for 62-78 bits entropy)
 - **Selection criteria**:
   - Comprehensive word list (maximum vocabulary)
   - Technical terms, place names, specialized vocabulary
-  - Includes all words from Normal dictionary
+  - Includes all words from Normal wordlist
   - Maximum entropy per word
   - Cultural and linguistic diversity
 
-### English Dictionaries (Existing)
+### English Wordlists (Existing)
 
-English dictionaries use standard formats without transliteration.
+English wordlists use standard formats without transliteration.
 
-#### Original Diceware Dictionary
+#### Original Diceware Wordlist
 - **Format**: `INDEX WORD`
-- **File format**: Diceware Dictionary
+- **File format**: Diceware Wordlist
 - **Source**: https://theworld.com/~reinhold/diceware.html
 - **Size**: 7,776 words (5 dice)
 - **Dice range**: 11111-66666
@@ -772,9 +772,9 @@ English dictionaries use standard formats without transliteration.
 - **Use case**: Standard passphrases (5-6 words for 65-77 bits entropy)
 - **Notes**: Original, time-tested list with short words (avg 4.2 characters), created by Arnold G. Reinhold
 
-#### EFF Short Diceware Dictionary
+#### EFF Short Diceware Wordlist
 - **Format**: `INDEX WORD`
-- **File format**: Diceware Dictionary
+- **File format**: Diceware Wordlist
 - **Source**: https://www.eff.org/dice
 - **Size**: 1,296 words (4 dice)
 - **Dice range**: 1111-6666
@@ -782,9 +782,9 @@ English dictionaries use standard formats without transliteration.
 - **Use case**: Shorter passphrases (6-8 words for 60-80 bits entropy)
 - **Notes**: Short, memorable words, no offensive content
 
-#### EFF Long Diceware Dictionary
+#### EFF Long Diceware Wordlist
 - **Format**: `INDEX WORD`
-- **File format**: Diceware Dictionary
+- **File format**: Diceware Wordlist
 - **Source**: https://www.eff.org/dice
 - **Size**: 7,776 words (5 dice)
 - **Dice range**: 11111-66666
@@ -792,9 +792,9 @@ English dictionaries use standard formats without transliteration.
 - **Use case**: Standard passphrases (5-6 words for 65-77 bits entropy)
 - **Notes**: Longer, more memorable words (avg 7.0 characters), no offensive content
 
-#### Beale Diceware Dictionary
+#### Beale Diceware Wordlist
 - **Format**: `INDEX WORD`
-- **File format**: Diceware Dictionary
+- **File format**: Diceware Wordlist
 - **Source**: https://theworld.com/~reinhold/beale.wordlist.asc
 - **Size**: 7,776 words (5 dice)
 - **Dice range**: 11111-66666
@@ -804,14 +804,14 @@ English dictionaries use standard formats without transliteration.
 
 ---
 
-### Dictionary Management
+### Wordlist Management
 
-> **Note:** All dictionary files are stored in `public/dictionaries/` organized by language (`en/`, `uk/`).  
+> **Note:** All wordlist files are stored in `public/wordlists/` organized by language (`en/`, `uk/`).  
 > See Section 5 (Technical Architecture → Code Organization) for the complete directory structure.
 
-#### Dictionary File Formats
+#### Wordlist File Formats
 
-The application supports **4 dictionary file formats** based on two main structures (Dictionary and Diceware Dictionary), each with an optional transliteration variant.
+The application supports **4 wordlist file formats** based on two main structures (Wordlist and Diceware Wordlist), each with an optional transliteration variant.
 
 ##### General Format Rules
 
@@ -819,7 +819,7 @@ The application supports **4 dictionary file formats** based on two main structu
 - Comments start with `#` and are optional but highly recommended
 - Comments do not influence execution, only provide metadata
 - Recommended metadata fields:
-  - `Name`: Dictionary name (e.g., "English Diceware")
+  - `Name`: Wordlist name (e.g., "English Diceware")
   - `Format`: Column structure (e.g., "WORD", "WORD TRANSLITERATION", "INDEX WORD", "INDEX WORD TRANSLITERATION")
   - `Language`: ISO language code (e.g., "en", "uk")
   - `Transliteration`: Transliteration language if present (e.g., "en")
@@ -832,12 +832,12 @@ The application supports **4 dictionary file formats** based on two main structu
 
 ---
 
-##### 1. Dictionary
+##### 1. Wordlist
 
 Simple word list with one word per line in alphabetical order. Used for non-Diceware generation methods.
 
 ```
-# Name: English Dictionary
+# Name: English Wordlist
 # Format: WORD
 # Language: en
 # Size: 10000
@@ -856,12 +856,12 @@ zulu
 
 ---
 
-##### 2. Dictionary with Transliteration
+##### 2. Wordlist with Transliteration
 
 Word list with transliteration support. Each line contains a word and its transliteration.
 
 ```
-# Name: Ukrainian Dictionary with Transliteration
+# Name: Ukrainian Wordlist with Transliteration
 # Format: WORD TRANSLITERATION
 # Language: uk
 # Transliteration: en
@@ -883,12 +883,12 @@ Word list with transliteration support. Each line contains a word and its transl
 
 ---
 
-##### 3. Diceware Dictionary
+##### 3. Diceware Wordlist
 
 Diceware word list with dice numbers as keys. Each line contains a dice number and a word.
 
 ```
-# Name: English Diceware Dictionary
+# Name: English Diceware Wordlist
 # Format: INDEX WORD
 # Language: en
 # Dice: 5
@@ -903,7 +903,7 @@ Diceware word list with dice numbers as keys. Each line contains a dice number a
 
 **Specifications:**
 - Format: `DICE_NUMBER<space>WORD`
-- Dice number: 4, 5, or 6 digits (depending on dictionary size)
+- Dice number: 4, 5, or 6 digits (depending on wordlist size)
   - 4 dice = 1,296 words (1111-6666)
   - 5 dice = 7,776 words (11111-66666)
   - 6 dice = 46,656 words (111111-666666)
@@ -913,12 +913,12 @@ Diceware word list with dice numbers as keys. Each line contains a dice number a
 
 ---
 
-##### 4. Diceware Dictionary with Transliteration
+##### 4. Diceware Wordlist with Transliteration
 
 Diceware word list with transliteration support. Each line contains a dice number, word, and transliteration.
 
 ```
-# Name: Ukrainian Diceware Dictionary with Transliteration
+# Name: Ukrainian Diceware Wordlist with Transliteration
 # Format: INDEX WORD TRANSLITERATION
 # Language: uk
 # Transliteration: en
@@ -934,20 +934,20 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 
 **Specifications:**
 - Format: `DICE_NUMBER<space>WORD<space>TRANSLITERATION`
-- Same dice number rules as Diceware Dictionary format
+- Same dice number rules as Diceware Wordlist format
 - Single space separator between each column
 - Words in alphabetical order (by original word)
 - Transliteration typically follows standard romanization rules
 
 #### Loading Strategy
-1. **Lazy loading**: Load dictionary only when method selected
-2. **Caching**: Service Worker caches dictionaries
+1. **Lazy loading**: Load wordlist only when method selected
+2. **Caching**: Service Worker caches wordlists
 3. **Compression**: Serve as gzip/brotli compressed raw text (simpler, standard format, automatic server compression)
-4. **Validation**: Verify dictionary format on load
-5. **Error handling**: Graceful fallback if dictionary fails to load
+4. **Validation**: Verify wordlist format on load
+5. **Error handling**: Graceful fallback if wordlist fails to load
 
-#### Future Dictionary Additions
-- TODO: Decide on the list of languages and dictionaries to add
+#### Future Wordlist Additions
+- TODO: Decide on the list of languages and wordlists to add
 - Community contributions welcome (with review process)
 
 ---
@@ -956,7 +956,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 
 ### Phase 0: Preparation (Current)
 - ✅ Create PRD
-- ⬜ Finalize Ukrainian dictionaries
+- ⬜ Finalize Ukrainian wordlists
 - ⬜ Set up Next.js project structure
 - ⬜ Iterate UI design in-browser with shadcn/ui (faster development cycle, leverage components, easier to test responsiveness)
 
@@ -971,10 +971,10 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 
 **Week 3-4: Diceware Implementation**
 - Implement Diceware generator (pure function)
-- Create dictionary loader
-- Integrate Ukrainian dictionaries (all 3 sizes)
-- Integrate English dictionaries (Original, EFF)
-- Dictionary selection UI
+- Create wordlist loader
+- Integrate Ukrainian wordlists (all 3 sizes)
+- Integrate English wordlists (Original, EFF)
+- Wordlist selection UI
 
 **Week 5: Polish & Testing**
 - Implement strength meter with all metrics
@@ -995,18 +995,18 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - PWA capabilities (install prompt, app manifest)
 - Additional generation methods:
   - Memorable passwords (pronounceable)
-  - Custom dictionary upload
-  - Manual dice roll mode (for paranoid users, full dictionary is displayed with word codes)
+  - Custom wordlist upload
+  - Manual dice roll mode (for paranoid users, full wordlist is displayed with word codes)
 - Settings persistence improvements
 - Performance optimizations
 - Community feedback integration
 
 ### Phase 3: Expansion (Target: 6 months post-MVP)
-- Additional language dictionaries
+- Additional language wordlists
 - Browser extension (Chrome, Firefox)
 - Password strength checker (separate tool)
 - API/CLI for developers
-- Community dictionary contributions
+- Community wordlist contributions
 
 ### Ongoing
 - Security audits (quarterly)
@@ -1020,9 +1020,9 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 ## 13. Open Questions & Decisions Needed
 
 ### Content Decisions
-- [ ] **Ukrainian dictionary completion**: When will dictionaries be ready?
-  - **Action**: Confirm timeline with dictionary creator
-- [ ] **English dictionary licensing**: Verify we can redistribute
+- [ ] **Ukrainian wordlist completion**: When will wordlists be ready?
+  - **Action**: Confirm timeline with wordlist creator
+- [ ] **English wordlist licensing**: Verify we can redistribute
   - **Action**: Review licenses (CC-BY 3.0 confirmed for Original Diceware and EFF lists, Public Domain for Beale)
 
 ### Launch Decisions
@@ -1114,8 +1114,8 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 
 ### Project-Specific Terms
 - **Transliteration**: Conversion of text from one script to another (e.g., Ukrainian Cyrillic "слово" → Latin "slovo")
-- **Dictionary**: Simple word list format, one word per line (optionally with transliteration)
-- **Diceware Dictionary**: Word list with dice number indices for Diceware method (e.g., "11111 word")
+- **Wordlist**: Simple word list format, one word per line (optionally with transliteration)
+- **Diceware Wordlist**: Word list with dice number indices for Diceware method (e.g., "11111 word")
 - **Index**: Dice number prefix in Diceware format (4-6 digits, each 1-6, e.g., "11111" for "word")
 
 ---
@@ -1142,7 +1142,7 @@ Entropy = log₂(94^16) ≈ 105 bits
 
 ### Diceware Entropy
 ```
-Entropy = log₂(dictionary_size ^ word_count)
+Entropy = log₂(wordlist_size ^ word_count)
 
 Ukrainian Small (1,296 words):
 - 6 words: log₂(1,296^6) ≈ 61.8 bits
@@ -1193,7 +1193,7 @@ Time = (2^entropy / attempts_per_second) / 2  (average case)
 1. User lands on homepage
 2. User clicks "Diceware Passphrase" tab
 3. User selects "Ukrainian" language
-4. User selects "Normal (5 dice)" dictionary
+4. User selects "Normal (5 dice)" wordlist
 5. User adjusts word count to 6
 6. User clicks "Generate"
 7. Passphrase appears: "хмара собака вікно книга ліхтар музика"
@@ -1223,7 +1223,7 @@ Time = (2^entropy / attempts_per_second) / 2  (average case)
 1. User lands on homepage
 2. User clicks "Diceware Passphrase" tab
 3. User selects "Ukrainian" language
-4. User selects "Small (4 dice)" dictionary
+4. User selects "Small (4 dice)" wordlist
 5. User enables "Use transliteration" toggle
 6. User adjusts word count to 7
 7. User clicks "Generate"

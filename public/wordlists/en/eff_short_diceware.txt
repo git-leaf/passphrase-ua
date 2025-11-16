@@ -1,4 +1,4 @@
-# Name: English EFF Short Diceware Dictionary
+# Name: English EFF Short Diceware Wordlist
 # Format: INDEX WORD
 # Language: en
 # Dice: 4

@@ -1,4 +1,4 @@
-# Name: English Beale Diceware Dictionary
+# Name: English Beale Diceware Wordlist
 # Format: INDEX WORD
 # Language: en
 # Dice: 5

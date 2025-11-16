@@ -2,13 +2,13 @@
  * Passphrase Generator
  * 
  * Generates cryptographically secure passphrases using Diceware method.
- * All functions are pure and testable (except dictionary loading).
+ * All functions are pure and testable (except wordlist loading).
  */
 
 import { getSecureRandomValues } from './password';
-import type { Dictionary } from '@/lib/dictionaries/types';
-import { loadDictionary } from '@/lib/dictionaries/loader';
-import { AVAILABLE_DICTIONARIES } from '@/lib/dictionaries/types';
+import type { Wordlist } from '@/lib/wordlists/types';
+import { loadWordlist } from '@/lib/wordlists/loader';
+import { AVAILABLE_WORDLISTS } from '@/lib/wordlists/types';
 
 /**
  * Capitalization style for passphrase words
@@ -32,8 +32,8 @@ export interface PassphraseConfig {
   capitalization: CapitalizationStyle;
   /** Include random digits at the end */
   includeNumber: boolean;
-  /** Dictionary to use */
-  dictionary: Dictionary;
+  /** Wordlist to use */
+  wordlist: Wordlist;
   /** Use transliteration if available */
   useTransliteration: boolean;
 }
@@ -46,16 +46,16 @@ export interface PassphraseResult {
   passphrase: string;
   /** Entropy in bits */
   entropy: number;
-  /** Dictionary size used */
-  dictionarySize: number;
+  /** Wordlist size used */
+  wordlistSize: number;
   /** Words used (without modifications) */
   words: string[];
   /** Metadata about generation */
   metadata: {
     method: 'passphrase';
     wordCount: number;
-    dictionarySize: number;
-    dictionaryName: string;
+    wordlistSize: number;
+    wordlistName: string;
     timestamp: number;
     config: PassphraseConfig;
   };
@@ -73,9 +73,9 @@ export function validatePassphraseConfig(config: PassphraseConfig): void {
     throw new Error('Word count must be between 1 and 20');
   }
 
-  // Validate dictionary
-  if (!config.dictionary || !config.dictionary.entries || config.dictionary.entries.length === 0) {
-    throw new Error('Invalid or empty dictionary');
+  // Validate wordlist
+  if (!config.wordlist || !config.wordlist.entries || config.wordlist.entries.length === 0) {
+    throw new Error('Invalid or empty wordlist');
   }
 
   // Validate separator (allow empty)
@@ -87,23 +87,23 @@ export function validatePassphraseConfig(config: PassphraseConfig): void {
 /**
  * Calculates entropy for a passphrase
  * 
- * Formula: entropy = word_count × log₂(dictionary_size) + [number_entropy]
+ * Formula: entropy = word_count × log₂(wordlist_size) + [number_entropy]
  * 
  * @param wordCount - Number of words
- * @param dictionarySize - Size of dictionary
+ * @param wordlistSize - Size of wordlist
  * @param includeNumber - Whether digits are included
  * @returns Entropy in bits
  */
 export function calculatePassphraseEntropy(
   wordCount: number,
-  dictionarySize: number,
+  wordlistSize: number,
   includeNumber: boolean
 ): number {
-  if (wordCount <= 0 || dictionarySize <= 0) {
+  if (wordCount <= 0 || wordlistSize <= 0) {
     return 0;
   }
 
-  let entropy = wordCount * Math.log2(dictionarySize);
+  let entropy = wordCount * Math.log2(wordlistSize);
 
   // Add entropy for random number (4 digits = ~13.3 bits)
   if (includeNumber) {
@@ -152,7 +152,7 @@ function capitalizeWord(word: string, style: CapitalizationStyle): string {
  * Generates a passphrase based on configuration
  * 
  * This function uses Web Crypto API for secure randomness.
- * Dictionary must be loaded before calling this function.
+ * Wordlist must be loaded before calling this function.
  * 
  * @param config - Passphrase generation configuration
  * @returns Passphrase generation result with metadata
@@ -162,15 +162,15 @@ export function generatePassphrase(config: PassphraseConfig): PassphraseResult {
   // Validate configuration
   validatePassphraseConfig(config);
 
-  const { dictionary, wordCount, separator, capitalization, includeNumber, useTransliteration } = config;
-  const dictionarySize = dictionary.entries.length;
+  const { wordlist, wordCount, separator, capitalization, includeNumber, useTransliteration } = config;
+  const wordlistSize = wordlist.entries.length;
 
   // Generate random word indices
-  const randomIndices = getSecureRandomValues(wordCount, dictionarySize);
+  const randomIndices = getSecureRandomValues(wordCount, wordlistSize);
 
-  // Select words from dictionary
+  // Select words from wordlist
   const selectedWords = randomIndices.map((index) => {
-    const entry = dictionary.entries[index];
+    const entry = wordlist.entries[index];
     
     // Use transliteration if requested and available
     if (useTransliteration && entry.transliteration) {
@@ -205,19 +205,19 @@ export function generatePassphrase(config: PassphraseConfig): PassphraseResult {
   }
 
   // Calculate entropy
-  const entropy = calculatePassphraseEntropy(wordCount, dictionarySize, includeNumber);
+  const entropy = calculatePassphraseEntropy(wordCount, wordlistSize, includeNumber);
 
   // Return result with metadata
   return {
     passphrase,
     entropy,
-    dictionarySize,
+    wordlistSize,
     words: selectedWords, // Original words without capitalization
     metadata: {
       method: 'passphrase',
       wordCount,
-      dictionarySize,
-      dictionaryName: dictionary.metadata.name,
+      wordlistSize,
+      wordlistName: wordlist.metadata.name,
       timestamp: Date.now(),
       config,
     },
@@ -225,42 +225,42 @@ export function generatePassphrase(config: PassphraseConfig): PassphraseResult {
 }
 
 /**
- * Convenience function to generate passphrase with dictionary path
+ * Convenience function to generate passphrase with wordlist path
  * 
- * Loads dictionary and generates passphrase in one call.
+ * Loads wordlist and generates passphrase in one call.
  * 
  * @param language - Language code ('en' or 'uk')
- * @param dictionaryName - Dictionary name
+ * @param wordlistName - Wordlist name
  * @param options - Passphrase options (wordCount, separator, etc.)
  * @returns Passphrase generation result
  */
-export async function generatePassphraseWithDictionary(
+export async function generatePassphraseWithWordlist(
   language: 'en' | 'uk',
-  dictionaryName: string,
-  options: Omit<PassphraseConfig, 'dictionary'>
+  wordlistName: string,
+  options: Omit<PassphraseConfig, 'wordlist'>
 ): Promise<PassphraseResult> {
-  // Get dictionary path
-  const dictionaries = AVAILABLE_DICTIONARIES[language];
-  const dictConfig = (dictionaries as Record<string, {path: string; name: string; description: string; size: number; dice: number; hasTransliteration?: boolean}>)[dictionaryName];
+  // Get wordlist path
+  const wordlists = AVAILABLE_WORDLISTS[language];
+  const wordlistConfig = (wordlists as Record<string, {path: string; name: string; description: string; size: number; dice: number; hasTransliteration?: boolean}>)[wordlistName];
   
-  if (!dictConfig) {
-    throw new Error(`Dictionary not found: ${language}/${dictionaryName}`);
+  if (!wordlistConfig) {
+    throw new Error(`Wordlist not found: ${language}/${wordlistName}`);
   }
 
-  // Load dictionary
-  const dictionary = await loadDictionary(dictConfig.path);
+  // Load wordlist
+  const wordlist = await loadWordlist(wordlistConfig.path);
 
   // Generate passphrase
   return generatePassphrase({
     ...options,
-    dictionary,
+    wordlist,
   });
 }
 
 /**
  * Default configuration for passphrase generation
  */
-export const DEFAULT_PASSPHRASE_CONFIG: Omit<PassphraseConfig, 'dictionary'> = {
+export const DEFAULT_PASSPHRASE_CONFIG: Omit<PassphraseConfig, 'wordlist'> = {
   wordCount: 6,
   separator: '-',
   capitalization: 'none',
