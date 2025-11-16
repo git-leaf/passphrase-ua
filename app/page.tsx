@@ -131,13 +131,28 @@ export default function Home() {
     }
   }
 
-  const copyToClipboard = () => {
+  const copyToClipboard = async () => {
     if (!generatedPassword) return
-    navigator.clipboard.writeText(generatedPassword)
-    toast({
-      title: t.toast.copied,
-      description: t.toast.copiedDescription,
-    })
+    
+    try {
+      // Check if clipboard API is available
+      if (!navigator.clipboard) {
+        throw new Error('Clipboard API not available')
+      }
+      
+      await navigator.clipboard.writeText(generatedPassword)
+      toast({
+        title: t.toast.copied,
+        description: t.toast.copiedDescription,
+      })
+    } catch (error) {
+      // Handle clipboard errors gracefully
+      toast({
+        title: t.toast.error,
+        description: error instanceof Error ? error.message : 'Failed to copy to clipboard',
+        variant: "destructive",
+      })
+    }
   }
 
   return (

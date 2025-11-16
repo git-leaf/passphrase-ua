@@ -120,6 +120,7 @@ export interface Translations {
     reportIssue: string
     documentation: string
     contact: string
+    privacy: string
   }
 
   // Theme
@@ -374,6 +375,7 @@ export const translations: Record<Locale, Translations> = {
       reportIssue: "Report Issue",
       documentation: "Documentation",
       contact: "Contact",
+      privacy: "Privacy",
     },
 
     theme: {
@@ -688,6 +690,7 @@ export const translations: Record<Locale, Translations> = {
       reportIssue: "Повідомити про проблему",
       documentation: "Документація",
       contact: "Контакт",
+      privacy: "Конфіденційність",
     },
 
     theme: {
