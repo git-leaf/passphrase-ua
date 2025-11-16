@@ -1,4 +1,4 @@
-# Name: Ukrainian Normal Diceware Dictionary
+# Name: Ukrainian Normal Diceware Wordlist
 # Format: INDEX WORD TRANSLITERATION
 # Language: uk
 # Transliteration: en

@@ -1,4 +1,4 @@
-# Name: English Original Diceware Dictionary
+# Name: English Original Diceware Wordlist
 # Format: INDEX WORD
 # Language: en
 # Dice: 5

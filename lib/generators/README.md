@@ -103,7 +103,7 @@ entropy = length × log₂(charset_size)
 
 For Diceware passphrases:
 ```
-entropy = word_count × log₂(dictionary_size)
+entropy = word_count × log₂(wordlist_size)
 ```
 
 **Industry Standards:**
@@ -236,7 +236,7 @@ describe('buildCharset', () => {
 - Diceware passphrase generator (`diceware.ts`)
 - Memorable password generator (`memorable.ts`)
 - BIP39 mnemonic generator (`bip39.ts`)
-- Custom dictionary support (`dictionary-loader.ts`)
+- Custom wordlist support (`wordlist-loader.ts`)
 - Password strength checker (`strength-checker.ts`)
 
 ## References

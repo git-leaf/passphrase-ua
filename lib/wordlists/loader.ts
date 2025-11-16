@@ -1,24 +1,24 @@
 /**
- * Dictionary Loader
+ * Wordlist Loader
  * 
- * Loads and parses dictionary files for passphrase generation.
+ * Loads and parses wordlist files for passphrase generation.
  */
 
-import type { Dictionary, DictionaryEntry, DictionaryMetadata } from './types';
+import type { Wordlist, WordlistEntry, WordlistMetadata } from './types';
 
 /**
- * Dictionary cache to avoid re-loading
+ * Wordlist cache to avoid re-loading
  */
-const dictionaryCache = new Map<string, Dictionary>();
+const wordlistCache = new Map<string, Wordlist>();
 
 /**
- * Parses dictionary metadata from header comments
+ * Parses wordlist metadata from header comments
  * 
- * @param lines - Dictionary file lines
+ * @param lines - Wordlist file lines
  * @returns Parsed metadata
  */
-function parseMetadata(lines: string[]): DictionaryMetadata {
-  const metadata: Partial<DictionaryMetadata> = {
+function parseMetadata(lines: string[]): WordlistMetadata {
+  const metadata: Partial<WordlistMetadata> = {
     name: 'Unknown',
     format: 'INDEX WORD',
     language: 'en',
@@ -62,21 +62,21 @@ function parseMetadata(lines: string[]): DictionaryMetadata {
     }
   }
 
-  return metadata as DictionaryMetadata;
+  return metadata as WordlistMetadata;
 }
 
 /**
- * Parses a dictionary entry line
+ * Parses a wordlist entry line
  * 
  * Supports two formats:
  * 1. Diceware: "INDEX WORD [TRANSLITERATION]"
  * 2. Simple: "WORD [TRANSLITERATION]"
  * 
- * @param line - Dictionary line
+ * @param line - Wordlist line
  * @param lineNumber - Line number for generating index
  * @returns Parsed entry or null if invalid
  */
-function parseEntry(line: string, lineNumber: number): DictionaryEntry | null {
+function parseEntry(line: string, lineNumber: number): WordlistEntry | null {
   if (!line || line.startsWith('#')) {
     return null;
   }
@@ -113,24 +113,24 @@ function parseEntry(line: string, lineNumber: number): DictionaryEntry | null {
 }
 
 /**
- * Loads a dictionary from a file path
+ * Loads a wordlist from a file path
  * 
- * @param path - Path to dictionary file (relative to public/)
- * @returns Loaded dictionary
- * @throws Error if dictionary fails to load or parse
+ * @param path - Path to wordlist file (relative to public/)
+ * @returns Loaded wordlist
+ * @throws Error if wordlist fails to load or parse
  */
-export async function loadDictionary(path: string): Promise<Dictionary> {
+export async function loadWordlist(path: string): Promise<Wordlist> {
   // Check cache first
-  if (dictionaryCache.has(path)) {
-    return dictionaryCache.get(path)!;
+  if (wordlistCache.has(path)) {
+    return wordlistCache.get(path)!;
   }
 
   try {
-    // Fetch dictionary file
+    // Fetch wordlist file
     const response = await fetch(path);
     
     if (!response.ok) {
-      throw new Error(`Failed to load dictionary: ${response.statusText}`);
+      throw new Error(`Failed to load wordlist: ${response.statusText}`);
     }
 
     const text = await response.text();
@@ -140,7 +140,7 @@ export async function loadDictionary(path: string): Promise<Dictionary> {
     const metadata = parseMetadata(lines);
 
     // Parse entries
-    const entries: DictionaryEntry[] = [];
+    const entries: WordlistEntry[] = [];
     let lineNumber = 0;
     for (const line of lines) {
       const entry = parseEntry(line, lineNumber);
@@ -152,7 +152,7 @@ export async function loadDictionary(path: string): Promise<Dictionary> {
 
     // Validate
     if (entries.length === 0) {
-      throw new Error('Dictionary is empty');
+      throw new Error('Wordlist is empty');
     }
 
     // Update metadata size if not set
@@ -160,56 +160,56 @@ export async function loadDictionary(path: string): Promise<Dictionary> {
       metadata.size = entries.length;
     }
 
-    const dictionary: Dictionary = {
+    const wordlist: Wordlist = {
       metadata,
       entries,
       wordCount: entries.length,
     };
 
-    // Cache the dictionary
-    dictionaryCache.set(path, dictionary);
+    // Cache the wordlist
+    wordlistCache.set(path, wordlist);
 
-    return dictionary;
+    return wordlist;
   } catch (error) {
     throw new Error(
-      `Failed to load dictionary from ${path}: ${error instanceof Error ? error.message : 'Unknown error'}`
+      `Failed to load wordlist from ${path}: ${error instanceof Error ? error.message : 'Unknown error'}`
     );
   }
 }
 
 /**
- * Preloads a dictionary (useful for prefetching)
+ * Preloads a wordlist (useful for prefetching)
  * 
- * @param path - Path to dictionary file
+ * @param path - Path to wordlist file
  */
-export async function preloadDictionary(path: string): Promise<void> {
-  await loadDictionary(path);
+export async function preloadWordlist(path: string): Promise<void> {
+  await loadWordlist(path);
 }
 
 /**
- * Clears the dictionary cache
+ * Clears the wordlist cache
  */
-export function clearDictionaryCache(): void {
-  dictionaryCache.clear();
+export function clearWordlistCache(): void {
+  wordlistCache.clear();
 }
 
 /**
- * Gets a cached dictionary without loading
+ * Gets a cached wordlist without loading
  * 
- * @param path - Path to dictionary file
- * @returns Cached dictionary or null if not cached
+ * @param path - Path to wordlist file
+ * @returns Cached wordlist or null if not cached
  */
-export function getCachedDictionary(path: string): Dictionary | null {
-  return dictionaryCache.get(path) || null;
+export function getCachedWordlist(path: string): Wordlist | null {
+  return wordlistCache.get(path) || null;
 }
 
 /**
- * Checks if a dictionary is cached
+ * Checks if a wordlist is cached
  * 
- * @param path - Path to dictionary file
+ * @param path - Path to wordlist file
  * @returns True if cached
  */
-export function isDictionaryCached(path: string): boolean {
-  return dictionaryCache.has(path);
+export function isWordlistCached(path: string): boolean {
+  return wordlistCache.has(path);
 }
 

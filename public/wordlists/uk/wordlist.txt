@@ -1,4 +1,4 @@
-# Name: Ukrainian Dictionary with Transliteration
+# Name: Ukrainian Wordlist with Transliteration
 # Format: WORD TRANSLITERATION
 # Language: uk
 # Transliteration: en

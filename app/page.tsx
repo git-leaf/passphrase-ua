@@ -11,7 +11,7 @@ import {
   type PasswordConfig 
 } from "@/lib/generators/password"
 import {
-  generatePassphraseWithDictionary,
+  generatePassphraseWithWordlist,
   type CapitalizationStyle
 } from "@/lib/generators/passphrase"
 
@@ -91,7 +91,7 @@ export default function Home() {
       const actualSeparator = separator === "custom" ? customSeparator : separator
 
       // Generate passphrase using the secure generator
-      const result = await generatePassphraseWithDictionary(
+      const result = await generatePassphraseWithWordlist(
         sourceLanguage,
         wordlist,
         {
@@ -107,7 +107,7 @@ export default function Home() {
       setGeneratedPassword(result.passphrase)
       setEntropy(result.entropy)
     } catch (error) {
-      // Handle errors (e.g., dictionary loading failure)
+      // Handle errors (e.g., wordlist loading failure)
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to generate passphrase",
@@ -120,7 +120,7 @@ export default function Home() {
 
   const handleSourceLanguageChange = (value: "en" | "uk") => {
     setSourceLanguage(value)
-    // Reset to first available dictionary when language changes
+    // Reset to first available wordlist when language changes
     if (value === "en") {
       setWordlist("eff-large")
     } else {

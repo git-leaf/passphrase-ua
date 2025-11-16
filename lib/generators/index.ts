@@ -21,7 +21,7 @@ export {
 // Passphrase Generator
 export {
   generatePassphrase,
-  generatePassphraseWithDictionary,
+  generatePassphraseWithWordlist,
   validatePassphraseConfig,
   calculatePassphraseEntropy,
   DEFAULT_PASSPHRASE_CONFIG,

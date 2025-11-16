@@ -1,4 +1,4 @@
-# Name: English EFF Long Diceware Dictionary
+# Name: English EFF Long Diceware Wordlist
 # Format: INDEX WORD
 # Language: en
 # Dice: 5

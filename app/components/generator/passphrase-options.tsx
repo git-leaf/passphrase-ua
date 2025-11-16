@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/app/components/ui/input"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
 import { RefreshCw } from "lucide-react"
-import { AVAILABLE_DICTIONARIES } from "@/lib/dictionaries/types"
+import { AVAILABLE_WORDLISTS } from "@/lib/wordlists/types"
 import type { CapitalizationStyle } from "@/lib/generators/passphrase"
 
 interface PassphraseOptionsProps {
@@ -105,19 +105,19 @@ export function PassphraseOptions({
               <SelectContent>
                 {sourceLanguage === "en" && (
                   <>
-                    <SelectItem value="eff-large">{AVAILABLE_DICTIONARIES.en["eff-large"].description}</SelectItem>
-                    <SelectItem value="eff-short">{AVAILABLE_DICTIONARIES.en["eff-short"].description}</SelectItem>
-                    <SelectItem value="eff-short-2">{AVAILABLE_DICTIONARIES.en["eff-short-2"].description}</SelectItem>
-                    <SelectItem value="original">{AVAILABLE_DICTIONARIES.en.original.description}</SelectItem>
-                    <SelectItem value="beale">{AVAILABLE_DICTIONARIES.en.beale.description}</SelectItem>
+                    <SelectItem value="eff-large">{AVAILABLE_WORDLISTS.en["eff-large"].description}</SelectItem>
+                    <SelectItem value="eff-short">{AVAILABLE_WORDLISTS.en["eff-short"].description}</SelectItem>
+                    <SelectItem value="eff-short-2">{AVAILABLE_WORDLISTS.en["eff-short-2"].description}</SelectItem>
+                    <SelectItem value="original">{AVAILABLE_WORDLISTS.en.original.description}</SelectItem>
+                    <SelectItem value="beale">{AVAILABLE_WORDLISTS.en.beale.description}</SelectItem>
                   </>
                 )}
                 {sourceLanguage === "uk" && (
                   <>
-                    <SelectItem value="wordlist">{AVAILABLE_DICTIONARIES.uk.wordlist.description}</SelectItem>
-                    <SelectItem value="small">{AVAILABLE_DICTIONARIES.uk.small.description}</SelectItem>
-                    <SelectItem value="normal">{AVAILABLE_DICTIONARIES.uk.normal.description}</SelectItem>
-                    <SelectItem value="large">{AVAILABLE_DICTIONARIES.uk.large.description}</SelectItem>
+                    <SelectItem value="wordlist">{AVAILABLE_WORDLISTS.uk.wordlist.description}</SelectItem>
+                    <SelectItem value="small">{AVAILABLE_WORDLISTS.uk.small.description}</SelectItem>
+                    <SelectItem value="normal">{AVAILABLE_WORDLISTS.uk.normal.description}</SelectItem>
+                    <SelectItem value="large">{AVAILABLE_WORDLISTS.uk.large.description}</SelectItem>
                   </>
                 )}
               </SelectContent>
