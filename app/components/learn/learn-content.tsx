@@ -87,8 +87,10 @@ export function LearnContent() {
             <p className="text-sm font-medium mb-2">{t.learn.strength.guidelinesTitle}</p>
             <ul className="text-sm space-y-2 text-muted-foreground">
               <li>{t.learn.strength.weak}</li>
+              <li>{t.learn.strength.moderate}</li>
               <li>{t.learn.strength.strong}</li>
               <li>{t.learn.strength.veryStrong}</li>
+              <li>{t.learn.strength.excessive}</li>
             </ul>
             <p className="text-xs text-muted-foreground mt-3 italic">
               {t.learn.strength.example}

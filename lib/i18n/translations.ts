@@ -515,9 +515,11 @@ export const translations: Record<Locale, Translations> = {
         description:
           "Password strength is measured in entropy bits. Each additional bit doubles the number of possible combinations, making passwords exponentially harder to crack.",
         guidelinesTitle: "Strength Guidelines:",
-        weak: "🔴 <60 bits: Weak — Avoid for important accounts",
-        strong: "🟡 60-79 bits: Strong — Good for most uses",
-        veryStrong: "🟢 80+ bits: Very Strong — Excellent for sensitive data",
+        weak: "🔴 0-40 bits: Weak — Avoid for important accounts",
+        moderate: "🟠 40-60 bits: Moderate — Use only for low-risk accounts",
+        strong: "🟡 60-80 bits: Strong — Good for most uses",
+        veryStrong: "🟢 80-120 bits: Very Strong — Excellent for sensitive data",
+        excessive: "🔵 120+ bits: Excessive — Overkill for most scenarios",
         example:
           "Example: A 6-word Diceware passphrase has ~77 bits of entropy, which would take trillions of years to crack with current technology.",
       },
@@ -906,11 +908,13 @@ export const translations: Record<Locale, Translations> = {
         description:
           "Надійність паролів вимірюється в бітах ентропії. Кожен додатковий біт подвоює кількість можливих комбінацій, роблячи паролі експоненційно складнішими для злому.",
         guidelinesTitle: "Рекомендації щодо надійності:",
-        weak: "🔴 <60 біт: Слабкий — Уникайте для важливих облікових записів",
-        strong: "🟡 60-79 біт: Сильний — Добре для більшості випадків",
-        veryStrong: "🟢 80+ біт: Дуже сильний — Відмінно для конфіденційних даних",
+        weak: "🔴 0-40 біт: Слабкий — Уникайте для важливих облікових записів",
+        moderate: "🟠 40-60 біт: Помірний — Використовуйте лише для низькоризикових облікових записів",
+        strong: "🟡 60-80 біт: Сильний — Добре для більшості випадків",
+        veryStrong: "🟢 80-120 біт: Дуже сильний — Відмінно для конфіденційних даних",
+        excessive: "🔵 120+ біт: Надлишковий — Невиправдано складний для більшості сценаріїв",
         example:
-          "Приклад: 6-словна фраза-пароль Diceware має ~77 біт ентропії, що зайняло б трильйони років для злому сучасними технологіями.",
+          "Приклад: 6-слівна фраза-пароль Diceware має ~77 біт ентропії, що зайняло б трильйони років для злому сучасними технологіями.",
       },
       faq: {
         title: "Поширені запитання",
