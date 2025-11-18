@@ -59,12 +59,15 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
     return calculateCombinations(entropy)
   }
 
-  // Get translated strength label
   const getStrengthLabel = () => {
-    if (entropy < 40) return t.output.strength.weak
-    if (entropy < 60) return t.output.strength.moderate
-    if (entropy < 80) return t.output.strength.strong
-    return t.output.strength.veryStrong
+    const levelMapping = {
+      'weak': t.output.strength.weak,
+      'fair': t.output.strength.moderate,
+      'strong': t.output.strength.strong,
+      'very-strong': t.output.strength.veryStrong,
+      'excessive': t.output.strength.excessive,
+    }
+    return levelMapping[strengthAssessment.level] || t.output.strength.weak
   }
 
   return (
