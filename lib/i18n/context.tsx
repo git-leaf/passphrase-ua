@@ -14,6 +14,7 @@ const I18nContext = createContext<I18nContextType | undefined>(undefined)
 interface I18nProviderProps {
   children: ReactNode
   defaultLocale?: Locale
+  storageKey?: string
 }
 
 /**
@@ -39,13 +40,13 @@ function detectBrowserLanguage(): Locale | null {
 /**
  * I18n Provider that manages language selection and provides translations
  */
-export function I18nProvider({ children, defaultLocale = "en" }: I18nProviderProps) {
+export function I18nProvider({ children, defaultLocale = "en", storageKey = "locale" }: I18nProviderProps) {
   const [locale, setLocaleState] = useState<Locale>(defaultLocale)
 
   // Load locale on mount: user preference → browser preference → default
   useEffect(() => {
     // First priority: check if user manually changed language (localStorage exists)
-    const saved = localStorage.getItem("locale") as Locale | null
+    const saved = localStorage.getItem(storageKey) as Locale | null
     if (saved && (saved === "en" || saved === "uk")) {
       setLocaleState(saved)
       return
@@ -64,7 +65,7 @@ export function I18nProvider({ children, defaultLocale = "en" }: I18nProviderPro
   // Save locale to localStorage when it changes
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale)
-    localStorage.setItem("locale", newLocale)
+    localStorage.setItem(storageKey, newLocale)
   }
 
   const value: I18nContextType = {

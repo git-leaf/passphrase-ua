@@ -32,7 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <I18nProvider defaultLocale="en">
-          <ThemeProvider defaultTheme="system" storageKey="passphrase-ua-theme">
+          <ThemeProvider defaultTheme="system">
             {children}
             <Toaster />
           </ThemeProvider>
