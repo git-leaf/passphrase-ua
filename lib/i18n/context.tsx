@@ -17,17 +17,48 @@ interface I18nProviderProps {
 }
 
 /**
+ * Detects the user's preferred language from browser settings
+ */
+function detectBrowserLanguage(): Locale | null {
+  if (typeof window === "undefined") return null
+
+  // Check navigator.languages first (preferred languages array)
+  const languages = navigator.languages || [navigator.language]
+  if (!languages) return null
+
+  // Map browser language codes to supported locales
+  for (const lang of languages) {
+    const primaryLang = lang.split('-')[0].toLowerCase()
+    if (primaryLang === "uk") return "uk"
+    if (primaryLang === "en") return "en"
+  }
+
+  return null
+}
+
+/**
  * I18n Provider that manages language selection and provides translations
  */
 export function I18nProvider({ children, defaultLocale = "en" }: I18nProviderProps) {
   const [locale, setLocaleState] = useState<Locale>(defaultLocale)
 
-  // Load saved locale from localStorage on mount
+  // Load locale on mount: user preference → browser preference → default
   useEffect(() => {
+    // First priority: check if user manually changed language (localStorage exists)
     const saved = localStorage.getItem("locale") as Locale | null
     if (saved && (saved === "en" || saved === "uk")) {
       setLocaleState(saved)
+      return
     }
+
+    // Second priority: first visit - use browser language preference
+    const browserLang = detectBrowserLanguage()
+    if (browserLang) {
+      setLocaleState(browserLang)
+      return
+    }
+
+    // Third priority: default locale (already set in useState)
   }, [])
 
   // Save locale to localStorage when it changes
