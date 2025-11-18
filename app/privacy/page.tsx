@@ -8,12 +8,7 @@ import { LanguageToggle } from "@/app/components/language-toggle"
 import { useI18n } from "@/lib/i18n"
 
 export default function PrivacyPage() {
-  const { t, locale } = useI18n()
-  const currentDate = new Date().toLocaleDateString(locale === "uk" ? "uk-UA" : "en-US", {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
+  const { t } = useI18n()
 
   return (
     <main className="min-h-screen bg-background py-12 px-4">
@@ -31,7 +26,7 @@ export default function PrivacyPage() {
             </h1>
           </div>
           <p className="text-muted-foreground">
-            {t.privacy.lastUpdated} {currentDate}
+            {t.privacy.lastUpdated} {t.privacy.lastUpdatedDate}
           </p>
         </div>
 
