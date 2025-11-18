@@ -143,7 +143,7 @@ export function PassphraseOptions({
 
         <div className="space-y-2">
           <Label>{t.passphrase.separator}</Label>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
             {[
               { value: "-", labelKey: "separatorDash" as const, symbol: "-" },
               { value: "_", labelKey: "separatorUnderscore" as const, symbol: "_" },
