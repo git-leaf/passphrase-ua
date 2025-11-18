@@ -329,6 +329,60 @@ export function LearnContent() {
           </div>
         </section>
 
+        {/* Get a Password Manager */}
+        <section className="space-y-3">
+          <h3 className="text-xl font-semibold">{t.learn.passwordManager.title}</h3>
+          <p className="text-sm text-muted-foreground">
+            {t.learn.passwordManager.description}
+          </p>
+          <div className="space-y-2">
+            <a
+              href="https://bitwarden.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
+            >
+              <p className="font-medium">{t.learn.passwordManager.bitwarden}</p>
+              <p className="text-muted-foreground text-xs mt-1">
+                {t.learn.passwordManager.bitwardenDescription}
+              </p>
+            </a>
+            <a
+              href="https://1password.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
+            >
+              <p className="font-medium">{t.learn.passwordManager.onepassword}</p>
+              <p className="text-muted-foreground text-xs mt-1">
+                {t.learn.passwordManager.onepasswordDescription}
+              </p>
+            </a>
+            <a
+              href="https://proton.me/pass"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
+            >
+              <p className="font-medium">{t.learn.passwordManager.proton}</p>
+              <p className="text-muted-foreground text-xs mt-1">
+                {t.learn.passwordManager.protonDescription}
+              </p>
+            </a>
+            <a
+              href="https://keepassxc.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
+            >
+              <p className="font-medium">{t.learn.passwordManager.keepass}</p>
+              <p className="text-muted-foreground text-xs mt-1">
+                {t.learn.passwordManager.keepassDescription}
+              </p>
+            </a>
+          </div>
+        </section>
+
         {/* Additional Resources */}
         <section className="space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.resources.title}</h3>

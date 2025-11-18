@@ -326,6 +326,18 @@ export interface Translations {
       strongphrase: string
       strongphraseDescription: string
     }
+    passwordManager: {
+      title: string
+      description: string
+      bitwarden: string
+      bitwardenDescription: string
+      keepass: string
+      keepassDescription: string
+      proton: string
+      protonDescription: string
+      onepassword: string
+      onepasswordDescription: string
+    }
     resources: {
       title: string
       description: string
@@ -387,7 +399,7 @@ export const translations: Record<Locale, Translations> = {
       capRandom: "Random letter per word",
       capAll: "All uppercase",
       capRandomWord: "Random word all uppercase",
-      includeNumber: "Include number between words",
+      includeNumber: "Include number after words",
       useTransliteration: "Use transliteration (Latin characters)",
       advancedOptions: "Advanced Options",
       generate: "Generate Passphrase",
@@ -444,7 +456,7 @@ export const translations: Record<Locale, Translations> = {
 
     footer: {
       securityNotice:
-        "All passwords are generated locally in your browser. Nothing is stored or transmitted.",
+        "All passwords are generated locally in your browser. Nothing is stored or transmitted. You can use it offline.",
       supportUkraine: "Support Ukraine 🇺🇦",
       supportDescription:
         "Consider supporting Ukrainian humanitarian and defense efforts through trusted organizations.",
@@ -480,16 +492,16 @@ export const translations: Record<Locale, Translations> = {
           "Strong passwords protect your digital life. This tool helps you create two types of secure passwords:",
         randomTitle: "🔐 Random Passwords",
         randomDescription:
-          "Mix of letters, numbers, and symbols. Very secure but harder to remember. Perfect for password managers.",
+          "Mix of letters, numbers, and symbols. Very secure but harder to remember. Perfect for accounts stored in a password manager.",
         randomExample: "K9#mP2@xL5qR",
         dicewareTitle: "💬 Diceware Passphrases",
         dicewareDescription:
-          "Random words combined together. Easy to remember and type while staying secure. Great for master passwords.",
+          "Random words combined together. Easy to remember and type while staying secure. Great for a master password for your password manager. Also great for other passwords you need to remember and type manually.",
         dicewareExample: "correct-horse-battery-staple",
       },
       safety: {
         title: "Why This Tool is Safe",
-        point1: "✓ Everything happens in your browser. No passwords are sent over the internet.",
+        point1: "✓ Everything happens in your browser. No passwords are sent over the network (once the page is loaded, you can use it offline).",
         point2: "✓ Nothing is stored. Passwords are never saved anywhere unless you copy them.",
         point3: "✓ Cryptographically secure. Uses your browser's built-in secure random number generator.",
         point4: "✓ Open source. Anyone can review the code on GitHub.",
@@ -521,7 +533,7 @@ export const translations: Record<Locale, Translations> = {
         veryStrong: "🟢 80-120 bits: Very Strong — Excellent for sensitive data",
         excessive: "🔵 120+ bits: Excessive — Overkill for most scenarios",
         example:
-          "Example: A 6-word Diceware passphrase has ~77 bits of entropy, which would take trillions of years to crack with current technology.",
+          "Example: A 6-word Diceware passphrase has ~77 bits of entropy, which would take from hundreds of years to trillions of years to crack, depending on the technology available.",
       },
       faq: {
         title: "Common Questions",
@@ -529,14 +541,15 @@ export const translations: Record<Locale, Translations> = {
         a1: [
           "6 words is the sweet spot for most users — it provides strong security (~77 bits) while being reasonably easy to remember.",
           "Use 7-8 words for master passwords protecting sensitive information like password managers or encryption keys.",
-          "Avoid using fewer than 5 words, as this significantly reduces security."
+          "Avoid using fewer than 5 words, as this significantly reduces security.",
+          "Note: The number of words depends on the wordlist size you are using. In this case, it is assumed that you are using any of 7776 words wordlist. The smaller the wordlist, the more words you need to use to achieve the same security level."
         ],
         q2: "What's a good password strategy?",
         a2Title: "The best approach:",
         a2List: [
           "Use a password manager (like Bitwarden, 1Password, or ProtonPass)",
-          "Create one strong Diceware passphrase (6-7 words) as your master password",
-          "Generate random passwords for all other accounts",
+          "Create one strong Diceware passphrase (7-8 words) as your master password and make sure to remember it by heart and/or store it in a secure location (physical paper, encrypted file, etc.)",
+          "Generate random passwords for all other accounts and store them in the password manager",
           "Enable two-factor authentication (2FA) wherever possible"
         ],
         a2Footer: "This way, you only memorize one password while having unique, strong passwords everywhere.",
@@ -551,9 +564,9 @@ export const translations: Record<Locale, Translations> = {
           "For passwords stored in a password manager that you'll copy-paste, keep all characters for maximum strength."
         ],
         q5: "Can I use this tool offline?",
-        a5: "Yes! After the page loads once, you can use it without an internet connection. All generation happens locally in your browser, and wordlists are cached for offline use.",
+        a5: "Yes! After the page loads once, you can use it without a network connection. All generation happens locally in your browser, and wordlists are cached for offline use.",
         q6: "How is \"time to crack\" calculated?",
-        a6: "We calculate the average time an attacker would need to guess your password by trying combinations. The calculation assumes a powerful adversary with 1 trillion guesses per second (using specialized hardware). Real-world attacks are usually much slower due to rate limiting and other protections.",
+        a6: "We calculate the average time an attacker would need to guess your password by trying combinations. The calculation assumes a powerful adversary with 1 trillion guesses per second (using specialized hardware). Real-world attacks are usually much slower due to rate limiting and other protections. You can configure the guess rate in the advanced options.",
         q7: "What are good use cases for Diceware passphrases?",
         a7GoodTitle: "Excellent use cases:",
         a7GoodList: [
@@ -566,8 +579,7 @@ export const translations: Record<Locale, Translations> = {
         ],
         a7BadTitle: "Not recommended for:",
         a7BadList: [
-          "Cryptocurrency wallets (use hardware wallets with seed phrases instead)",
-          "Situations where an attacker can make unlimited offline cracking attempts"
+          "Usage with small number of words (less than 5). This significantly reduces security"
         ],
         q8: "Should I add numbers or symbols to my passphrase?",
         a8: [
@@ -584,7 +596,7 @@ export const translations: Record<Locale, Translations> = {
           "Always check the website URL before entering passwords",
           "Enable two-factor authentication (2FA) on all accounts",
           "Use a password manager — they won't autofill on fake sites",
-          "Be suspicious of urgent emails asking you to log in"
+          "Be suspicious of urgent emails or messages asking you to log in"
         ]
       },
       comparison: {
@@ -608,7 +620,7 @@ export const translations: Record<Locale, Translations> = {
         securityRandom: "16 chars ≈ 104 bits",
         securityDiceware: "6 words ≈ 77 bits",
         bestFor: "Best For",
-        bestForRandom: "Password managers",
+        bestForRandom: "Password manager accounts",
         bestForDiceware: "Master passwords"
       },
       bestPractices: {
@@ -631,8 +643,8 @@ export const translations: Record<Locale, Translations> = {
           "This tool uses the same principle but with a cryptographically secure random number generator instead of dice. The wordlists are carefully curated to include only memorable, appropriate words while maintaining maximum security.",
         wordlistsTitle: "Available Wordlists:",
         ukrainian:
-          "Ukrainian: First comprehensive Ukrainian Diceware wordlists (small, normal, large) with transliteration",
-        english: "English: EFF and Original Diceware wordlists — time-tested and widely trusted",
+          "Ukrainian: First comprehensive Ukrainian Diceware wordlists (small, normal, large, 10K) with transliteration",
+        english: "English: EFF, Beale and Original Diceware wordlists — time-tested and widely trusted",
       },
       similarTools: {
         title: "Similar Tools",
@@ -643,6 +655,18 @@ export const translations: Record<Locale, Translations> = {
         strongphrase: "StrongPhrase",
         strongphraseDescription:
           "Advanced passphrase generator with detailed password strength analysis and cracking cost estimates. Excellent for understanding security metrics.",
+      },
+      passwordManager: {
+        title: "Get a Password Manager",
+        description: "Securely store and manage your strong passwords with these trusted tools:",
+        bitwarden: "Bitwarden",
+        bitwardenDescription: "Open-source password manager with free tier, cross-platform sync, and secure sharing. Excellent for teams and individuals.",
+        keepass: "KeePassXC",
+        keepassDescription: "Free, open-source, and offline password manager. Your passwords stay on your device — no cloud required.",
+        proton: "Proton Pass",
+        protonDescription: "Privacy-focused password manager from the ProtonMail team. End-to-end encrypted with zero-knowledge architecture.",
+        onepassword: "1Password",
+        onepasswordDescription: "Popular commercial password manager with excellent user experience, strong security features, and reliable cross-platform support.",
       },
       resources: {
         title: "Educational Resources",
@@ -680,7 +704,7 @@ export const translations: Record<Locale, Translations> = {
         title: "What We Store Locally",
         description: "In your browser (localStorage) — under your control",
         themePreference: "Theme Preference",
-        themeDescription: "Your choice of light/dark mode (passphrase-ua-theme)",
+        themeDescription: "Your choice of light/dark mode (theme)",
         languagePreference: "Language Preference",
         languageDescription: "Your choice of Ukrainian/English (locale)",
         noPasswords: "No Passwords",
@@ -691,7 +715,7 @@ export const translations: Record<Locale, Translations> = {
         title: "How It Works",
         clientSideGeneration: {
           title: "1. Client-Side Only Generation",
-          description: "All passwords and passphrases are generated locally in your browser using the Web Crypto API (crypto.getRandomValues()). The generation code is pure JavaScript function that runs exclusively on your device."
+          description: "All passwords and passphrases are generated locally in your browser using the Web Crypto API (crypto.getRandomValues()). The generation code is JavaScript function that runs exclusively on your device."
         },
         noNetworkRequests: {
           title: "2. No Network Requests",
@@ -752,8 +776,8 @@ export const translations: Record<Locale, Translations> = {
       lowercase: "Малі літери (a-z)",
       numbers: "Цифри (0-9)",
       symbols: "Символи (!@#$)",
-      advancedOptions: "Розширені налаштування",
-      excludeAmbiguous: "Виключити неоднозначні",
+      advancedOptions: "Додаткові налаштування",
+      excludeAmbiguous: "Виключити неоднозначні символи",
       excludeAmbiguousDetail: "(i, l, 1, L, o, 0, O)",
       generate: "Згенерувати пароль",
       generating: "Генерація...",
@@ -770,18 +794,18 @@ export const translations: Record<Locale, Translations> = {
       separatorUnderscore: "Підкреслення",
       separatorPeriod: "Крапка",
       separatorNone: "Немає",
-      separatorCustom: "Власний",
-      customSeparator: "Власний роздільник",
-      customSeparatorPlaceholder: "Введіть власний роздільник",
-      capitalization: "Капіталізація",
-      capNone: "Немає (всі малі)",
+      separatorCustom: "Свій роздільник",
+      customSeparator: "Свій роздільник",
+      customSeparatorPlaceholder: "Введіть свій роздільник",
+      capitalization: "Регістр",
+      capNone: "Без змін (всі малі)",
       capFirst: "Перша літера кожного слова",
       capRandom: "Випадкова літера в кожному слові",
-      capAll: "Всі великі",
-      capRandomWord: "Випадкове слово всі великі",
-      includeNumber: "Додати цифру між словами",
-      useTransliteration: "Використовувати транслітерацію (латиниця)",
-      advancedOptions: "Розширені налаштування",
+      capAll: "Усі великі",
+      capRandomWord: "Випадкове слово всіма великими",
+      includeNumber: "Додати число після слів",
+      useTransliteration: "Використовувати транслітерацію (латиницею)",
+      advancedOptions: "Додаткові налаштування",
       generate: "Згенерувати фразу-пароль",
       generating: "Генерація...",
     },
@@ -804,12 +828,12 @@ export const translations: Record<Locale, Translations> = {
 
     output: {
       entropy: "Ентропія",
-      bits: "біт",
+      bits: "бітів",
       combinations: "Комбінацій",
-      timeToCrack: "Час на злом",
+      timeToCrack: "Тривалість злому",
       costToCrack: "Вартість злому",
-      avgTime: "середній",
-      maxTime: "максимум",
+      avgTime: "середній час",
+      maxTime: "максимальний час",
       strengthLabel: "Надійність",
       strength: {
         weak: "Слабкий",
@@ -823,7 +847,7 @@ export const translations: Record<Locale, Translations> = {
       regenerate: "Згенерувати знову",
       regenerating: "Генерація...",
       configureMetrics: "Налаштувати метрики",
-      guessRate: "Швидкість підбору (спроб/сек)",
+      guessRate: "Швидкість злому (спроб/сек)",
       costPer32: "Вартість за 2^32 спроб ($)",
       enterGuessRate: "Введіть кількість спроб за секунду",
       enterCost: "Введіть вартість за 2^32 спроб",
@@ -831,12 +855,12 @@ export const translations: Record<Locale, Translations> = {
       guessRateBillion: "1 мільярд (10^9)",
       guessRateTrillion: "1 трильйон (10^12)",
       guessRateQuadrillion: "1 квадрильйон (10^15)",
-      guessRateCustom: "Власний",
+      guessRateCustom: "Свій",
     },
 
     footer: {
       securityNotice:
-        "Всі паролі генеруються локально у вашому браузері. Нічого не зберігається та не передається.",
+        "Усі паролі створюються безпосередньо у вашому браузері. Нічого не зберігається та не передається через мережу. Можна використовувати без підключення до мережі.",
       supportUkraine: "Підтримати Україну 🇺🇦",
       supportDescription:
         "Розгляньте можливість підтримки українських гуманітарних та оборонних організацій.",
@@ -865,26 +889,25 @@ export const translations: Record<Locale, Translations> = {
     },
 
     learn: {
-      title: "Посібник з безпеки паролів",
+      title: "Посібник із безпеки паролів",
       gettingStarted: {
         title: "Початок роботи",
         description:
           "Надійні паролі захищають ваше цифрове життя. Цей інструмент допомагає створювати два типи безпечних паролів:",
         randomTitle: "🔐 Випадкові паролі",
         randomDescription:
-          "Суміш літер, цифр та символів. Дуже надійні, але складніші для запам'ятовування. Ідеально для менеджерів паролів.",
+          "Комбінація літер, цифр та символів. Дуже надійні, але складніші для запам'ятовування. Ідеально підходять для акаунтів, збережених у менеджері паролів.",
         randomExample: "K9#mP2@xL5qR",
         dicewareTitle: "💬 Фрази-паролі Diceware",
         dicewareDescription:
-          "Випадкові слова, з'єднані разом. Легко запам'ятати та набрати, залишаючись безпечними. Чудово підходять для головних паролів.",
+          "Випадкові слова, поєднані докупи. Легко запам'ятати та вводити, не нехтуючи безпекою. Чудово підходять для головного пароля для вашого менеджера паролів.",
         dicewareExample: "correct-horse-battery-staple",
       },
       safety: {
         title: "Чому цей інструмент безпечний",
-        point1: "✓ Все відбувається у вашому браузері. Жодні паролі не надсилаються через інтернет.",
-        point2: "✓ Нічого не зберігається. Паролі ніколи не зберігаються, якщо ви їх не скопіюєте.",
-        point3:
-          "✓ Криптографічно безпечний. Використовує вбудований генератор випадкових чисел вашого браузера.",
+        point1: "✓ Усе відбувається у вашому браузері. Паролі не надсилаються через мережу (після завантаження вебсайту ви можете користуватися ним без доступу до мережі).",
+        point2: "✓ Нічого не зберігається. Паролі ніколи не зберігаються десь, якщо ви їх не скопіюєте самостійно.",
+        point3: "✓ Криптографічно безпечний. Використовує вбудований генератор випадкових чисел вашого браузера.",
         point4: "✓ Відкритий код. Будь-хто може переглянути код на GitHub.",
       },
       whenToUse: {
@@ -892,8 +915,8 @@ export const translations: Record<Locale, Translations> = {
         randomTitle: "Використовуйте випадкові паролі для:",
         randomList: [
           "Облікових записів, що зберігаються в менеджері паролів",
-          "Максимальної безпеки в мінімальному просторі",
-          "Веб-сайтів з вимогами до символів"
+          "Максимальної безпеки з порівняно невеликою довжиною",
+          "Вебсайтів з вимогами до символів"
         ],
         dicewareTitle: "Використовуйте фрази-паролі Diceware для:",
         dicewareList: [
@@ -908,31 +931,32 @@ export const translations: Record<Locale, Translations> = {
         description:
           "Надійність паролів вимірюється в бітах ентропії. Кожен додатковий біт подвоює кількість можливих комбінацій, роблячи паролі експоненційно складнішими для злому.",
         guidelinesTitle: "Рекомендації щодо надійності:",
-        weak: "🔴 0-40 біт: Слабкий — Уникайте для важливих облікових записів",
-        moderate: "🟠 40-60 біт: Помірний — Використовуйте лише для низькоризикових облікових записів",
-        strong: "🟡 60-80 біт: Сильний — Добре для більшості випадків",
-        veryStrong: "🟢 80-120 біт: Дуже сильний — Відмінно для конфіденційних даних",
-        excessive: "🔵 120+ біт: Надлишковий — Невиправдано складний для більшості сценаріїв",
+        weak: "🔴 0-40 бітів: Слабкий — Уникайте для важливих облікових записів",
+        moderate: "🟠 40-60 бітів: Помірний — Використовуйте лише для низькоризикових облікових записів",
+        strong: "🟡 60-80 бітів: Сильний — Добре для більшості випадків",
+        veryStrong: "🟢 80-120 бітів: Дуже сильний — Відмінно для чутливих даних",
+        excessive: "🔵 120+ бітів: Надлишковий — Невиправдано складний для більшості сценаріїв",
         example:
-          "Приклад: 6-слівна фраза-пароль Diceware має ~77 біт ентропії, що зайняло б трильйони років для злому сучасними технологіями.",
+          "Приклад: 6-слівна фраза-пароль Diceware має ~77 бітів ентропії, що б зайняло від сотень до трильйонів років для злому в залежності від доступних технологій.",
       },
       faq: {
         title: "Поширені запитання",
-        q1: "Скільки слів повинна мати моя фраза-пароль?",
+        q1: "Скільки слів повинна мати моя парольна фраза?",
         a1: [
-          "6 слів — оптимальний вибір для більшості користувачів. Це забезпечує надійну безпеку (~77 біт) і водночас легко запам'ятовується.",
+          "6 слів — оптимальний вибір для більшості користувачів. Це забезпечує надійну безпеку (близько 77 бітів) і водночас легко запам'ятовується.",
           "Використовуйте 7-8 слів для головних паролів, що захищають конфіденційну інформацію, такі як менеджери паролів або ключі шифрування.",
-          "Уникайте використання менше ніж 5 слів, оскільки це суттєво знижує безпеку."
+          "Уникайте використання менше ніж 5 слів, оскільки це суттєво знижує безпеку.",
+          "Пам'ятайте, що необхідна кількість слів залежить від розміру словника — чим менший словник, тим більше слів потрібно. У цьому випадку вважається, що ви використовуєте будь-який зі словників на 7,776 слів."
         ],
         q2: "Яка хороша стратегія паролів?",
         a2Title: "Найкращий підхід:",
         a2List: [
           "Використовуйте менеджер паролів (наприклад, Bitwarden, 1Password або ProtonPass)",
-          "Створіть одну надійну фразу-пароль Diceware (6-7 слів) як головний пароль",
-          "Генеруйте випадкові паролі для всіх інших облікових записів",
+          "Створіть одну надійну фразу-пароль Diceware (7-8 слів) як головний пароль для менеджера паролів, запам'ятайте його та/або збережіть в безпечному місці (папір, зашифрований файл тощо)",
+          "Генеруйте випадкові паролі для всіх інших облікових записів та зберігайте їх у менеджері паролів",
           "Вмикайте двофакторну автентифікацію (2FA) всюди, де це можливо"
         ],
-        a2Footer: "Так ви запам'ятаєте лише один пароль, маючи унікальні надійні паролі скрізь.",
+        a2Footer: "Таким чином вам потрібно запам'ятати лише один пароль, маючи унікальні надійні паролі скрізь.",
         q3: "Навіщо використовувати українські словники?",
         a3: [
           "Фрази-паролі рідною мовою легше запам'ятовувати і вони відчуваються природніше. Passphrase UA — перший інструмент, що пропонує всеосяжні українські словники Diceware.",
@@ -940,13 +964,13 @@ export const translations: Record<Locale, Translations> = {
         ],
         q4: "Чи варто виключати неоднозначні символи в паролях?",
         a4: [
-          "Якщо ви часто вводите пароль вручну, виключення неоднозначних символів (як-от 'O' проти '0', 'l' проти '1') зменшує помилки введення. Це трохи знижує ентропію, але покращує зручність.",
+          "Якщо ви часто вводите пароль вручну, виключення неоднозначних символів (як-от 'O' чи '0', 'l' чи '1') зменшує помилки введення. Це трохи знижує ентропію, але покращує зручність.",
           "Для паролів, збережених у менеджері паролів, які ви копіюватимете, залишайте всі символи для максимальної безпеки."
         ],
         q5: "Чи можу я використовувати цей інструмент офлайн?",
-        a5: "Так! Після першого завантаження сторінки ви можете використовувати її без підключення до інтернету. Вся генерація відбувається локально у вашому браузері, а словники кешуються для офлайн-використання.",
+        a5: "Так! Після першого завантаження сторінки ви можете використовувати її без підключення до мережі. Вся генерація відбувається локально у вашому браузері, а словники кешуються для офлайн-використання.",
         q6: "Як розраховується \"час на злом\"?",
-        a6: "Ми розраховуємо середній час, який знадобиться зловмиснику для підбору вашого пароля шляхом перебору комбінацій. Розрахунок припускає потужного супротивника з 1 трильйоном спроб на секунду (використовуючи спеціалізоване обладнання). Реальні атаки зазвичай набагато повільніші через обмеження швидкості та інші захисти.",
+        a6: "Ми розраховуємо середній час, який знадобиться зловмиснику для підбору вашого пароля шляхом перебору комбінацій. Розрахунок припускає, що працює потужний зловмисник з 1 трильйоном спроб на секунду (використовуючи спеціалізоване обладнання). Реальні атаки зазвичай набагато повільніші через обмеження швидкості та інші захисти. Ви можете змінити швидкість злому у додаткових налаштування.",
         q7: "Які хороші варіанти використання фраз-паролів Diceware?",
         a7GoodTitle: "Відмінні варіанти використання:",
         a7GoodList: [
@@ -959,25 +983,24 @@ export const translations: Record<Locale, Translations> = {
         ],
         a7BadTitle: "Не рекомендується для:",
         a7BadList: [
-          "Криптовалютних гаманців (використовуйте апаратні гаманці з seed-фразами)",
-          "Ситуацій, де зловмисник може робити необмежені офлайн-спроби злому"
+          "Використання з малою кількістю слів (менше ніж 5). Це значно зменшує безпеку"
         ],
         q8: "Чи варто додавати цифри або символи до моєї фрази-пароля?",
         a8: [
-          "Загалом ні — довжина важливіша за складність. Додавання однієї цифри або символу додає лише кілька біт ентропії, тоді як додавання ще одного слова додає ~13 біт.",
+          "Загалом ні — довжина важливіша за складність. Додавання однієї цифри або символу додає лише кілька бітів ентропії, тоді як додавання ще одного слова додає ~13 бітів.",
           "Наприклад: correct-horse-battery-staple-7 ледь надійніший за correct-horse-battery-staple, але correct-horse-battery-staple-magnet значно надійніший.",
-          "Додавайте спеціальні символи лише якщо веб-сайт вимагає їх — інакше тримайте простоту та легкість запам'ятовування."
+          "Додавайте спеціальні символи лише якщо вебсайт вимагає їх — інакше тримайте простоту та легкість запам'ятовування."
         ],
         q9: "Чи захистить мене надійний пароль від фішингу?",
         a9: [
-          "На жаль, ні. Навіть найнадійніший пароль у світі не допоможе, якщо ви введете його на підробленому веб-сайті. Однак використання унікальних паролів для кожного сервісу означає, що якщо один з них викрадуть через фішинг, ваші інші облікові записи залишаться в безпеці."
+          "На жаль, ні. Навіть найнадійніший пароль у світі не допоможе, якщо ви введете його на підробленому вебсайті. Однак використання унікальних паролів для кожного сервісу означає, що якщо один з них викрадуть через фішинг, ваші інші облікові записи залишаться в безпеці."
         ],
         a9Title: "Захистіть себе від фішингу:",
         a9List: [
-          "Завжди перевіряйте URL веб-сайту перед введенням паролів",
+          "Завжди перевіряйте URL вебсайту перед введенням паролів",
           "Вмикайте двофакторну автентифікацію (2FA) на всіх облікових записах",
-          "Використовуйте менеджер паролів — вони не автозаповнюватимуть на підроблених сайтах",
-          "Будьте підозрілими до термінових листів, що просять вас увійти в систему"
+          "Використовуйте менеджер паролів — вони не автозаповнюватимуть на підроблених вебсайтах",
+          "Будьте підозрілими до термінових листів та повідомлень, що просять вас увійти в систему"
         ]
       },
       comparison: {
@@ -995,48 +1018,60 @@ export const translations: Record<Locale, Translations> = {
         lengthRandom: "12-20 символів",
         lengthDiceware: "30-50 символів",
         entropyPerChar: "Ентропія на символ",
-        entropyRandom: "Висока (~6.5 біт)",
-        entropyDiceware: "Нижча (~2.6 біт)",
+        entropyRandom: "Висока (~6.5 бітів)",
+        entropyDiceware: "Нижча (~2.6 бітів)",
         totalSecurity: "Загальна безпека (подібна)",
-        securityRandom: "16 символів ≈ 104 біт",
-        securityDiceware: "6 слів ≈ 77 біт",
+        securityRandom: "16 символів ≈ 104 бітів",
+        securityDiceware: "6 слів ≈ 77 бітів",
         bestFor: "Найкраще для",
-        bestForRandom: "Менеджерів паролів",
-        bestForDiceware: "Головних паролів"
+        bestForRandom: "Акаунтів у менеджері паролів",
+        bestForDiceware: "Головний пароль"
       },
       bestPractices: {
         title: "Найкращі практики безпеки",
         list: [
-          "Використовуйте унікальні паролі для кожного облікового запису — ніколи не повторюйте",
+          "Використовуйте унікальні паролі для кожного облікового запису — ніколи не повторюйтесь",
           "Використовуйте менеджер паролів для безпечного зберігання всіх ваших паролів",
           "Вмикайте двофакторну автентифікацію (2FA) на всіх важливих облікових записах",
           "Оновлюйте паролі у разі порушення безпеки",
           "Ніколи не діліться паролями через email, SMS або месенджери",
           "Не використовуйте персональну інформацію (дати народження, імена, імена домашніх тварин)",
-          "Будьте підозрілими до фішингових спроб, що просять паролі"
+          "Остерігайтесь спроб фішингу, під час яких вас просять ввести паролі"
         ]
       },
       whatIsDiceware: {
         title: "Що таке Diceware?",
         description1:
-          "Diceware — це метод, створений Арнольдом Г. Рейнгольдом у 1995 році для генерації безпечних, легких для запам'ятовування фраз-паролів. Спочатку ви кидали справжні кості, щоб випадково вибрати слова зі списку.",
+          "Diceware — це метод, створений Арнольдом Г. Рейнгольдом у 1995 році для генерації безпечних, легких для запам'ятовування фраз-паролів. Спочатку кидали справжні кубики, щоб випадково вибрати слова зі списку.",
         description2:
-          "Цей інструмент використовує той самий принцип, але з криптографічно безпечним генератором випадкових чисел замість костей. Словники ретельно підібрані, щоб включати лише запам'ятовувані, відповідні слова, зберігаючи максимальну безпеку.",
+          "Цей інструмент використовує той самий принцип, але з криптографічно безпечним генератором випадкових чисел замість кубиків. Словники ретельно підібрані, щоб включати лише запам'ятовувані, доречні слова, зберігаючи максимальну безпеку.",
         wordlistsTitle: "Доступні словники:",
         ukrainian:
-          "Українська: Перші всеосяжні українські словники Diceware (малий, звичайний, великий) з транслітерацією",
+          "Українська: Перші українські словники Diceware (малий, звичайний, великий, 10K) з транслітерацією",
         english:
-          "Англійська: Словники EFF та Original Diceware — перевірені часом та широко довірені",
+          "Англійська: Словники EFF, Beale та Original Diceware — перевірені часом та широко довірені",
       },
       similarTools: {
         title: "Подібні інструменти",
         description: "Інші чудові генератори паролів, які можуть вам знадобитися:",
         dmuth: "Diceware Password Generator від Doug Muth",
         dmuthDescription:
-          "Інтерактивний генератор Diceware з анімацією костей та словником EFF. Чудово для візуалізації процесу випадковості.",
+          "Інтерактивний генератор Diceware з анімацією кубиків та словником EFF. Чудово для візуалізації процесу випадковості.",
         strongphrase: "StrongPhrase",
         strongphraseDescription:
           "Розширений генератор фраз-паролів з детальним аналізом надійності паролів та оцінками вартості злому. Відмінно для розуміння метрик безпеки.",
+      },
+      passwordManager: {
+        title: "Отримайте менеджер паролів",
+        description: "Безпечне зберігання та управління вашими надійними паролями за допомогою цих перевірених інструментів:",
+        bitwarden: "Bitwarden",
+        bitwardenDescription: "Менеджер паролів з відкритим кодом з безкоштовним тарифом, синхронізацією між платформами та безпечним спільним доступом. Відмінно для команд та окремих користувачів.",
+        keepass: "KeePassXC",
+        keepassDescription: "Безкоштовний, відкритий та офлайн менеджер паролів. Ваші паролі залишаються на вашому пристрої — хмара не потрібна.",
+        proton: "Proton Pass",
+        protonDescription: "Менеджер паролів, орієнтований на приватність від команди ProtonMail. Наскрізне шифрування з архітектурою нульового знання.",
+        onepassword: "1Password",
+        onepasswordDescription: "Популярний комерційний менеджер паролів з відмінним користувацьким досвідом, потужними функціями безпеки та надійною підтримкою між платформами.",
       },
       resources: {
         title: "Навчальні ресурси",
@@ -1056,11 +1091,11 @@ export const translations: Record<Locale, Translations> = {
 
     privacy: {
       title: "Політика конфіденційності",
-      lastUpdated: "Остання актуалізація:",
+      lastUpdated: "Останнє оновлення:",
       overview: {
         title: "Огляд",
         noDataMessage: "Ми НЕ збираємо жодних даних. Ніколи.",
-        description: "Passphrase UA — це повністю клієнтський застосунок, створений з акцентом на конфіденційність. Усі паролі та парольні фрази генеруються локально у вашому браузері та ніколи не передаються через мережу, не зберігаються на наших серверах і не відстежуються жодним чином."
+        description: "Passphrase UA — це повністю клієнтський застосунок, створений з особливою увагою до конфіденційності. Усі паролі та фрази-паролі генеруються локально у вашому браузері та ніколи не передаються через мережу, не зберігаються на наших серверах і не відстежуються жодним чином."
       },
       whatWeDontCollect: {
         title: "Що ми НЕ збираємо",
@@ -1075,18 +1110,18 @@ export const translations: Record<Locale, Translations> = {
         title: "Що зберігається локально",
         description: "У вашому браузері (localStorage) — під вашим контролем",
         themePreference: "Вибір теми",
-        themeDescription: "Ваш вибір між світлою/темною темою (passphrase-ua-theme)",
+        themeDescription: "Ваш вибір між світлою/темною темою (theme)",
         languagePreference: "Вибір мови",
         languageDescription: "Ваш вибір між українською/англійською мовою (locale)",
         noPasswords: "Без паролів",
         noPasswordsDescription: "Паролі ніколи не зберігаються, навіть локально",
-        clearSettings: "Ви можете очистити ці налаштування в будь-який час, видаливши дані сайту в налаштуваннях вашого браузера."
+        clearSettings: "Ви можете очистити ці налаштування в будь-який час, видаливши дані вебсайту в налаштуваннях вашого браузера."
       },
       howItWorks: {
         title: "Як це працює",
         clientSideGeneration: {
           title: "1. Генерація лише на стороні клієнта",
-          description: "Усі паролі та парольні фрази генеруються локально у вашому браузері за допомогою Web Crypto API (crypto.getRandomValues()). Код генерації є чистою функцією JavaScript, яка виконується виключно на вашому пристрої."
+          description: "Усі паролі та парольні фрази генеруються безпосередньо у вашому браузері за допомогою Web Crypto API (crypto.getRandomValues()). Код генерації є функцією JavaScript, яка виконується виключно на вашому пристрої."
         },
         noNetworkRequests: {
           title: "2. Без мережевих запитів",
@@ -1117,7 +1152,7 @@ export const translations: Record<Locale, Translations> = {
       },
       changesToPolicy: {
         title: "Зміни в цій політиці",
-        description: "Якщо ми внесемо зміни до цієї політики конфіденційності, ми оновимо дату «Остання актуалізація» вгорі цієї сторінки. Оскільки ми не збираємо контактну інформацію, ми не можемо повідомити вас безпосередньо про зміни. Рекомендуємо періодично переглядати цю сторінку."
+        description: "Якщо ми внесемо зміни до цієї політики конфіденційності, ми оновимо дату «Останнє оновлення» вгорі цієї сторінки. Оскільки ми не збираємо контактну інформацію, ми не можемо повідомити вас безпосередньо про зміни. Рекомендуємо періодично переглядати цю сторінку."
       },
       contact: {
         title: "Контакт",
