@@ -92,6 +92,7 @@ export interface Translations {
       moderate: string
       strong: string
       veryStrong: string
+      excessive: string
     }
     copy: string
     copied: string
@@ -247,8 +248,10 @@ export interface Translations {
       description: string
       guidelinesTitle: string
       weak: string
+      fair: string
       strong: string
       veryStrong: string
+      excessive: string
       example: string
     }
     faq: {
@@ -421,6 +424,7 @@ export const translations: Record<Locale, Translations> = {
         moderate: "Moderate",
         strong: "Strong",
         veryStrong: "Very Strong",
+        excessive: "Excessive",
       },
       copy: "Copy",
       copied: "Copied!",
@@ -810,6 +814,7 @@ export const translations: Record<Locale, Translations> = {
         moderate: "Помірний",
         strong: "Сильний",
         veryStrong: "Дуже сильний",
+        excessive: "Надлишковий",
       },
       copy: "Копіювати",
       copied: "Скопійовано!",
