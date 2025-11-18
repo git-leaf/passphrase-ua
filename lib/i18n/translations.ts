@@ -460,7 +460,7 @@ export const translations: Record<Locale, Translations> = {
         "All passwords are generated locally in your browser. Nothing is stored or transmitted. You can use it offline.",
       supportUkraine: "Support Ukraine 🇺🇦",
       supportDescription:
-        "Consider supporting Ukrainian humanitarian and defense efforts through trusted organizations.",
+        "Consider supporting Ukrainian humanitarian and defense efforts through trusted organizations:",
       supportFundraising: "Or support our current fundraising:",
       aboutProject: "About Project",
       sourceCode: "Source Code",
@@ -865,7 +865,7 @@ export const translations: Record<Locale, Translations> = {
         "Усі паролі створюються безпосередньо у вашому браузері. Нічого не зберігається та не передається через мережу. Можна використовувати без підключення до мережі.",
       supportUkraine: "Підтримати Україну 🇺🇦",
       supportDescription:
-        "Розгляньте можливість підтримки українських гуманітарних та оборонних організацій.",
+        "Розгляньте можливість підтримки українських гуманітарних та оборонних організацій:",
       supportFundraising: "Або підтримайте наш поточний збір:",
       aboutProject: "Про проєкт",
       sourceCode: "Вихідний код",
