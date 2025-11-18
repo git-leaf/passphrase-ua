@@ -128,6 +128,7 @@ export interface Translations {
   privacy: {
     title: string
     lastUpdated: string
+    lastUpdatedDate: string
     overview: {
       title: string
       noDataMessage: string
@@ -686,6 +687,7 @@ export const translations: Record<Locale, Translations> = {
     privacy: {
       title: "Privacy Policy",
       lastUpdated: "Last Updated:",
+      lastUpdatedDate: "November 18, 2025",
       overview: {
         title: "Overview",
         noDataMessage: "We DO NOT collect any data. Ever.",
@@ -1092,6 +1094,7 @@ export const translations: Record<Locale, Translations> = {
     privacy: {
       title: "Політика конфіденційності",
       lastUpdated: "Останнє оновлення:",
+      lastUpdatedDate: "18 листопада 2025",
       overview: {
         title: "Огляд",
         noDataMessage: "Ми НЕ збираємо жодних даних. Ніколи.",
