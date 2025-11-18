@@ -108,7 +108,7 @@ entropy = word_count × log₂(wordlist_size)
 
 **Industry Standards:**
 - < 40 bits: Weak
-- 40-60 bits: Fair (minimum for basic security)
+- 40-60 bits: Moderate (minimum for basic security)
 - 60-80 bits: Strong (secure for most uses)
 - 80+ bits: Very Strong (highly secure)
 

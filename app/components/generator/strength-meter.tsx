@@ -62,7 +62,7 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
   const getStrengthLabel = () => {
     const levelMapping = {
       'weak': t.output.strength.weak,
-      'fair': t.output.strength.moderate,
+      'moderate': t.output.strength.moderate,
       'strong': t.output.strength.strong,
       'very-strong': t.output.strength.veryStrong,
       'excessive': t.output.strength.excessive,

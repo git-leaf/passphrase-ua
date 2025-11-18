@@ -248,7 +248,7 @@ export interface Translations {
       description: string
       guidelinesTitle: string
       weak: string
-      fair: string
+      moderate: string
       strong: string
       veryStrong: string
       excessive: string

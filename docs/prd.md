@@ -346,7 +346,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **FR-1.5** At least one character type must be selected
 - **FR-1.6** Generated password displays in monospace font
 - **FR-1.7** Entropy calculated based on character set size and password length
-- **FR-1.8** Human-readable evaluation of the password strength (weak/moderate/strong/very strong)
+- **FR-1.8** Human-readable evaluation of the password strength (weak/moderate/strong/very strong/excessive)
 
 ### FR-2: Diceware Passphrase Generation
 **Priority:** P0 (MVP)
@@ -378,7 +378,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
   - Offline attack (100B attempts/sec)
   - Custom (user can specify the number of attempts per second)
   - Display in human-readable format (seconds, years, centuries)
-- **FR-3.4** Human-readable evaluation of the password strength (weak/moderate/strong/very strong)
+- **FR-3.4** Human-readable evaluation of the password strength (weak/moderate/strong/very strong/excessive)
 - **FR-3.5** Color-coded display (red/yellow/green)
 - **FR-3.6** Display cost to crack estimation:
   - Custom (user can specify the cost to crack in USD)
@@ -567,7 +567,8 @@ Homepage / Generator
 - 0-40 bits: "Weak" (red)
 - 41-60 bits: "Moderate" (yellow)
 - 61-80 bits: "Strong" (light green)
-- 81+ bits: "Very Strong" (dark green)
+- 81-120 bits: "Very Strong" (dark green)
+- 121+ bits: "Excessive" (blue)
 
 #### Help Text Examples
 - Diceware: "Generates memorable passphrase using random words from a wordlist. Recommended for master passwords."

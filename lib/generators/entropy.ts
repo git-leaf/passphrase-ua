@@ -8,7 +8,7 @@
 /**
  * Strength level based on entropy
  */
-export type StrengthLevel = 'weak' | 'fair' | 'strong' | 'very-strong' | 'excessive';
+export type StrengthLevel = 'weak' | 'moderate' | 'strong' | 'very-strong' | 'excessive';
 
 /**
  * Strength assessment result
@@ -49,7 +49,7 @@ export interface CostToCrackEstimate {
  * 
  * Entropy levels based on NIST and industry standards:
  * - <= 40 bits: Weak - Vulnerable to attacks
- * - 40-60 bits: Fair - Minimum for basic security
+ * - 40-60 bits: Moderate - Minimum for basic security
  * - 60-80 bits: Strong - Secure for most uses
  * - 80-120 bits: Very Strong - Highly secure
  * - 120+ bits: Excessive - Highly secure, but not practical for most uses
@@ -69,8 +69,8 @@ export function assessStrength(entropy: number): StrengthAssessment {
 
   if (entropy <= 60) {
     return {
-      level: 'fair',
-      label: 'Fair',
+      level: 'moderate',
+      label: 'Moderate',
       color: 'bg-amber-500',
       percentage: 25 + ((entropy - 40) / 20) * 50,
     };
