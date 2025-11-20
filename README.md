@@ -6,6 +6,25 @@ Mova Pass (formerly Passphrase UA) is a secure, privacy-focused tool for generat
 
 ---
 
+## 🇺🇦 Support Ukraine
+
+**Support Ukrainian charities and humanitarian efforts**
+
+Help Ukraine defend against Russian aggression. Your contributions make a real difference in supporting the brave Ukrainian people!
+
+### Trusted Organizations
+
+- [**Come Back Alive**](https://savelife.in.ua/en/)
+- [**Serhiy Prytula Foundation**](https://prytulafoundation.org/en)
+- [**United24**](https://u24.gov.ua/)
+- [**Sternenko Fund**](https://www.sternenkofund.org/en)
+
+### Personal Fundraising
+
+Support the developer's personal charity efforts through [**Monobank Charity Jar**](https://send.monobank.ua/jar/4JzF7j6qAc).
+
+---
+
 ## ✨ Features
 
 ### Generation Methods
