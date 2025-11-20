@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Passphrase UA - Secure Password & Passphrase Generator",
+  title: "Mova Pass - Secure Password & Passphrase Generator",
   description: "Generate secure passwords and memorable passphrases with Ukrainian language support. Client-side generation ensures complete privacy.",
   keywords: ["password generator", "passphrase", "diceware", "Ukrainian", "security", "privacy"],
 };
