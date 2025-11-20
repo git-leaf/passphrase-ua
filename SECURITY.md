@@ -2,7 +2,7 @@
 
 ## Reporting Security Vulnerabilities
 
-We take the security of Passphrase UA seriously. If you discover a security vulnerability, please report it responsibly.
+We take the security of Mova Pass (formerly Passphrase UA) seriously. If you discover a security vulnerability, please report it responsibly.
 
 ### How to Report
 
@@ -26,7 +26,7 @@ When reporting a vulnerability, please include:
 
 ## Security Measures
 
-Passphrase UA implements multiple security measures to protect user privacy and password security:
+Mova Pass implements multiple security measures to protect user privacy and password security:
 
 ### 1. Cryptographically Secure Random Number Generation
 - Uses Web Crypto API (`crypto.getRandomValues()`) exclusively
@@ -63,7 +63,7 @@ Passphrase UA implements multiple security measures to protect user privacy and 
 
 ## Security Best Practices for Users
 
-### When Using Passphrase UA
+### When Using Mova Pass
 
 1. **Use HTTPS**: Always access the site via HTTPS
 2. **Verify the Domain**: Ensure you're on the correct domain
@@ -113,8 +113,8 @@ We appreciate security researchers who help keep our users safe. Contributors wi
 ## Contact
 
 For security-related questions or concerns:
-- GitHub Issues: [passphrase-ua/passphrase-ua/issues](https://github.com/git-leaf/passphrase-ua/issues)
-- Security Advisories: [passphrase-ua/passphrase-ua/security](https://github.com/git-leaf/passphrase-ua/security)
+- GitHub Issues: [git-leaf/passphrase-ua/issues](https://github.com/git-leaf/passphrase-ua/issues)
+- Security Advisories: [git-leaf/passphrase-ua/security](https://github.com/git-leaf/passphrase-ua/security)
 
 ---
 

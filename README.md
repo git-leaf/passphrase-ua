@@ -1,8 +1,8 @@
-# Passphrase UA 🔐
+# Mova Pass 🔐 (formerly Passphrase UA)
 
 **Client-side password and passphrase generator with first-class Ukrainian language support**
 
-Passphrase UA is a secure, privacy-focused tool for generating strong passwords and memorable passphrases. It features the first comprehensive Ukrainian Diceware wordlists with transliteration support, alongside trusted English wordlists.
+Mova Pass (formerly Passphrase UA) is a secure, privacy-focused tool for generating strong passwords and memorable passphrases. It features the first comprehensive Ukrainian Diceware wordlists with transliteration support, alongside trusted English wordlists.
 
 ---
 

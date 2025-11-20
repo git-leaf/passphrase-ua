@@ -357,7 +357,7 @@ export interface Translations {
 export const translations: Record<Locale, Translations> = {
   en: {
     header: {
-      title: "Passphrase UA",
+      title: "Mova Pass",
       subtitle: "Generate secure passwords and memorable passphrases",
     },
 
@@ -556,7 +556,7 @@ export const translations: Record<Locale, Translations> = {
         a2Footer: "This way, you only memorize one password while having unique, strong passwords everywhere.",
         q3: "Why use Ukrainian wordlists?",
         a3: [
-          "Passphrases in your native language are easier to remember and feel more natural. Passphrase UA is the first tool to offer comprehensive Ukrainian Diceware wordlists.",
+          "Passphrases in your native language are easier to remember and feel more natural. Mova Pass is the first tool to offer comprehensive Ukrainian Diceware wordlists.",
           "The transliteration feature lets you type Ukrainian words using a standard Latin keyboard (e.g., \"собака\" becomes \"sobaka\"), making it easier to enter on any device while maintaining Ukrainian vocabulary."
         ],
         q4: "Should I exclude ambiguous characters in passwords?",
@@ -691,7 +691,7 @@ export const translations: Record<Locale, Translations> = {
       overview: {
         title: "Overview",
         noDataMessage: "We DO NOT collect any data. Ever.",
-        description: "Passphrase UA is a completely client-side application built with privacy as the core principle. All passwords and passphrases are generated locally in your browser and are never transmitted over the network, stored on our servers, or tracked in any way."
+        description: "Mova Pass is a completely client-side application built with privacy as the core principle. All passwords and passphrases are generated locally in your browser and are never transmitted over the network, stored on our servers, or tracked in any way."
       },
       whatWeDontCollect: {
         title: "What We DON'T Collect",
@@ -730,7 +730,7 @@ export const translations: Record<Locale, Translations> = {
       },
       gdprCompliance: {
         title: "GDPR Compliance",
-        description: "Passphrase UA is fully compliant with the General Data Protection Regulation (GDPR) and other privacy laws because we:",
+        description: "Mova Pass is fully compliant with the General Data Protection Regulation (GDPR) and other privacy laws because we:",
         noPersonalData: "Do not collect any personal data",
         noUserIdentifyingInfo: "Do not process any user-identifying information",
         noTrackingCookies: "Do not use tracking cookies",
@@ -752,7 +752,7 @@ export const translations: Record<Locale, Translations> = {
       },
       contact: {
         title: "Contact",
-        description: "If you have questions about this privacy policy or Passphrase UA's privacy practices, you can:",
+        description: "If you have questions about this privacy policy or Mova Pass's privacy practices, you can:",
         openIssueOn: "Open an issue on ",
         reviewSourceCode: "Review the source code for complete transparency"
       },
@@ -762,7 +762,7 @@ export const translations: Record<Locale, Translations> = {
 
   uk: {
     header: {
-      title: "Passphrase UA",
+      title: "Mova Pass",
       subtitle: "Генерація безпечних паролів та фраз-паролів",
     },
 
@@ -961,7 +961,7 @@ export const translations: Record<Locale, Translations> = {
         a2Footer: "Таким чином вам потрібно запам'ятати лише один пароль, маючи унікальні надійні паролі скрізь.",
         q3: "Навіщо використовувати українські словники?",
         a3: [
-          "Фрази-паролі рідною мовою легше запам'ятовувати і вони відчуваються природніше. Passphrase UA — перший інструмент, що пропонує всеосяжні українські словники Diceware.",
+          "Фрази-паролі рідною мовою легше запам'ятовувати і вони відчуваються природніше. Mova Pass — перший інструмент, що пропонує всеосяжні українські словники Diceware.",
           "Функція транслітерації дозволяє вводити українські слова стандартною латинською клавіатурою (наприклад, \"собака\" стає \"sobaka\"), що полегшує введення на будь-якому пристрої, зберігаючи українську лексику."
         ],
         q4: "Чи варто виключати неоднозначні символи в паролях?",
@@ -1098,7 +1098,7 @@ export const translations: Record<Locale, Translations> = {
       overview: {
         title: "Огляд",
         noDataMessage: "Ми НЕ збираємо жодних даних. Ніколи.",
-        description: "Passphrase UA — це повністю клієнтський застосунок, створений з особливою увагою до конфіденційності. Усі паролі та фрази-паролі генеруються локально у вашому браузері та ніколи не передаються через мережу, не зберігаються на наших серверах і не відстежуються жодним чином."
+        description: "Mova Pass — це повністю клієнтський застосунок, створений з особливою увагою до конфіденційності. Усі паролі та фрази-паролі генеруються локально у вашому браузері та ніколи не передаються через мережу, не зберігаються на наших серверах і не відстежуються жодним чином."
       },
       whatWeDontCollect: {
         title: "Що ми НЕ збираємо",
@@ -1137,7 +1137,7 @@ export const translations: Record<Locale, Translations> = {
       },
       gdprCompliance: {
         title: "Відповідність GDPR",
-        description: "Passphrase UA повністю відповідає Загальному регламенту захисту даних (GDPR) та іншим законам про конфіденційність, оскільки ми:",
+        description: "Mova Pass повністю відповідає Загальному регламенту захисту даних (GDPR) та іншим законам про конфіденційність, оскільки ми:",
         noPersonalData: "Не збираємо жодних персональних даних",
         noUserIdentifyingInfo: "Не обробляємо жодної інформації, яка ідентифікує користувача",
         noTrackingCookies: "Не використовуємо файли cookie для відстеження",
@@ -1159,7 +1159,7 @@ export const translations: Record<Locale, Translations> = {
       },
       contact: {
         title: "Контакт",
-        description: "Якщо у вас є питання щодо цієї політики конфіденційності або практик конфіденційності Passphrase UA, ви можете:",
+        description: "Якщо у вас є питання щодо цієї політики конфіденційності або практик конфіденційності Mova Pass, ви можете:",
         openIssueOn: "Відкрити проблему на ",
         reviewSourceCode: "Переглянути вихідний код для повної прозорості"
       },

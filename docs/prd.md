@@ -1,7 +1,7 @@
-# Product Requirements Document: Passphrase UA
+# Product Requirements Document: Mova Pass (formerly Passphrase UA)
 
-**Version:** 1.0.1  
-**Last Updated:** November 9, 2025  
+**Version:** 1.0.3
+**Last Updated:** November 20, 2025
 **Status:** Draft
 
 ---
@@ -48,7 +48,7 @@
 
 ## 1. Executive Summary
 
-**Passphrase UA** is a client-side password and passphrase generator with first-class support for Ukrainian language wordlists. The project aims to fill the gap in Ukrainian-language Diceware implementations while providing a secure, privacy-focused, and user-friendly tool for generating strong passwords and passphrases across multiple languages.
+**Mova Pass** (formerly **Passphrase UA**) is a client-side password and passphrase generator with first-class support for Ukrainian language wordlists. The project aims to fill the gap in Ukrainian-language Diceware implementations while providing a secure, privacy-focused, and user-friendly tool for generating strong passwords and passphrases across multiple languages.
 
 ### Vision
 To become the go-to passphrase generation tool for Ukrainian-speaking users while demonstrating the first comprehensive Ukrainian Diceware wordlists, and serving as a flexible, multilingual password generation platform for privacy-conscious users worldwide.
@@ -1123,7 +1123,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 
 ## 17. Approval & Sign-off
 
-**Document Author**: Passphrase UA Team  
+**Document Author**: Mova Pass Team
 **Stakeholders**: Project founder, contributors, Ukrainian security community  
 **Review Status**: Draft  
 **Next Review Date**: After MVP implementation
@@ -1246,6 +1246,7 @@ Time = (2^entropy / attempts_per_second) / 2  (average case)
 | 1.0.0 | 2025-11-08 | Project Founder | Initial PRD creation |
 | 1.0.1 | 2025-11-09 | Project Founder | Reviewed and refined PRD |
 | 1.0.2 | 2025-11-16 | Project Founder | Replaced the term "dictionary" with "wordlist" |
+| 1.0.3 | 2025-11-20 | Project Founder | Renamed project from "Passphrase UA" to "Mova Pass" |
 
 ---
 
