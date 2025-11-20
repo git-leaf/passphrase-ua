@@ -31,7 +31,7 @@ export function FooterLinks() {
       </Link>
       <span className="hidden sm:inline">•</span>
       <a
-        href="mailto:contact@example.com"
+        href="mailto:contact@movapass.net"
         className="flex items-center gap-2 hover:text-foreground transition-colors"
       >
         <Mail className="h-4 w-4" />
