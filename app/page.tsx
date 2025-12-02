@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
+import Image from "next/image"
 import { Card, CardContent } from "@/app/components/ui/card"
 import { TabsContent } from "@/app/components/ui/tabs"
-import { Shield } from "lucide-react"
 import { useToast } from "@/app/hooks/use-toast"
 import { ThemeToggle } from "@/app/components/theme-toggle"
 import { LanguageToggle } from "@/app/components/language-toggle"
@@ -165,7 +165,14 @@ export default function Home() {
             <ThemeToggle />
           </div>
           <div className="mb-2 flex items-center justify-center gap-2">
-            <Shield className="h-8 w-8 text-primary" />
+            <Image 
+              src="/logo.svg" 
+              alt="Logo" 
+              width={64} 
+              height={64}
+              className="text-primary"
+              priority
+            />
             <h1 className="text-4xl font-bold tracking-tight">{t.header.title}</h1>
           </div>
           <p className="text-muted-foreground">{t.header.subtitle}</p>
