@@ -168,8 +168,8 @@ export default function Home() {
             <Image 
               src="/logo.svg" 
               alt="Logo" 
-              width={64} 
-              height={64}
+              width={48} 
+              height={48}
               className="text-primary"
               priority
             />
