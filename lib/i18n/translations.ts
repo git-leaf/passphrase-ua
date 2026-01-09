@@ -71,9 +71,8 @@ export interface Translations {
     }
     uk: {
       wordlist: string
-      "small-diceware": string
-      "normal-diceware": string
-      "large-diceware": string
+      "short-diceware": string
+      "long-diceware": string
     }
   }
 
@@ -416,10 +415,9 @@ export const translations: Record<Locale, Translations> = {
         "original": "Original Diceware (7,776 words)",
       },
       uk: {
-        wordlist: "Wordlist (10,000 words)",
-        "small-diceware": "Small Diceware (1,296 words)",
-        "normal-diceware": "Normal Diceware (7,776 words)",
-        "large-diceware": "Large Diceware (46,656 words)",
+        wordlist: "Wordlist (10,870 words)",
+        "short-diceware": "Short Diceware (1,296 words)",
+        "long-diceware": "Long Diceware (7,776 words)",
       },
     },
 
@@ -821,10 +819,9 @@ export const translations: Record<Locale, Translations> = {
         "original": "Оригінальний Diceware (7,776 слів)",
       },
       uk: {
-        wordlist: "Словник (10,000 слів)",
-        "small-diceware": "Малий Diceware (1,296 слів)",
-        "normal-diceware": "Звичайний Diceware (7,776 слів)",
-        "large-diceware": "Великий Diceware (46,656 слів)",
+        wordlist: "Словник (10,870 слів)",
+        "short-diceware": "Короткий Diceware (1,296 слів)",
+        "long-diceware": "Довгий Diceware (7,776 слів)",
       },
     },
 
