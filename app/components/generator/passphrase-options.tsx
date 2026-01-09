@@ -118,9 +118,8 @@ export function PassphraseOptions({
                 {sourceLanguage === "uk" && (
                   <>
                     <SelectItem value="wordlist">{t.wordlists.uk.wordlist}</SelectItem>
-                    <SelectItem value="small">{t.wordlists.uk["small-diceware"]}</SelectItem>
-                    <SelectItem value="normal">{t.wordlists.uk["normal-diceware"]}</SelectItem>
-                    <SelectItem value="large">{t.wordlists.uk["large-diceware"]}</SelectItem>
+                    <SelectItem value="short">{t.wordlists.uk["short-diceware"]}</SelectItem>
+                    <SelectItem value="long">{t.wordlists.uk["long-diceware"]}</SelectItem>
                   </>
                 )}
               </SelectContent>
