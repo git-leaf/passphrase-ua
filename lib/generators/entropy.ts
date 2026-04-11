@@ -44,6 +44,56 @@ export interface CostToCrackEstimate {
   formatted: string;
 }
 
+/** Labels for {@link formatTime} / {@link calculateTimeToCrack} (i18n) */
+export interface TimeFormatLabels {
+  invalid: string;
+  milliseconds: string;
+  seconds: string;
+  minutes: string;
+  hours: string;
+  days: string;
+  years: string;
+  thousandYears: string;
+  millionYears: string;
+  billionYears: string;
+  trillionYears: string;
+  scientificYears: string;
+}
+
+/** Labels for {@link formatCost} / {@link calculateCostToCrack} (i18n) */
+export interface CostFormatLabels {
+  invalid: string;
+  suffixThousands: string;
+  suffixMillions: string;
+  suffixBillions: string;
+  suffixTrillions: string;
+  scientific: string;
+}
+
+const DEFAULT_TIME_FORMAT_LABELS: TimeFormatLabels = {
+  invalid: 'Invalid',
+  milliseconds: 'milliseconds',
+  seconds: 'seconds',
+  minutes: 'minutes',
+  hours: 'hours',
+  days: 'days',
+  years: 'years',
+  thousandYears: 'thousand years',
+  millionYears: 'million years',
+  billionYears: 'billion years',
+  trillionYears: 'trillion years',
+  scientificYears: '{mantissa} × 10^{exp} years',
+};
+
+const DEFAULT_COST_FORMAT_LABELS: CostFormatLabels = {
+  invalid: 'Invalid',
+  suffixThousands: 'K',
+  suffixMillions: 'M',
+  suffixBillions: 'B',
+  suffixTrillions: 'T',
+  scientific: '{mantissa} × 10^{exp}',
+};
+
 /**
  * Assesses password strength based on entropy
  * 
@@ -104,63 +154,68 @@ export function assessStrength(entropy: number): StrengthAssessment {
 
 /**
  * Formats time in human-readable format
- * 
+ *
  * @param seconds - Time in seconds
+ * @param labels - Unit strings (defaults to English)
  * @returns Human-readable time string
  */
-export function formatTime(seconds: number): string {
+export function formatTime(
+  seconds: number,
+  labels: TimeFormatLabels = DEFAULT_TIME_FORMAT_LABELS
+): string {
   if (seconds < 0) {
-    return 'Invalid';
+    return labels.invalid;
   }
 
   if (seconds < 1) {
-    return `${(seconds * 1000).toFixed(2)} milliseconds`;
+    return `${(seconds * 1000).toFixed(2)} ${labels.milliseconds}`;
   }
 
   if (seconds < 60) {
-    return `${seconds.toFixed(2)} seconds`;
+    return `${seconds.toFixed(2)} ${labels.seconds}`;
   }
 
   const minutes = seconds / 60;
   if (minutes < 60) {
-    return `${minutes.toFixed(2)} minutes`;
+    return `${minutes.toFixed(2)} ${labels.minutes}`;
   }
 
   const hours = minutes / 60;
   if (hours < 24) {
-    return `${hours.toFixed(2)} hours`;
+    return `${hours.toFixed(2)} ${labels.hours}`;
   }
 
   const days = hours / 24;
   if (days < 365.25) {
-    return `${days.toFixed(2)} days`;
+    return `${days.toFixed(2)} ${labels.days}`;
   }
 
   const years = days / 365.25;
   if (years < 1000) {
-    return `${years.toFixed(2)} years`;
+    return `${years.toFixed(2)} ${labels.years}`;
   }
 
   if (years < 1000000) {
-    return `${(years / 1000).toFixed(2)} thousand years`;
+    return `${(years / 1000).toFixed(2)} ${labels.thousandYears}`;
   }
 
   if (years < 1000000000) {
-    return `${(years / 1000000).toFixed(2)} million years`;
+    return `${(years / 1000000).toFixed(2)} ${labels.millionYears}`;
   }
 
   if (years < 1000000000000) {
-    return `${(years / 1000000000).toFixed(2)} billion years`;
+    return `${(years / 1000000000).toFixed(2)} ${labels.billionYears}`;
   }
 
   if (years < 1e15) {
-    return `${(years / 1000000000000).toFixed(2)} trillion years`;
+    return `${(years / 1000000000000).toFixed(2)} ${labels.trillionYears}`;
   }
 
-  // For extremely large values, use scientific notation
   const exp = Math.floor(Math.log10(years));
   const mantissa = years / Math.pow(10, exp);
-  return `${mantissa.toFixed(2)} × 10^${exp} years`;
+  return labels.scientificYears
+    .replace('{mantissa}', mantissa.toFixed(2))
+    .replace('{exp}', String(exp));
 }
 
 /**
@@ -175,12 +230,13 @@ export function formatTime(seconds: number): string {
  */
 export function calculateTimeToCrack(
   entropy: number,
-  guessesPerSecond: number
+  guessesPerSecond: number,
+  labels: TimeFormatLabels = DEFAULT_TIME_FORMAT_LABELS
 ): TimeToCrackEstimate {
   if (entropy <= 0 || guessesPerSecond <= 0) {
     return {
       seconds: 0,
-      formatted: 'Invalid',
+      formatted: labels.invalid,
     };
   }
 
@@ -191,19 +247,23 @@ export function calculateTimeToCrack(
 
   return {
     seconds,
-    formatted: formatTime(seconds),
+    formatted: formatTime(seconds, labels),
   };
 }
 
 /**
  * Formats cost in human-readable format
- * 
+ *
  * @param usd - Cost in USD
+ * @param labels - Suffix strings (defaults to English)
  * @returns Human-readable cost string
  */
-export function formatCost(usd: number): string {
+export function formatCost(
+  usd: number,
+  labels: CostFormatLabels = DEFAULT_COST_FORMAT_LABELS
+): string {
   if (usd < 0) {
-    return 'Invalid';
+    return labels.invalid;
   }
 
   if (usd < 1) {
@@ -215,25 +275,26 @@ export function formatCost(usd: number): string {
   }
 
   if (usd < 1000000) {
-    return `$${(usd / 1000).toFixed(2)}K`;
+    return `$${(usd / 1000).toFixed(2)}${labels.suffixThousands}`;
   }
 
   if (usd < 1000000000) {
-    return `$${(usd / 1000000).toFixed(2)}M`;
+    return `$${(usd / 1000000).toFixed(2)}${labels.suffixMillions}`;
   }
 
   if (usd < 1000000000000) {
-    return `$${(usd / 1000000000).toFixed(2)}B`;
+    return `$${(usd / 1000000000).toFixed(2)}${labels.suffixBillions}`;
   }
 
   if (usd < 1e15) {
-    return `$${(usd / 1000000000000).toFixed(2)}T`;
+    return `$${(usd / 1000000000000).toFixed(2)}${labels.suffixTrillions}`;
   }
 
-  // For extremely large values, use scientific notation
   const exp = Math.floor(Math.log10(usd));
   const mantissa = usd / Math.pow(10, exp);
-  return `$${mantissa.toFixed(2)} × 10^${exp}`;
+  return labels.scientific
+    .replace('{mantissa}', `$${mantissa.toFixed(2)}`)
+    .replace('{exp}', String(exp));
 }
 
 /**
@@ -248,28 +309,29 @@ export function formatCost(usd: number): string {
  */
 export function calculateCostToCrack(
   entropy: number,
-  costPer2pow32: number
+  costPer2pow32: number,
+  labels: CostFormatLabels = DEFAULT_COST_FORMAT_LABELS
 ): CostToCrackEstimate {
   if (entropy <= 0 || costPer2pow32 < 0) {
     return {
       usd: 0,
-      formatted: 'Invalid',
+      formatted: labels.invalid,
     };
   }
 
   // Calculate average case: half of all possible combinations
   // 2^entropy / 2 = 2^(entropy - 1)
   const avgCombinations = Math.pow(2, entropy - 1);
-  
+
   // Number of 2^32 blocks
   const blocks = avgCombinations / Math.pow(2, 32);
-  
+
   // Total cost
   const usd = blocks * costPer2pow32;
 
   return {
     usd,
-    formatted: formatCost(usd),
+    formatted: formatCost(usd, labels),
   };
 }
 
