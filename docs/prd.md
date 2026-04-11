@@ -711,6 +711,8 @@ Content-Security-Policy:
 
 All Ukrainian wordlists include **transliteration support** to enable easier typing on non-Ukrainian keyboards.
 
+- **Source**: https://github.com/git-leaf/diceware-ua — canonical repository for Ukrainian Diceware and general wordlist assets, formats, and curation pipeline. Files under `public/wordlists/uk/` in this application track that project.
+
 #### Wordlist (10,000 words)
 - **Format**: `WORD TRANSLITERATION`
 - **File format**: Wordlist with Transliteration
@@ -1068,6 +1070,9 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - **Diceware FAQ**: https://theworld.com/~reinhold/dicewarefaq.html
 - **Interactive demo**: https://diceware.dmuth.org/
 - **EFF Dice-Generated Passphrases**: https://www.eff.org/dice
+
+### Ukrainian wordlists
+- **diceware-ua** (wordlists and tooling): https://github.com/git-leaf/diceware-ua
 
 ### Security Standards
 - **OWASP**: https://owasp.org/www-project-web-security-testing-guide/

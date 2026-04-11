@@ -109,6 +109,8 @@ For comprehensive information about the project:
 
 _All with English transliteration support_
 
+The Ukrainian dictionaries and Diceware wordlists were developed by the same author in another repository, [diceware-ua](https://github.com/git-leaf/diceware-ua), which holds the source CSV and TXT files (and tooling used to build them). This app bundles copies under `public/wordlists/uk/`.
+
 ### English
 - Original Diceware (7,776 words)
 - EFF Short List (1,296 words)
@@ -140,6 +142,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [Arnold G. Reinhold](https://theworld.com/~reinhold/diceware.html) — Creator of the Diceware method
 - [Electronic Frontier Foundation (EFF)](https://www.eff.org/dice) — EFF wordlists
+- [diceware-ua](https://github.com/git-leaf/diceware-ua) — The maintainer's sister project: Ukrainian dictionaries and Diceware wordlists (authored there), with per-list folders (CSV/TXT), notebooks, and curation tools. This app ships bundled copies; wordlist changes and contributions belong in that repository.
 - Inspired by [Diceware Password Generator](https://diceware.dmuth.org/) and [StrongPhrase](https://strongphrase.net/)
 
 ---
