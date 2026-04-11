@@ -45,13 +45,13 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
 
   const getTimeToCrackFormatted = () => {
     const rate = getGuessRateValue()
-    const result = calculateTimeToCrack(entropy, rate)
+    const result = calculateTimeToCrack(entropy, rate, t.output.timeUnits)
     return result.formatted
   }
 
   const getCostToCrackFormatted = () => {
     const costPer = getCostPer32Value()
-    const result = calculateCostToCrack(entropy, costPer)
+    const result = calculateCostToCrack(entropy, costPer, t.output.costUnits)
     return result.formatted
   }
 
@@ -150,7 +150,7 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
                     <SelectItem value="0.01">$0.01</SelectItem>
                     <SelectItem value="0.1">$0.10</SelectItem>
                     <SelectItem value="1">$1.00</SelectItem>
-                    <SelectItem value="custom">Custom</SelectItem>
+                    <SelectItem value="custom">{t.output.guessRateCustom}</SelectItem>
                   </SelectContent>
                 </Select>
                 {costPer32 === "custom" && (

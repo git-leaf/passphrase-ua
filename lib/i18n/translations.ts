@@ -107,6 +107,28 @@ export interface Translations {
     guessRateTrillion: string
     guessRateQuadrillion: string
     guessRateCustom: string
+    timeUnits: {
+      invalid: string
+      milliseconds: string
+      seconds: string
+      minutes: string
+      hours: string
+      days: string
+      years: string
+      thousandYears: string
+      millionYears: string
+      billionYears: string
+      trillionYears: string
+      scientificYears: string
+    }
+    costUnits: {
+      invalid: string
+      suffixThousands: string
+      suffixMillions: string
+      suffixBillions: string
+      suffixTrillions: string
+      scientific: string
+    }
   }
 
   // Footer
@@ -451,6 +473,28 @@ export const translations: Record<Locale, Translations> = {
       guessRateTrillion: "1 Trillion (10^12)",
       guessRateQuadrillion: "1 Quadrillion (10^15)",
       guessRateCustom: "Custom",
+      timeUnits: {
+        invalid: "Invalid",
+        milliseconds: "milliseconds",
+        seconds: "seconds",
+        minutes: "minutes",
+        hours: "hours",
+        days: "days",
+        years: "years",
+        thousandYears: "thousand years",
+        millionYears: "million years",
+        billionYears: "billion years",
+        trillionYears: "trillion years",
+        scientificYears: "{mantissa} × 10^{exp} years",
+      },
+      costUnits: {
+        invalid: "Invalid",
+        suffixThousands: "K",
+        suffixMillions: "M",
+        suffixBillions: "B",
+        suffixTrillions: "T",
+        scientific: "{mantissa} × 10^{exp}",
+      },
     },
 
     footer: {
@@ -855,6 +899,28 @@ export const translations: Record<Locale, Translations> = {
       guessRateTrillion: "1 трильйон (10^12)",
       guessRateQuadrillion: "1 квадрильйон (10^15)",
       guessRateCustom: "Свій",
+      timeUnits: {
+        invalid: "Некоректно",
+        milliseconds: "мілісекунд",
+        seconds: "секунд",
+        minutes: "хвилин",
+        hours: "годин",
+        days: "днів",
+        years: "років",
+        thousandYears: "тис. років",
+        millionYears: "млн. років",
+        billionYears: "млрд. років",
+        trillionYears: "трлн. років",
+        scientificYears: "{mantissa} × 10^{exp} років",
+      },
+      costUnits: {
+        invalid: "Некоректно",
+        suffixThousands: " тис.",
+        suffixMillions: " млн.",
+        suffixBillions: " млрд.",
+        suffixTrillions: " трлн.",
+        scientific: "{mantissa} × 10^{exp}",
+      },
     },
 
     footer: {

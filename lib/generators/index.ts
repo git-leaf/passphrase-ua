@@ -45,6 +45,8 @@ export {
   type StrengthAssessment,
   type TimeToCrackEstimate,
   type CostToCrackEstimate,
+  type TimeFormatLabels,
+  type CostFormatLabels,
 } from './entropy';
 
 // Shared Types
