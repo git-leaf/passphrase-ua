@@ -34,4 +34,3 @@ export function MethodSelector({ activeTab, onTabChange, children }: MethodSelec
     </Tabs>
   )
 }
-

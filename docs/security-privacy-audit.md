@@ -1,6 +1,7 @@
 > **Historical, not authoritative.** Kept for reference only. For current decisions see [CONTRIBUTING.md](../CONTRIBUTING.md), [docs/adr/](adr/) and [GLOSSARY.md](../GLOSSARY.md).
 
 # Security & Privacy Audit Report
+
 **Passphrase UA**  
 **Date:** November 16, 2025  
 **Version:** 1.0  
@@ -26,6 +27,7 @@ This audit evaluates the security and privacy posture of Passphrase UA against t
 **Status:** ✅ **FULLY COMPLIANT**
 
 **Findings:**
+
 - ✅ `lib/generators/password.ts` correctly implements `getSecureRandomValues()` using `window.crypto.getRandomValues()`
 - ✅ Proper rejection sampling implemented to avoid modulo bias
 - ✅ Feature detection: Checks for Web Crypto API availability before use
@@ -34,6 +36,7 @@ This audit evaluates the security and privacy posture of Passphrase UA against t
 - ✅ Unit tests verify Web Crypto API usage
 
 **Code Reference:**
+
 ```141:171:lib/generators/password.ts
 export function getSecureRandomValues(length: number, max: number): number[] {
   if (typeof window === 'undefined' || !window.crypto?.getRandomValues) {
@@ -41,7 +44,7 @@ export function getSecureRandomValues(length: number, max: number): number[] {
   }
 
   const randomValues: number[] = [];
-  
+
   // Calculate how many bits we need
   const bitsNeeded = Math.ceil(Math.log2(max));
   const bytesNeeded = Math.ceil(bitsNeeded / 8);
@@ -79,6 +82,7 @@ export function getSecureRandomValues(length: number, max: number): number[] {
 **Status:** ✅ **COMPLIANT** (Generation) | ⚠️ **NEEDS ATTENTION** (Infrastructure)
 
 **Findings:**
+
 - ✅ Password/passphrase generation: No network requests during generation
 - ✅ All generation logic is pure functions, client-side only
 - ⚠️ Wordlist loading: Uses `fetch()` to load wordlists from `public/` directory
@@ -86,6 +90,7 @@ export function getSecureRandomValues(length: number, max: number): number[] {
   - However, wordlists are loaded on-demand, which could be improved with Service Worker caching
 
 **Code Reference:**
+
 ```122:178:lib/wordlists/loader.ts
 export async function loadWordlist(path: string): Promise<Wordlist> {
   // Check cache first
@@ -96,7 +101,7 @@ export async function loadWordlist(path: string): Promise<Wordlist> {
   try {
     // Fetch wordlist file
     const response = await fetch(path);
-    
+
     if (!response.ok) {
       throw new Error(`Failed to load wordlist: ${response.statusText}`);
     }
@@ -147,6 +152,7 @@ export async function loadWordlist(path: string): Promise<Wordlist> {
 ```
 
 **Recommendations:**
+
 1. ✅ Current implementation is acceptable - wordlists are static assets
 2. ⚠️ Implement Service Worker for offline wordlist caching (PRD FR-5.2)
 3. ⚠️ Consider preloading wordlists to avoid network requests during generation
@@ -161,6 +167,7 @@ export async function loadWordlist(path: string): Promise<Wordlist> {
 **Status:** ⚠️ **MOSTLY COMPLIANT** (with exceptions)
 
 **Findings:**
+
 - ✅ Production code (`app/page.tsx`, `lib/generators/`) does not log passwords
 - ✅ Error handling does not include passwords in error messages
 - ⚠️ **ISSUE FOUND:** `lib/generators/examples.ts` contains multiple `console.log()` statements that output passwords
@@ -168,6 +175,7 @@ export async function loadWordlist(path: string): Promise<Wordlist> {
   - However, if this file is imported or executed, passwords could be logged
 
 **Code Reference:**
+
 ```28:30:lib/generators/examples.ts
   console.log('Password:', result.password);
   console.log('Entropy:', result.entropy.toFixed(2), 'bits');
@@ -175,6 +183,7 @@ export async function loadWordlist(path: string): Promise<Wordlist> {
 ```
 
 **Recommendations:**
+
 1. ⚠️ **CRITICAL:** Ensure `examples.ts` is never imported in production builds
 2. ⚠️ Add build-time check or exclude `examples.ts` from production bundle
 3. ✅ Consider moving examples to separate documentation-only directory
@@ -189,25 +198,28 @@ export async function loadWordlist(path: string): Promise<Wordlist> {
 **Status:** ❌ **NOT IMPLEMENTED**
 
 **Findings:**
+
 - ❌ No CSP headers configured in `next.config.ts`
 - ❌ No middleware.ts found for header configuration
 - ❌ No `vercel.json` found for deployment-level headers
 
 **PRD Specification:**
+
 ```
-Content-Security-Policy: 
-  default-src 'self'; 
-  script-src 'self'; 
-  style-src 'self' 'unsafe-inline'; 
-  img-src 'self' data:; 
-  font-src 'self'; 
-  connect-src 'self'; 
-  frame-ancestors 'none'; 
-  base-uri 'self'; 
+Content-Security-Policy:
+  default-src 'self';
+  script-src 'self';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data:;
+  font-src 'self';
+  connect-src 'self';
+  frame-ancestors 'none';
+  base-uri 'self';
   form-action 'self';
 ```
 
 **Recommendations:**
+
 1. ❌ **CRITICAL:** Implement CSP headers before launch
 2. Add CSP via Next.js `next.config.ts` headers configuration
 3. Test CSP with browser DevTools to ensure no violations
@@ -222,11 +234,13 @@ Content-Security-Policy:
 **Status:** ⚠️ **DEPENDS ON DEPLOYMENT**
 
 **Findings:**
+
 - ⚠️ No HSTS headers configured in codebase
 - ✅ Vercel (specified deployment platform) enables HTTPS by default
 - ⚠️ HSTS should be explicitly configured
 
 **Recommendations:**
+
 1. ⚠️ Configure HSTS headers in `next.config.ts` or `vercel.json`
 2. Set `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload`
 3. Verify HTTPS enforcement in production deployment
@@ -240,12 +254,14 @@ Content-Security-Policy:
 **Status:** ✅ **COMPLIANT**
 
 **Findings:**
+
 - ✅ No analytics scripts found (Google Analytics, etc.)
 - ✅ No third-party CDN scripts
 - ✅ Only dependencies are UI libraries (Radix UI, shadcn/ui) - all bundled
 - ✅ Google Fonts loaded via Next.js font optimization (acceptable)
 
 **Code Reference:**
+
 ```8:16:app/layout.tsx
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -269,6 +285,7 @@ const geistMono = Geist_Mono({
 **Status:** ⚠️ **NOT USING ZOD** (but validation exists)
 
 **Findings:**
+
 - ⚠️ PRD specifies Zod for validation, but codebase uses manual validation
 - ✅ Input validation is present and thorough:
   - Password length: 1-128 characters
@@ -279,6 +296,7 @@ const geistMono = Geist_Mono({
 - ⚠️ Zod is listed in `pnpm-lock.yaml` but not used in code
 
 **Code Reference:**
+
 ```65:87:lib/generators/password.ts
 export function validateConfig(config: PasswordConfig): void {
   // Validate length
@@ -306,6 +324,7 @@ export function validateConfig(config: PasswordConfig): void {
 ```
 
 **Recommendations:**
+
 1. ⚠️ Either implement Zod validation as specified in PRD, or update PRD to reflect manual validation
 2. ✅ Current manual validation is sufficient, but Zod would provide:
    - Runtime schema validation
@@ -368,6 +387,7 @@ export function validateConfig(config: PasswordConfig): void {
     - ✅ N/A - No server-side requests
 
 **Recommendations:**
+
 1. ❌ Implement CSP headers (critical)
 2. ⚠️ Add HSTS headers
 3. ⚠️ Create security.txt file
@@ -382,10 +402,12 @@ export function validateConfig(config: PasswordConfig): void {
 **Status:** ❌ **NOT IMPLEMENTED**
 
 **Findings:**
+
 - ❌ No `.well-known/security.txt` file found
 - ❌ No vulnerability disclosure policy documented
 
 **Recommendations:**
+
 1. ❌ **RECOMMENDED:** Create `.well-known/security.txt` with:
    - Contact email for security issues
    - Vulnerability disclosure policy
@@ -393,6 +415,7 @@ export function validateConfig(config: PasswordConfig): void {
    - Acknowledgments (optional)
 
 **Example:**
+
 ```
 Contact: security@example.com
 Expires: 2026-12-31T23:59:59.000Z
@@ -409,11 +432,13 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 **Status:** ❌ **NOT IMPLEMENTED**
 
 **Findings:**
+
 - ❌ No Service Worker implementation found
 - ❌ No offline support currently
 - ⚠️ Wordlists cached in memory, but not persisted
 
 **Recommendations:**
+
 1. ⚠️ **POST-MVP:** Implement Service Worker for offline support
 2. Cache wordlists in Service Worker cache
 3. Cache app shell for offline functionality
@@ -428,11 +453,13 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 **Status:** ✅ **COMPLIANT**
 
 **Findings:**
+
 - ✅ Uses `navigator.clipboard.writeText()` (modern, secure API)
 - ✅ No password storage after copy
 - ⚠️ No error handling visible for clipboard failures
 
 **Code Reference:**
+
 ```134:141:app/page.tsx
   const copyToClipboard = () => {
     if (!generatedPassword) return
@@ -445,6 +472,7 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 ```
 
 **Recommendations:**
+
 1. ⚠️ Add error handling for clipboard API failures
 2. ✅ Consider adding fallback for older browsers (but not critical)
 
@@ -460,6 +488,7 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 **Status:** ✅ **FULLY COMPLIANT**
 
 **Findings:**
+
 - ✅ No analytics scripts found
 - ✅ No telemetry or tracking
 - ✅ No user accounts or authentication
@@ -477,6 +506,7 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 **Status:** ✅ **COMPLIANT**
 
 **Findings:**
+
 - ✅ Only stores:
   - Theme preference (`passphrase-ua-theme`)
   - Locale preference (`locale`)
@@ -484,6 +514,7 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 - ✅ Settings are user-controlled and can be cleared
 
 **Code Reference:**
+
 ```31:33:app/components/theme-provider.tsx
   const [theme, setTheme] = React.useState<Theme>(
     () => (typeof window !== "undefined" && (localStorage.getItem(storageKey) as Theme)) || defaultTheme,
@@ -518,6 +549,7 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 **Status:** ✅ **COMPLIANT**
 
 **Findings:**
+
 - ✅ No external API calls found
 - ✅ Only `fetch()` calls are for local wordlist files (`public/wordlists/`)
 - ✅ No third-party services
@@ -535,6 +567,7 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 **Status:** ❌ **NOT IMPLEMENTED**
 
 **Findings:**
+
 - ❌ No privacy policy page found
 - ❌ No privacy policy content in codebase
 - ⚠️ PRD specifies privacy policy should include:
@@ -544,6 +577,7 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
   - Contact information
 
 **Recommendations:**
+
 1. ❌ **CRITICAL:** Create privacy policy page before launch
 2. Include all points specified in PRD Section 8
 3. Link privacy policy in footer
@@ -558,6 +592,7 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 **Status:** ✅ **COMPLIANT** (assumed)
 
 **Findings:**
+
 - ✅ Codebase is structured for open source
 - ✅ MIT license specified in `package.json`
 - ✅ README mentions open source
@@ -621,24 +656,24 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 
 ### PRD Requirements Compliance
 
-| Requirement | Status | Notes |
-|------------|--------|-------|
-| NFR-1.1: Web Crypto API | ✅ | Fully compliant |
-| NFR-1.2: No network requests | ✅ | Compliant (wordlists are static assets) |
-| NFR-1.3: No password logging | ⚠️ | Examples.ts logs passwords |
-| NFR-1.4: No passwords in errors | ✅ | Compliant |
-| NFR-1.5: CSP headers | ❌ | Not implemented |
-| NFR-1.6: HTTPS/HSTS | ⚠️ | HTTPS yes, HSTS no |
-| NFR-1.7: No third-party scripts | ✅ | Compliant |
-| NFR-1.8: OWASP Top 10 | ⚠️ | Mostly compliant, CSP missing |
-| NFR-1.9: Security audits | ⚠️ | This audit completed |
-| NFR-2.1: GDPR compliance | ✅ | No data collected |
-| NFR-2.2: No analytics | ✅ | Compliant |
-| NFR-2.3: No cookies | ✅ | Only localStorage for settings |
-| NFR-2.4: No external APIs | ✅ | Compliant |
-| NFR-2.5: Privacy policy | ❌ | Not implemented |
-| NFR-2.6: Open source | ✅ | Compliant (assumed) |
-| NFR-7.4: Zod validation | ⚠️ | Manual validation instead |
+| Requirement                     | Status | Notes                                   |
+| ------------------------------- | ------ | --------------------------------------- |
+| NFR-1.1: Web Crypto API         | ✅     | Fully compliant                         |
+| NFR-1.2: No network requests    | ✅     | Compliant (wordlists are static assets) |
+| NFR-1.3: No password logging    | ⚠️     | Examples.ts logs passwords              |
+| NFR-1.4: No passwords in errors | ✅     | Compliant                               |
+| NFR-1.5: CSP headers            | ❌     | Not implemented                         |
+| NFR-1.6: HTTPS/HSTS             | ⚠️     | HTTPS yes, HSTS no                      |
+| NFR-1.7: No third-party scripts | ✅     | Compliant                               |
+| NFR-1.8: OWASP Top 10           | ⚠️     | Mostly compliant, CSP missing           |
+| NFR-1.9: Security audits        | ⚠️     | This audit completed                    |
+| NFR-2.1: GDPR compliance        | ✅     | No data collected                       |
+| NFR-2.2: No analytics           | ✅     | Compliant                               |
+| NFR-2.3: No cookies             | ✅     | Only localStorage for settings          |
+| NFR-2.4: No external APIs       | ✅     | Compliant                               |
+| NFR-2.5: Privacy policy         | ❌     | Not implemented                         |
+| NFR-2.6: Open source            | ✅     | Compliant (assumed)                     |
+| NFR-7.4: Zod validation         | ⚠️     | Manual validation instead               |
 
 **Overall Compliance:** 11/16 ✅ | 4/16 ⚠️ | 1/16 ❌
 
@@ -647,16 +682,19 @@ Canonical: https://passphrase-ua.vercel.app/.well-known/security.txt
 ## 5. Recommendations Priority Matrix
 
 ### Immediate (Pre-Launch)
+
 1. ❌ Implement CSP headers
 2. ❌ Create privacy policy page
 3. ⚠️ Exclude/exclude examples.ts from production build
 
 ### Short-term (Post-Launch)
+
 4. ⚠️ Add HSTS headers
 5. ❌ Create security.txt file
 6. ⚠️ Add clipboard error handling
 
 ### Medium-term (Future Releases)
+
 7. ❌ Implement Service Worker for offline support
 8. ⚠️ Consider implementing Zod validation or updating PRD
 
@@ -735,4 +773,3 @@ Passphrase UA demonstrates **strong security fundamentals** with proper cryptogr
 
 **Report Prepared By:** Security Audit  
 **Next Review:** Post-launch security review recommended
-

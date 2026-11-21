@@ -36,8 +36,7 @@ export default function Home() {
     })
   })
 
-  const method: GenerationMethod | null =
-    activeTab === "password" || activeTab === "passphrase" ? activeTab : null
+  const method: GenerationMethod | null = activeTab === "password" || activeTab === "passphrase" ? activeTab : null
   const output = method && state[method].output
 
   const copyToClipboard = async (secret: string) => {
@@ -66,14 +65,7 @@ export default function Home() {
             <ThemeToggle />
           </div>
           <div className="mb-2 flex items-center justify-center gap-2">
-            <Image 
-              src="/logo.svg" 
-              alt="Logo" 
-              width={48} 
-              height={48}
-              className="text-primary"
-              priority
-            />
+            <Image src="/logo.svg" alt="Logo" width={48} height={48} className="text-primary" priority />
             <h1 className="text-4xl font-bold tracking-tight">{t.header.title}</h1>
           </div>
           <p className="text-muted-foreground">{t.header.subtitle}</p>
@@ -123,9 +115,7 @@ export default function Home() {
         </Card>
 
         {/* Security Notice */}
-        <p className="mt-6 text-center text-xs text-muted-foreground">
-          {t.footer.securityNotice}
-        </p>
+        <p className="mt-6 text-center text-xs text-muted-foreground">{t.footer.securityNotice}</p>
 
         {/* Footer */}
         <footer className="mt-8 border-t pt-6 space-y-6">

@@ -1,6 +1,7 @@
 "use client"
 
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
+import { createContext, useContext, useState, useSyncExternalStore, type ReactNode } from "react"
+import { resolvePreferredLocale } from "./preferred-locale"
 import { translations, type Locale, type Translations } from "./translations"
 
 interface I18nContextType {
@@ -17,55 +18,48 @@ interface I18nProviderProps {
   storageKey?: string
 }
 
-/**
- * Detects the user's preferred language from browser settings
- */
-function detectBrowserLanguage(): Locale | null {
-  if (typeof window === "undefined") return null
+// The stored and browser preferences are only read, never observed for changes
+const subscribeToNothing = () => () => {}
 
-  // Check navigator.languages first (preferred languages array)
-  const languages = navigator.languages || [navigator.language]
-  if (!languages) return null
-
-  // Map browser language codes to supported locales
-  for (const lang of languages) {
-    const primaryLang = lang.split('-')[0].toLowerCase()
-    if (primaryLang === "uk") return "uk"
-    if (primaryLang === "en") return "en"
+// Storage can be blocked (privacy settings, sandboxed frames) or full; the
+// locale then falls back to the browser language and is not remembered
+function readSavedLocale(storageKey: string): string | null {
+  try {
+    return localStorage.getItem(storageKey)
+  } catch {
+    return null
   }
+}
 
-  return null
+function saveLocale(storageKey: string, locale: Locale) {
+  try {
+    localStorage.setItem(storageKey, locale)
+  } catch {
+    // The choice still applies for this visit
+  }
+}
+
+function browserLanguages(): readonly string[] {
+  return navigator.languages?.length ? navigator.languages : [navigator.language]
 }
 
 /**
  * I18n Provider that manages language selection and provides translations
  */
 export function I18nProvider({ children, defaultLocale = "en", storageKey = "locale" }: I18nProviderProps) {
-  const [locale, setLocaleState] = useState<Locale>(defaultLocale)
+  // Server render and hydration use the default; the browser then switches to
+  // the saved choice or browser language without a setState-in-effect re-render
+  const preferredLocale = useSyncExternalStore(
+    subscribeToNothing,
+    () => resolvePreferredLocale(readSavedLocale(storageKey), browserLanguages(), defaultLocale),
+    () => defaultLocale,
+  )
+  const [chosenLocale, setChosenLocale] = useState<Locale | null>(null)
+  const locale = chosenLocale ?? preferredLocale
 
-  // Load locale on mount: user preference → browser preference → default
-  useEffect(() => {
-    // First priority: check if user manually changed language (localStorage exists)
-    const saved = localStorage.getItem(storageKey) as Locale | null
-    if (saved && (saved === "en" || saved === "uk")) {
-      setLocaleState(saved)
-      return
-    }
-
-    // Second priority: first visit - use browser language preference
-    const browserLang = detectBrowserLanguage()
-    if (browserLang) {
-      setLocaleState(browserLang)
-      return
-    }
-
-    // Third priority: default locale (already set in useState)
-  }, [])
-
-  // Save locale to localStorage when it changes
   const setLocale = (newLocale: Locale) => {
-    setLocaleState(newLocale)
-    localStorage.setItem(storageKey, newLocale)
+    setChosenLocale(newLocale)
+    saveLocale(storageKey, newLocale)
   }
 
   const value: I18nContextType = {
@@ -87,4 +81,3 @@ export function useI18n() {
   }
   return context
 }
-

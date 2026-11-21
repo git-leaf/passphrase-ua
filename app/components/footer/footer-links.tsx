@@ -22,22 +22,15 @@ export function FooterLinks() {
         {t.footer.sourceCode}
       </a>
       <span className="hidden sm:inline">•</span>
-      <Link
-        href="/privacy"
-        className="flex items-center gap-2 hover:text-foreground transition-colors"
-      >
+      <Link href="/privacy" className="flex items-center gap-2 hover:text-foreground transition-colors">
         <Shield className="h-4 w-4" />
         {t.footer.privacy}
       </Link>
       <span className="hidden sm:inline">•</span>
-      <a
-        href="mailto:contact@movapass.net"
-        className="flex items-center gap-2 hover:text-foreground transition-colors"
-      >
+      <a href="mailto:contact@movapass.net" className="flex items-center gap-2 hover:text-foreground transition-colors">
         <Mail className="h-4 w-4" />
         {t.footer.contact}
       </a>
     </div>
   )
 }
-

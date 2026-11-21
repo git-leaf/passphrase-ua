@@ -5,14 +5,14 @@
 /**
  * Generation method type
  */
-export type GenerationMethod = 'password' | 'passphrase';
+export type GenerationMethod = "password" | "passphrase"
 
 /**
  * A generated Secret and its entropy
  */
 export interface GeneratedSecret {
   /** The password or passphrase */
-  secret: string;
+  secret: string
   /** Entropy in bits */
-  entropy: number;
+  entropy: number
 }

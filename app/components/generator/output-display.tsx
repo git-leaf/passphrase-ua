@@ -15,13 +15,7 @@ interface OutputDisplayProps {
 /**
  * Displays generated password/passphrase with copy and regenerate actions, plus strength metrics
  */
-export function OutputDisplay({ 
-  secret,
-  entropy, 
-  onCopy, 
-  onRegenerate,
-  isRegenerating = false 
-}: OutputDisplayProps) {
+export function OutputDisplay({ secret, entropy, onCopy, onRegenerate, isRegenerating = false }: OutputDisplayProps) {
   return (
     <div className="mt-8 space-y-4 rounded-lg border-2 bg-muted/30 p-6">
       <div className="space-y-2">
@@ -31,13 +25,7 @@ export function OutputDisplay({
             <Button size="icon" variant="ghost" onClick={onCopy} className="h-8 w-8">
               <Copy className="h-4 w-4" />
             </Button>
-            <Button
-              size="icon"
-              variant="ghost"
-              onClick={onRegenerate}
-              className="h-8 w-8"
-              disabled={isRegenerating}
-            >
+            <Button size="icon" variant="ghost" onClick={onRegenerate} className="h-8 w-8" disabled={isRegenerating}>
               <RefreshCw className={`h-4 w-4 ${isRegenerating ? "animate-spin" : ""}`} />
             </Button>
           </div>
@@ -49,4 +37,3 @@ export function OutputDisplay({
     </div>
   )
 }
-
