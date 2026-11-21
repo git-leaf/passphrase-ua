@@ -28,14 +28,17 @@ Support the developer's personal charity efforts through [**Monobank Charity Jar
 ## ✨ Features
 
 ### Generation Methods
+
 - **Random Passwords** — Cryptographically secure character-based passwords with customizable length and character sets
 - **Diceware Passphrases** — Memorable word-based passphrases using the proven Diceware method
 
 ### Ukrainian Support (First Implementation!)
+
 - 🇺🇦 **Ukrainian Wordlists**: Small (1,296 words), Normal (7,776 words), Large (46,656 words)
 - 🔤 **Transliteration**: Type Ukrainian words using Latin characters (e.g., "собака" → "sobaka")
 
 ### Security & Privacy
+
 - ✅ **100% Client-side** — All generation happens in your browser, nothing sent to servers
 - ✅ **Cryptographically Secure** — Uses `crypto.getRandomValues()` Web Crypto API
 - ✅ **No Tracking** — Zero analytics, no data collection, complete privacy
@@ -43,6 +46,7 @@ Support the developer's personal charity efforts through [**Monobank Charity Jar
 - ✅ **Open Source** — Fully auditable code
 
 ### User Experience
+
 - 📊 **Strength Meter** — Real-time entropy calculation and time-to-crack estimates
 - 🎨 **Dark/Light Modes** — System preference detection with manual toggle
 - ♿ **Accessible** — WCAG 2.1 AA compliant, keyboard navigation, screen reader support
@@ -53,7 +57,8 @@ Support the developer's personal charity efforts through [**Monobank Charity Jar
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 20+ and pnpm
+
+- [pnpm](https://pnpm.io/installation). It installs the pinned Node.js 26 for the project's scripts by itself.
 
 ### Installation
 
@@ -75,9 +80,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ```bash
 pnpm dev      # Start development server
+pnpm check    # Run every check CI runs: format, lint, types, tests, build
+pnpm format   # Format all files with Prettier
+pnpm lint     # Run ESLint
+pnpm test     # Run tests
+pnpm test:watch  # Run tests in watch mode
 pnpm build    # Build for production
 pnpm start    # Start production server
-pnpm lint     # Run linter
 ```
 
 ---
@@ -102,6 +111,7 @@ pnpm lint     # Run linter
 ## 🌍 Supported Languages
 
 ### Ukrainian
+
 - Wordlist (10,000 words)
 - Small Diceware (1,296 words, 4 dice)
 - Normal Diceware (7,776 words, 5 dice)
@@ -112,6 +122,7 @@ _All with English transliteration support_
 The Ukrainian dictionaries and Diceware wordlists were developed by the same author in another repository, [diceware-ua](https://github.com/git-leaf/diceware-ua), which holds the source CSV and TXT files (and tooling used to build them). This app bundles copies under `public/wordlists/uk/`.
 
 ### English
+
 - Original Diceware (7,776 words)
 - EFF Short List (1,296 words)
 - EFF Large List (7,776 words)

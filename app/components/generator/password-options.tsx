@@ -95,4 +95,3 @@ export function PasswordOptions({ options, onChange, onGenerate }: PasswordOptio
     </div>
   )
 }
-

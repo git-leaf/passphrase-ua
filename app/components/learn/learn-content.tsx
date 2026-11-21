@@ -27,26 +27,18 @@ export function LearnContent() {
         {/* Getting Started: The Basics */}
         <section className="space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.gettingStarted.title}</h3>
-          <p className="text-muted-foreground leading-relaxed">
-            {t.learn.gettingStarted.description}
-          </p>
+          <p className="text-muted-foreground leading-relaxed">{t.learn.gettingStarted.description}</p>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
               <p className="font-medium">{t.learn.gettingStarted.randomTitle}</p>
-              <p className="text-sm text-muted-foreground">
-                {t.learn.gettingStarted.randomDescription}
-              </p>
+              <p className="text-sm text-muted-foreground">{t.learn.gettingStarted.randomDescription}</p>
               <p className="text-xs font-mono bg-background p-2 rounded">{t.learn.gettingStarted.randomExample}</p>
             </div>
 
             <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
               <p className="font-medium">{t.learn.gettingStarted.dicewareTitle}</p>
-              <p className="text-sm text-muted-foreground">
-                {t.learn.gettingStarted.dicewareDescription}
-              </p>
-              <p className="text-xs font-mono bg-background p-2 rounded">
-                {t.learn.gettingStarted.dicewareExample}
-              </p>
+              <p className="text-sm text-muted-foreground">{t.learn.gettingStarted.dicewareDescription}</p>
+              <p className="text-xs font-mono bg-background p-2 rounded">{t.learn.gettingStarted.dicewareExample}</p>
             </div>
           </div>
         </section>
@@ -74,7 +66,7 @@ export function LearnContent() {
                 ))}
               </ul>
             </div>
-            
+
             <div className="rounded-lg border bg-muted/30 p-4">
               <p className="font-medium mb-2">{t.learn.whenToUse.dicewareTitle}</p>
               <ul className="text-sm space-y-1 text-muted-foreground list-disc list-inside">
@@ -89,9 +81,7 @@ export function LearnContent() {
         {/* Understanding Strength */}
         <section className="space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.strength.title}</h3>
-          <p className="text-muted-foreground leading-relaxed">
-            {t.learn.strength.description}
-          </p>
+          <p className="text-muted-foreground leading-relaxed">{t.learn.strength.description}</p>
           <div className="rounded-lg border bg-muted/30 p-4">
             <p className="text-sm font-medium mb-2">{t.learn.strength.guidelinesTitle}</p>
             <ul className="text-sm space-y-2 text-muted-foreground">
@@ -101,9 +91,7 @@ export function LearnContent() {
               <li>{t.learn.strength.veryStrong.replace("{range}", bandRange("very-strong"))}</li>
               <li>{t.learn.strength.excessive.replace("{range}", bandRange("excessive"))}</li>
             </ul>
-            <p className="text-xs text-muted-foreground mt-3 italic">
-              {t.learn.strength.example}
-            </p>
+            <p className="text-xs text-muted-foreground mt-3 italic">{t.learn.strength.example}</p>
           </div>
         </section>
 
@@ -113,9 +101,7 @@ export function LearnContent() {
 
           <Accordion type="single" collapsible className="space-y-2">
             <AccordionItem value="faq-1" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                {t.learn.faq.q1}
-              </AccordionTrigger>
+              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q1}</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 {t.learn.faq.a1.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
@@ -124,9 +110,7 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-2" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                {t.learn.faq.q2}
-              </AccordionTrigger>
+              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q2}</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 <p className="font-medium">{t.learn.faq.a2Title}</p>
                 <ol className="list-decimal list-inside space-y-1 ml-2">
@@ -139,9 +123,7 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-3" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                {t.learn.faq.q3}
-              </AccordionTrigger>
+              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q3}</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 {t.learn.faq.a3.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
@@ -150,9 +132,7 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-4" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                {t.learn.faq.q4}
-              </AccordionTrigger>
+              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q4}</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 {t.learn.faq.a4.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
@@ -161,27 +141,17 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-5" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                {t.learn.faq.q5}
-              </AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground">
-                {t.learn.faq.a5}
-              </AccordionContent>
+              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q5}</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">{t.learn.faq.a5}</AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-6" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                {t.learn.faq.q6}
-              </AccordionTrigger>
-              <AccordionContent className="text-sm text-muted-foreground">
-                {t.learn.faq.a6}
-              </AccordionContent>
+              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q6}</AccordionTrigger>
+              <AccordionContent className="text-sm text-muted-foreground">{t.learn.faq.a6}</AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-7" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                {t.learn.faq.q7}
-              </AccordionTrigger>
+              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q7}</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 <p className="font-medium">{t.learn.faq.a7GoodTitle}</p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
@@ -199,9 +169,7 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-8" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                {t.learn.faq.q8}
-              </AccordionTrigger>
+              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q8}</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 {t.learn.faq.a8.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
@@ -210,9 +178,7 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-9" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">
-                {t.learn.faq.q9}
-              </AccordionTrigger>
+              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q9}</AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 {t.learn.faq.a9.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
@@ -291,12 +257,8 @@ export function LearnContent() {
         {/* What is Diceware? (Advanced) */}
         <section className="space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.whatIsDiceware.title}</h3>
-          <p className="text-muted-foreground leading-relaxed">
-            {t.learn.whatIsDiceware.description1}
-          </p>
-          <p className="text-muted-foreground leading-relaxed">
-            {t.learn.whatIsDiceware.description2}
-          </p>
+          <p className="text-muted-foreground leading-relaxed">{t.learn.whatIsDiceware.description1}</p>
+          <p className="text-muted-foreground leading-relaxed">{t.learn.whatIsDiceware.description2}</p>
           <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
             <p className="text-sm font-medium">{t.learn.whatIsDiceware.wordlistsTitle}</p>
             <ul className="text-sm space-y-1 text-muted-foreground">
@@ -309,9 +271,7 @@ export function LearnContent() {
         {/* Similar Tools */}
         <section className="space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.similarTools.title}</h3>
-          <p className="text-sm text-muted-foreground">
-            {t.learn.similarTools.description}
-          </p>
+          <p className="text-sm text-muted-foreground">{t.learn.similarTools.description}</p>
           <div className="space-y-2">
             <a
               href="https://diceware.dmuth.org/"
@@ -320,9 +280,7 @@ export function LearnContent() {
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
               <p className="font-medium">{t.learn.similarTools.dmuth}</p>
-              <p className="text-muted-foreground text-xs mt-1">
-                {t.learn.similarTools.dmuthDescription}
-              </p>
+              <p className="text-muted-foreground text-xs mt-1">{t.learn.similarTools.dmuthDescription}</p>
             </a>
             <a
               href="https://strongphrase.net/"
@@ -331,9 +289,7 @@ export function LearnContent() {
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
               <p className="font-medium">{t.learn.similarTools.strongphrase}</p>
-              <p className="text-muted-foreground text-xs mt-1">
-                {t.learn.similarTools.strongphraseDescription}
-              </p>
+              <p className="text-muted-foreground text-xs mt-1">{t.learn.similarTools.strongphraseDescription}</p>
             </a>
           </div>
         </section>
@@ -341,9 +297,7 @@ export function LearnContent() {
         {/* Get a Password Manager */}
         <section className="space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.passwordManager.title}</h3>
-          <p className="text-sm text-muted-foreground">
-            {t.learn.passwordManager.description}
-          </p>
+          <p className="text-sm text-muted-foreground">{t.learn.passwordManager.description}</p>
           <div className="space-y-2">
             <a
               href="https://bitwarden.com/"
@@ -352,9 +306,7 @@ export function LearnContent() {
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
               <p className="font-medium">{t.learn.passwordManager.bitwarden}</p>
-              <p className="text-muted-foreground text-xs mt-1">
-                {t.learn.passwordManager.bitwardenDescription}
-              </p>
+              <p className="text-muted-foreground text-xs mt-1">{t.learn.passwordManager.bitwardenDescription}</p>
             </a>
             <a
               href="https://1password.com/"
@@ -363,9 +315,7 @@ export function LearnContent() {
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
               <p className="font-medium">{t.learn.passwordManager.onepassword}</p>
-              <p className="text-muted-foreground text-xs mt-1">
-                {t.learn.passwordManager.onepasswordDescription}
-              </p>
+              <p className="text-muted-foreground text-xs mt-1">{t.learn.passwordManager.onepasswordDescription}</p>
             </a>
             <a
               href="https://proton.me/pass"
@@ -374,9 +324,7 @@ export function LearnContent() {
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
               <p className="font-medium">{t.learn.passwordManager.proton}</p>
-              <p className="text-muted-foreground text-xs mt-1">
-                {t.learn.passwordManager.protonDescription}
-              </p>
+              <p className="text-muted-foreground text-xs mt-1">{t.learn.passwordManager.protonDescription}</p>
             </a>
             <a
               href="https://keepassxc.org/"
@@ -385,9 +333,7 @@ export function LearnContent() {
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
               <p className="font-medium">{t.learn.passwordManager.keepass}</p>
-              <p className="text-muted-foreground text-xs mt-1">
-                {t.learn.passwordManager.keepassDescription}
-              </p>
+              <p className="text-muted-foreground text-xs mt-1">{t.learn.passwordManager.keepassDescription}</p>
             </a>
           </div>
         </section>
@@ -395,9 +341,7 @@ export function LearnContent() {
         {/* Additional Resources */}
         <section className="space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.resources.title}</h3>
-          <p className="text-sm text-muted-foreground">
-            {t.learn.resources.description}
-          </p>
+          <p className="text-sm text-muted-foreground">{t.learn.resources.description}</p>
           <div className="space-y-2">
             <a
               href="https://www.eff.org/dice"
@@ -406,9 +350,7 @@ export function LearnContent() {
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
               <p className="font-medium">{t.learn.resources.eff}</p>
-              <p className="text-muted-foreground text-xs mt-1">
-                {t.learn.resources.effDescription}
-              </p>
+              <p className="text-muted-foreground text-xs mt-1">{t.learn.resources.effDescription}</p>
             </a>
             <a
               href="https://theworld.com/~reinhold/diceware.html"
@@ -417,9 +359,7 @@ export function LearnContent() {
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
               <p className="font-medium">{t.learn.resources.original}</p>
-              <p className="text-muted-foreground text-xs mt-1">
-                {t.learn.resources.originalDescription}
-              </p>
+              <p className="text-muted-foreground text-xs mt-1">{t.learn.resources.originalDescription}</p>
             </a>
             <a
               href="https://xkcd.com/936/"
@@ -428,9 +368,7 @@ export function LearnContent() {
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
               <p className="font-medium">{t.learn.resources.xkcd}</p>
-              <p className="text-muted-foreground text-xs mt-1">
-                {t.learn.resources.xkcdDescription}
-              </p>
+              <p className="text-muted-foreground text-xs mt-1">{t.learn.resources.xkcdDescription}</p>
             </a>
             <a
               href="https://pages.nist.gov/800-63-3/sp800-63b.html"
@@ -439,9 +377,7 @@ export function LearnContent() {
               className="block rounded-lg border bg-muted/30 p-3 text-sm hover:bg-muted/50 transition-colors"
             >
               <p className="font-medium">{t.learn.resources.nist}</p>
-              <p className="text-muted-foreground text-xs mt-1">
-                {t.learn.resources.nistDescription}
-              </p>
+              <p className="text-muted-foreground text-xs mt-1">{t.learn.resources.nistDescription}</p>
             </a>
           </div>
         </section>
@@ -449,4 +385,3 @@ export function LearnContent() {
     </div>
   )
 }
-

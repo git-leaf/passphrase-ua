@@ -7,12 +7,14 @@ We take the security of Mova Pass (formerly Passphrase UA) seriously. If you dis
 ### How to Report
 
 Please report security vulnerabilities via:
+
 - **GitHub Security Advisories**: [Create a new advisory](https://github.com/git-leaf/passphrase-ua/security/advisories/new)
 - **Email**: If you prefer private disclosure, contact us via the email in the repository
 
 ### What to Include
 
 When reporting a vulnerability, please include:
+
 - Description of the vulnerability
 - Steps to reproduce the issue
 - Potential impact
@@ -29,34 +31,40 @@ When reporting a vulnerability, please include:
 Mova Pass implements multiple security measures to protect user privacy and password security:
 
 ### 1. Cryptographically Secure Random Number Generation
+
 - Uses Web Crypto API (`crypto.getRandomValues()`) exclusively
 - Rejection sampling prevents modulo bias
 - No use of insecure `Math.random()`
 
 ### 2. Client-Side Only
+
 - All password generation happens locally in the browser
 - No network requests during generation
 - No server-side processing
 - Verifiable in browser DevTools (Network tab)
 
 ### 3. No Data Collection
+
 - No passwords stored (even temporarily)
 - No user accounts or authentication
 - No analytics or tracking
 - No cookies (except functional localStorage for settings)
 
 ### 4. Security Headers
+
 - Content Security Policy (CSP) to prevent XSS
 - HTTP Strict Transport Security (HSTS)
 - X-Frame-Options to prevent clickjacking
 - X-Content-Type-Options to prevent MIME sniffing
 
 ### 5. Open Source
+
 - Full source code available for audit
 - Transparent generation algorithms
 - Community review encouraged
 
 ### 6. Regular Audits
+
 - Periodic security reviews
 - Dependency updates
 - Vulnerability scanning
@@ -102,7 +110,7 @@ We support the latest version deployed to production. Older versions are not mai
 
 We appreciate security researchers who help keep our users safe. Contributors will be acknowledged here (with permission):
 
-- *No vulnerabilities reported yet*
+- _No vulnerabilities reported yet_
 
 ## Additional Resources
 
@@ -111,10 +119,10 @@ We appreciate security researchers who help keep our users safe. Contributors wi
 ## Contact
 
 For security-related questions or concerns:
+
 - GitHub Issues: [git-leaf/passphrase-ua/issues](https://github.com/git-leaf/passphrase-ua/issues)
 - Security Advisories: [git-leaf/passphrase-ua/security](https://github.com/git-leaf/passphrase-ua/security)
 
 ---
 
 **Last Updated**: November 16, 2025
-
