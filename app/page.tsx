@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/app/components/theme-toggle"
 import { LanguageToggle } from "@/app/components/language-toggle"
 import { useI18n } from "@/lib/i18n"
 import { generatePassword } from "@/lib/generators/password"
+import { DEFAULT_WORDLIST } from "@/lib/wordlists/catalogue"
 import {
   generatePassphraseWithWordlist,
   type CapitalizationStyle
@@ -47,7 +48,7 @@ export default function Home() {
   const [capitalization, setCapitalization] = useState<CapitalizationStyle>("none")
   const [includeNumbers2, setIncludeNumbers2] = useState(false)
   const [sourceLanguage, setSourceLanguage] = useState<"en" | "uk">("uk")
-  const [wordlist, setWordlist] = useState("wordlist")
+  const [wordlist, setWordlist] = useState<string>(DEFAULT_WORDLIST.uk)
   const [showTransliteration, setShowTransliteration] = useState(false)
   const [isGeneratingPassphrase, setIsGeneratingPassphrase] = useState(false)
 
@@ -120,12 +121,7 @@ export default function Home() {
 
   const handleSourceLanguageChange = (value: "en" | "uk") => {
     setSourceLanguage(value)
-    // Reset to first available wordlist when language changes
-    if (value === "en") {
-      setWordlist("eff-large")
-    } else {
-      setWordlist("wordlist")
-    }
+    setWordlist(DEFAULT_WORDLIST[value])
   }
 
   const copyToClipboard = async () => {

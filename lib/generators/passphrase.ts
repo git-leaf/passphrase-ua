@@ -8,7 +8,8 @@
 import { randomInts } from '@/lib/random/secure-random';
 import type { Wordlist } from '@/lib/wordlists/types';
 import { loadWordlist } from '@/lib/wordlists/loader';
-import { AVAILABLE_WORDLISTS } from '@/lib/wordlists/types';
+import { wordlistInfo, type WordlistChoice } from '@/lib/wordlists/catalogue';
+import { GeneratorError } from './errors';
 
 /**
  * Capitalization style for passphrase words
@@ -239,16 +240,13 @@ export async function generatePassphraseWithWordlist(
   wordlistName: string,
   options: Omit<PassphraseConfig, 'wordlist'>
 ): Promise<PassphraseResult> {
-  // Get wordlist path
-  const wordlists = AVAILABLE_WORDLISTS[language];
-  const wordlistConfig = (wordlists as Record<string, {path: string; name: string; description: string; size: number; dice: number; hasTransliteration?: boolean}>)[wordlistName];
-  
-  if (!wordlistConfig) {
-    throw new Error(`Wordlist not found: ${language}/${wordlistName}`);
+  const info = wordlistInfo({ language, id: wordlistName } as WordlistChoice);
+  if (!info) {
+    throw new GeneratorError('wordlist-unavailable', `Wordlist not found: ${language}/${wordlistName}`);
   }
 
   // Load wordlist
-  const wordlist = await loadWordlist(wordlistConfig.path);
+  const wordlist = await loadWordlist(info.path);
 
   // Generate passphrase
   return generatePassphrase({

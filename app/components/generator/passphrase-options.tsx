@@ -9,7 +9,7 @@ import { Input } from "@/app/components/ui/input"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
 import { useI18n } from "@/lib/i18n"
 import { RefreshCw } from "lucide-react"
-import { AVAILABLE_WORDLISTS } from "@/lib/wordlists/types"
+import { WORDLIST_CATALOGUE, wordlistIds, wordlistInfo, type WordlistChoice } from "@/lib/wordlists/catalogue"
 import type { CapitalizationStyle } from "@/lib/generators/passphrase"
 
 interface PassphraseOptionsProps {
@@ -61,7 +61,7 @@ export function PassphraseOptions({
   onShowTransliterationChange,
   onGenerate,
 }: PassphraseOptionsProps) {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
 
   return (
     <div className="space-y-6">
@@ -106,29 +106,22 @@ export function PassphraseOptions({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {sourceLanguage === "en" && (
-                  <>
-                    <SelectItem value="eff-large">{t.wordlists.en["eff-large"]}</SelectItem>
-                    <SelectItem value="eff-short">{t.wordlists.en["eff-short"]}</SelectItem>
-                    <SelectItem value="eff-short-2">{t.wordlists.en["eff-short-2"]}</SelectItem>
-                    <SelectItem value="original">{t.wordlists.en.original}</SelectItem>
-                    <SelectItem value="beale">{t.wordlists.en.beale}</SelectItem>
-                  </>
-                )}
-                {sourceLanguage === "uk" && (
-                  <>
-                    <SelectItem value="wordlist">{t.wordlists.uk.wordlist}</SelectItem>
-                    <SelectItem value="short">{t.wordlists.uk["short-diceware"]}</SelectItem>
-                    <SelectItem value="long">{t.wordlists.uk["long-diceware"]}</SelectItem>
-                  </>
-                )}
+                {wordlistIds(sourceLanguage).map((id) => (
+                  <SelectItem key={id} value={id}>
+                    {t.wordlists.withSize
+                      .replace("{name}", (t.wordlists[sourceLanguage] as Record<string, string>)[id])
+                      .replace("{count}", new Intl.NumberFormat(locale).format(
+                        (WORDLIST_CATALOGUE[sourceLanguage] as Record<string, { size: number }>)[id].size
+                      ))}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          {sourceLanguage === "uk" && (
+          {wordlistInfo({ language: sourceLanguage, id: wordlist } as WordlistChoice).transliteration && (
             <div className="flex items-center justify-between space-x-2">
               <Label htmlFor="transliteration">{t.passphrase.useTransliteration}</Label>
               <Switch

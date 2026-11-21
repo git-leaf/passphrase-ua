@@ -2,6 +2,8 @@
  * Translation dictionaries for English and Ukrainian
  */
 
+import type { WordlistId } from "@/lib/wordlists/catalogue"
+
 export type Locale = "en" | "uk"
 
 export interface Translations {
@@ -62,18 +64,10 @@ export interface Translations {
 
   // Wordlist names
   wordlists: {
-    en: {
-      "eff-large": string
-      "eff-short": string
-      "eff-short-2": string
-      "beale": string
-      "original": string
-    }
-    uk: {
-      wordlist: string
-      "short-diceware": string
-      "long-diceware": string
-    }
+    en: Record<WordlistId<"en">, string>
+    uk: Record<WordlistId<"uk">, string>
+    /** "{name} ({count} words)" */
+    withSize: string
   }
 
   // Output Display
@@ -430,17 +424,18 @@ export const translations: Record<Locale, Translations> = {
 
     wordlists: {
       en: {
-        "eff-large": "EFF Large (7,776 words)",
-        "eff-short": "EFF Short (1,296 words)",
-        "eff-short-2": "EFF Short 2 (1,296 words)",
-        "beale": "Beale (7,776 words)",
-        "original": "Original Diceware (7,776 words)",
+        "eff-large": "EFF Large",
+        "eff-short": "EFF Short",
+        "eff-short-2": "EFF Short 2",
+        "beale": "Beale",
+        "original": "Original Diceware",
       },
       uk: {
-        wordlist: "Wordlist (10,870 words)",
-        "short-diceware": "Short Diceware (1,296 words)",
-        "long-diceware": "Long Diceware (7,776 words)",
+        wordlist: "Wordlist",
+        short: "Short Diceware",
+        long: "Long Diceware",
       },
+      withSize: "{name} ({count} words)",
     },
 
     output: {
@@ -686,7 +681,7 @@ export const translations: Record<Locale, Translations> = {
           "This tool uses the same principle but with a cryptographically secure random number generator instead of dice. The wordlists are carefully curated to include only memorable, appropriate words while maintaining maximum security.",
         wordlistsTitle: "Available Wordlists:",
         ukrainian:
-          "Ukrainian: First comprehensive Ukrainian Diceware wordlists (small, normal, large, 10K) with transliteration",
+          "Ukrainian: First comprehensive Ukrainian Diceware wordlists (short and long) and a 10K wordlist, all with transliteration",
         english: "English: EFF, Beale and Original Diceware wordlists — time-tested and widely trusted",
       },
       similarTools: {
@@ -856,17 +851,18 @@ export const translations: Record<Locale, Translations> = {
 
     wordlists: {
       en: {
-        "eff-large": "EFF великий (7,776 слів)",
-        "eff-short": "EFF короткий (1,296 слів)",
-        "eff-short-2": "EFF короткий 2 (1,296 слів)",
-        "beale": "Beale (7,776 слів)",
-        "original": "Оригінальний Diceware (7,776 слів)",
+        "eff-large": "EFF великий",
+        "eff-short": "EFF короткий",
+        "eff-short-2": "EFF короткий 2",
+        "beale": "Beale",
+        "original": "Оригінальний Diceware",
       },
       uk: {
-        wordlist: "Словник (10,870 слів)",
-        "short-diceware": "Короткий Diceware (1,296 слів)",
-        "long-diceware": "Довгий Diceware (7,776 слів)",
+        wordlist: "Словник",
+        short: "Короткий Diceware",
+        long: "Довгий Diceware",
       },
+      withSize: "{name} ({count} слів)",
     },
 
     output: {
@@ -1112,7 +1108,7 @@ export const translations: Record<Locale, Translations> = {
           "Цей інструмент використовує той самий принцип, але з криптографічно безпечним генератором випадкових чисел замість кубиків. Словники ретельно підібрані, щоб включати лише запам'ятовувані, доречні слова, зберігаючи максимальну безпеку.",
         wordlistsTitle: "Доступні словники:",
         ukrainian:
-          "Українська: Перші українські словники Diceware (малий, звичайний, великий, 10K) з транслітерацією",
+          "Українська: Перші українські словники Diceware (короткий і довгий) та словник на 10K слів, усі з транслітерацією",
         english:
           "Англійська: Словники EFF, Beale та Original Diceware — перевірені часом та широко довірені",
       },
