@@ -107,8 +107,6 @@ We appreciate security researchers who help keep our users safe. Contributors wi
 ## Additional Resources
 
 - [Privacy Policy](/privacy)
-- [Security Audit Report](docs/security-privacy-audit.md)
-- [Product Requirements Document](docs/prd.md)
 
 ## Contact
 

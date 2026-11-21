@@ -84,9 +84,9 @@ pnpm lint     # Run linter
 
 ## 📚 Documentation
 
-For comprehensive information about the project:
-
-- **[Product Requirements Document (PRD)](docs/prd.md)** — Complete project specification, architecture, requirements, and roadmap
+- **[CONTRIBUTING.md](CONTRIBUTING.md)**: workflow and conventions
+- **[GLOSSARY.md](GLOSSARY.md)**: the domain vocabulary
+- **[docs/adr/](docs/adr/)**: architecture decisions and why they were made
 
 ---
 
@@ -121,14 +121,7 @@ The Ukrainian dictionaries and Diceware wordlists were developed by the same aut
 
 ## 🤝 Contributing
 
-Contributions are welcome! While contribution guidelines are still being established, feel free to:
-
-- 💡 Submit proposals and ideas via [GitHub Issues](https://github.com/git-leaf/passphrase-ua/issues)
-- 🐛 Report bugs
-- 📖 Improve documentation
-- 🌐 Suggest new wordlists or languages
-
-Please communicate with the maintainer before starting major changes.
+Contributions are welcome! Read [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and conventions, and open a [GitHub issue](https://github.com/git-leaf/passphrase-ua/issues) for proposals, bugs, documentation fixes or new wordlists and languages. Please talk to the maintainer before starting larger changes.
 
 ---
 
