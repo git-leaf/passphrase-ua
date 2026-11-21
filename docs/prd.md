@@ -1,3 +1,5 @@
+> **Historical, not authoritative.** Kept for reference only. For current decisions see [CONTRIBUTING.md](../CONTRIBUTING.md), [docs/adr/](adr/) and [GLOSSARY.md](../GLOSSARY.md).
+
 # Product Requirements Document: Mova Pass (formerly Passphrase UA)
 
 **Version:** 1.0.3
