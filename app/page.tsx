@@ -8,10 +8,7 @@ import { useToast } from "@/app/hooks/use-toast"
 import { ThemeToggle } from "@/app/components/theme-toggle"
 import { LanguageToggle } from "@/app/components/language-toggle"
 import { useI18n } from "@/lib/i18n"
-import { 
-  generatePassword, 
-  type PasswordConfig 
-} from "@/lib/generators/password"
+import { generatePassword } from "@/lib/generators/password"
 import {
   generatePassphraseWithWordlist,
   type CapitalizationStyle
@@ -61,7 +58,7 @@ export default function Home() {
   const handleGeneratePassword = () => {
     try {
       // Build configuration from UI state
-      const config: PasswordConfig = {
+      const config = {
         length: passwordLength[0],
         includeLowercase,
         includeUppercase,
@@ -74,7 +71,7 @@ export default function Home() {
       const result = generatePassword(config)
 
       // Update UI state
-      setGeneratedPassword(result.password)
+      setGeneratedPassword(result.secret)
       setEntropy(result.entropy)
     } catch (error) {
       // Handle errors (e.g., invalid configuration)

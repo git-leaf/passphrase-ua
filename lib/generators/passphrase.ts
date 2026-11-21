@@ -5,7 +5,7 @@
  * All functions are pure and testable (except wordlist loading).
  */
 
-import { getSecureRandomValues } from './password';
+import { randomInts } from '@/lib/random/secure-random';
 import type { Wordlist } from '@/lib/wordlists/types';
 import { loadWordlist } from '@/lib/wordlists/loader';
 import { AVAILABLE_WORDLISTS } from '@/lib/wordlists/types';
@@ -132,7 +132,7 @@ function capitalizeWord(word: string, style: CapitalizationStyle): string {
     
     case 'random': {
       // Capitalize a random letter in the word
-      const index = getSecureRandomValues(1, word.length)[0];
+      const index = randomInts(1, word.length)[0];
       return (
         word.slice(0, index) +
         word.charAt(index).toUpperCase() +
@@ -166,7 +166,7 @@ export function generatePassphrase(config: PassphraseConfig): PassphraseResult {
   const wordlistSize = wordlist.entries.length;
 
   // Generate random word indices
-  const randomIndices = getSecureRandomValues(wordCount, wordlistSize);
+  const randomIndices = randomInts(wordCount, wordlistSize);
 
   // Select words from wordlist
   const selectedWords = randomIndices.map((index) => {
@@ -185,7 +185,7 @@ export function generatePassphrase(config: PassphraseConfig): PassphraseResult {
   
   if (capitalization === 'random-word') {
     // Capitalize one random word completely
-    const wordIndex = getSecureRandomValues(1, wordCount)[0];
+    const wordIndex = randomInts(1, wordCount)[0];
     words = selectedWords.map((word, index) => 
       index === wordIndex ? word.toUpperCase() : word
     );
@@ -199,7 +199,7 @@ export function generatePassphrase(config: PassphraseConfig): PassphraseResult {
 
   // Add random number if requested
   if (includeNumber) {
-    const randomNumber = getSecureRandomValues(1, 10000)[0];
+    const randomNumber = randomInts(1, 10000)[0];
     const numberStr = randomNumber.toString().padStart(4, '0');
     passphrase += separator + numberStr;
   }
