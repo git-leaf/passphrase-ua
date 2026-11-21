@@ -19,6 +19,12 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - name: Actions are pinned to full commit SHAs
+        run: |
+          if grep -rnE '^\s*-?\s*uses:\s' .github/workflows | grep -vE '@[0-9a-f]{40}(\s|$)'; then
+            echo "::error::Pin every action to a full commit SHA (CONTRIBUTING.md)"
+            exit 1
+          fi
       # pnpm 12 is a native executable; its install downloads the Node version pinned in devEngines.runtime
       - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
         with:
