@@ -1,8 +1,8 @@
-Read [CONTRIBUTING.md](CONTRIBUTING.md) before changing anything: it holds the workflow and conventions. Decisions and the reasons behind them live in `docs/adr/`.
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before changing anything: it holds the workflow and conventions. Name things with the terms in [GLOSSARY.md](GLOSSARY.md). Decisions and the reasons behind them live in `docs/adr/`.
 
 ## Working on a change
 
-- Work on a branch named as CONTRIBUTING describes, cut from an up-to-date `main`. `main` changes only through a merged PR.
+- Commit only on a branch named as CONTRIBUTING describes, cut from an up-to-date `main`. `main` changes only through a merged PR.
 - Push, open a PR or merge only when the user asks. "Merge when green" means enable auto-merge: `gh pr merge --squash --auto`.
 - Before opening a PR: `pnpm check` passes, then the independent review below, then fixes.
 - Write the PR body with the `mattpocock-skills:pr` skill, including `Closes #<n>`.

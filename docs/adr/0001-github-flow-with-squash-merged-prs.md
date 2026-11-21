@@ -10,5 +10,5 @@
 
 ## Consequences
 
-- Agents review a change in fresh sub-agents (spec, standards, correctness/security) **before** opening the PR, so the PR shows finished work and the maintainer stays the reviewer of record.
-- Dependabot minor, patch, GitHub Actions and security updates auto-merge once checks pass, after a 7-day release cooldown that guards against hijacked packages. Major updates wait for the maintainer, because they can break the UI without failing CI.
+- Branch names reuse the Conventional Commit types and carry the issue number, so one vocabulary covers branches, commits and PR titles and every branch traces back to its issue. Features, bugs and review findings start as issues, because the issue is the spec the PR is reviewed against. Small chores can skip the issue, since the PR itself is the record.
+- Agents run their independent review (spec, standards, correctness/security) **before** opening the PR, not as PR comments. Posting an agent's review on its own PR would be one party playing both roles. Reviewing first means the PR shows finished work, and the maintainer stays the reviewer of record.
