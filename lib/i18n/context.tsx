@@ -21,6 +21,28 @@ interface I18nProviderProps {
 // The stored and browser preferences are only read, never observed for changes
 const subscribeToNothing = () => () => {}
 
+// Storage can be blocked (privacy settings, sandboxed frames) or full; the
+// locale then falls back to the browser language and is not remembered
+function readSavedLocale(storageKey: string): string | null {
+  try {
+    return localStorage.getItem(storageKey)
+  } catch {
+    return null
+  }
+}
+
+function saveLocale(storageKey: string, locale: Locale) {
+  try {
+    localStorage.setItem(storageKey, locale)
+  } catch {
+    // The choice still applies for this visit
+  }
+}
+
+function browserLanguages(): readonly string[] {
+  return navigator.languages?.length ? navigator.languages : [navigator.language]
+}
+
 /**
  * I18n Provider that manages language selection and provides translations
  */
@@ -29,7 +51,7 @@ export function I18nProvider({ children, defaultLocale = "en", storageKey = "loc
   // the saved choice or browser language without a setState-in-effect re-render
   const preferredLocale = useSyncExternalStore(
     subscribeToNothing,
-    () => resolvePreferredLocale(localStorage.getItem(storageKey), navigator.languages ?? [], defaultLocale),
+    () => resolvePreferredLocale(readSavedLocale(storageKey), browserLanguages(), defaultLocale),
     () => defaultLocale,
   )
   const [chosenLocale, setChosenLocale] = useState<Locale | null>(null)
@@ -37,7 +59,7 @@ export function I18nProvider({ children, defaultLocale = "en", storageKey = "loc
 
   const setLocale = (newLocale: Locale) => {
     setChosenLocale(newLocale)
-    localStorage.setItem(storageKey, newLocale)
+    saveLocale(storageKey, newLocale)
   }
 
   const value: I18nContextType = {

@@ -1,9 +1,7 @@
-import type { Locale } from "./translations"
-
-const supportedLocales: readonly Locale[] = ["en", "uk"]
+import { locales, type Locale } from "./translations"
 
 function isLocale(value: string): value is Locale {
-  return (supportedLocales as readonly string[]).includes(value)
+  return (locales as readonly string[]).includes(value)
 }
 
 /**

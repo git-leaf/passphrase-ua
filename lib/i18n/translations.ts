@@ -5,7 +5,9 @@
 import type { GeneratorErrorCode } from "@/lib/generators/errors"
 import type { WordlistId } from "@/lib/wordlists/catalogue"
 
-export type Locale = "en" | "uk"
+export const locales = ["en", "uk"] as const
+
+export type Locale = (typeof locales)[number]
 
 export interface Translations {
   // Header

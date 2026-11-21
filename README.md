@@ -82,7 +82,9 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 pnpm dev      # Start development server
 pnpm check    # Run every check CI runs: format, lint, types, tests, build
 pnpm format   # Format all files with Prettier
+pnpm lint     # Run ESLint
 pnpm test     # Run tests
+pnpm test:watch  # Run tests in watch mode
 pnpm build    # Build for production
 pnpm start    # Start production server
 ```

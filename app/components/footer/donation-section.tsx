@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils"
 
 interface DonationLink {
   href: string | undefined
-  label: string
-  name: string
+  ariaLabel: string
+  logoAlt: string
   /** Logo file name in /public/charity, without the -dark suffix or extension */
   logo: string
   width: number
@@ -17,32 +17,32 @@ interface DonationLink {
 const organizations: DonationLink[] = [
   {
     href: "https://savelife.in.ua/en/",
-    label: "Come Back Alive Foundation",
-    name: "Come Back Alive",
+    ariaLabel: "Come Back Alive Foundation",
+    logoAlt: "Come Back Alive",
     logo: "comebackalive",
     width: 62,
     height: 31,
   },
   {
     href: "https://prytulafoundation.org/en",
-    label: "Serhiy Prytula Charity Foundation",
-    name: "Serhiy Prytula Foundation",
+    ariaLabel: "Serhiy Prytula Charity Foundation",
+    logoAlt: "Serhiy Prytula Foundation",
     logo: "prytulafoundation",
     width: 261,
     height: 48,
   },
   {
     href: "https://u24.gov.ua/",
-    label: "United24 - Official fundraising platform",
-    name: "United24",
+    ariaLabel: "United24 - Official fundraising platform",
+    logoAlt: "United24",
     logo: "united24",
     width: 422,
     height: 40,
   },
   {
     href: "https://www.sternenkofund.org/en",
-    label: "Sternenko Community Foundation",
-    name: "Sternenko Fund",
+    ariaLabel: "Sternenko Community Foundation",
+    logoAlt: "Sternenko Fund",
     logo: "sternenkofund",
     width: 506,
     height: 200,
@@ -51,8 +51,8 @@ const organizations: DonationLink[] = [
 
 const personalJar: DonationLink = {
   href: process.env.NEXT_PUBLIC_MONOBANK_JAR_URL,
-  label: "Personal charity account via Monobank",
-  name: "Monobank Charity Jar",
+  ariaLabel: "Personal charity account via Monobank",
+  logoAlt: "Monobank Charity Jar",
   logo: "monobank",
   width: 109,
   height: 24,
@@ -111,18 +111,18 @@ function DonationLogoLink({
         "flex items-center justify-center rounded-lg border bg-card hover:bg-accent transition-colors",
         className,
       )}
-      aria-label={link.label}
+      aria-label={link.ariaLabel}
     >
       <Image
         src={`/charity/${link.logo}.svg`}
-        alt={link.name}
+        alt={link.logoAlt}
         width={link.width}
         height={link.height}
         className={cn(logoClassName, "dark:hidden")}
       />
       <Image
         src={`/charity/${link.logo}-dark.svg`}
-        alt={link.name}
+        alt={link.logoAlt}
         width={link.width}
         height={link.height}
         className={cn(logoClassName, "hidden dark:block")}
