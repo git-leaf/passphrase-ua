@@ -570,11 +570,11 @@ export const translations: Record<Locale, Translations> = {
         description:
           "Password strength is measured in entropy bits. Each additional bit doubles the number of possible combinations, making passwords exponentially harder to crack.",
         guidelinesTitle: "Strength Guidelines:",
-        weak: "🔴 0-40 bits: Weak — Avoid for important accounts",
-        moderate: "🟠 40-60 bits: Moderate — Use only for low-risk accounts",
-        strong: "🟡 60-80 bits: Strong — Good for most uses",
-        veryStrong: "🟢 80-120 bits: Very Strong — Excellent for sensitive data",
-        excessive: "🔵 120+ bits: Excessive — Overkill for most scenarios",
+        weak: "🔴 {range} bits: Weak — Avoid for important accounts",
+        moderate: "🟠 {range} bits: Moderate — Use only for low-risk accounts",
+        strong: "🟡 {range} bits: Strong — Good for most uses",
+        veryStrong: "🟢 {range} bits: Very Strong — Excellent for sensitive data",
+        excessive: "🔵 {range} bits: Excessive — Overkill for most scenarios",
         example:
           "Example: A 6-word Diceware passphrase has ~77 bits of entropy, which would take from hundreds of years to trillions of years to crack, depending on the technology available.",
       },
@@ -996,11 +996,11 @@ export const translations: Record<Locale, Translations> = {
         description:
           "Надійність паролів вимірюється в бітах ентропії. Кожен додатковий біт подвоює кількість можливих комбінацій, роблячи паролі експоненційно складнішими для злому.",
         guidelinesTitle: "Рекомендації щодо надійності:",
-        weak: "🔴 0-40 бітів: Слабкий — Уникайте для важливих облікових записів",
-        moderate: "🟠 40-60 бітів: Помірний — Використовуйте лише для низькоризикових облікових записів",
-        strong: "🟡 60-80 бітів: Сильний — Добре для більшості випадків",
-        veryStrong: "🟢 80-120 бітів: Дуже сильний — Відмінно для чутливих даних",
-        excessive: "🔵 120+ бітів: Надлишковий — Невиправдано складний для більшості сценаріїв",
+        weak: "🔴 {range} бітів: Слабкий — Уникайте для важливих облікових записів",
+        moderate: "🟠 {range} бітів: Помірний — Використовуйте лише для низькоризикових облікових записів",
+        strong: "🟡 {range} бітів: Сильний — Добре для більшості випадків",
+        veryStrong: "🟢 {range} бітів: Дуже сильний — Відмінно для чутливих даних",
+        excessive: "🔵 {range} бітів: Надлишковий — Невиправдано складний для більшості сценаріїв",
         example:
           "Приклад: 6-слівна фраза-пароль Diceware має ~77 бітів ентропії, що б зайняло від сотень до трильйонів років для злому в залежності від доступних технологій.",
       },
