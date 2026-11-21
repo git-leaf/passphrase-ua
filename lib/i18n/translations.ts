@@ -426,8 +426,8 @@ export const translations: Record<Locale, Translations> = {
         "eff-large": "EFF Large",
         "eff-short": "EFF Short",
         "eff-short-2": "EFF Short 2",
-        "beale": "Beale",
-        "original": "Original Diceware",
+        beale: "Beale",
+        original: "Original Diceware",
       },
       uk: {
         wordlist: "Wordlist",
@@ -524,7 +524,7 @@ export const translations: Record<Locale, Translations> = {
         "invalid-word-count": "Choose between 3 and 12 words.",
         "invalid-separator": "The separator can be at most 3 characters.",
         "wordlist-unavailable": "The wordlist could not be loaded. Check your connection and try again.",
-        "unexpected": "Something went wrong while generating. Please try again.",
+        unexpected: "Something went wrong while generating. Please try again.",
       },
     },
 
@@ -545,7 +545,8 @@ export const translations: Record<Locale, Translations> = {
       },
       safety: {
         title: "Why This Tool is Safe",
-        point1: "✓ Everything happens in your browser. No passwords are sent over the network (once the page is loaded, you can use it offline).",
+        point1:
+          "✓ Everything happens in your browser. No passwords are sent over the network (once the page is loaded, you can use it offline).",
         point2: "✓ Nothing is stored. Passwords are never saved anywhere unless you copy them.",
         point3: "✓ Cryptographically secure. Uses your browser's built-in secure random number generator.",
         point4: "✓ Open source. Anyone can review the code on GitHub.",
@@ -556,15 +557,15 @@ export const translations: Record<Locale, Translations> = {
         randomList: [
           "Accounts stored in a password manager",
           "Maximum security in minimum space",
-          "Websites with character requirements"
+          "Websites with character requirements",
         ],
         dicewareTitle: "Use Diceware Passphrases For:",
         dicewareList: [
           "Master password for your password manager",
           "Disk encryption passwords",
           "Wi-Fi passwords you need to share or type often",
-          "Any password you need to remember and type manually"
-        ]
+          "Any password you need to remember and type manually",
+        ],
       },
       strength: {
         title: "Understanding Password Strength",
@@ -586,7 +587,7 @@ export const translations: Record<Locale, Translations> = {
           "6 words is the sweet spot for most users — it provides strong security (~77 bits) while being reasonably easy to remember.",
           "Use 7-8 words for master passwords protecting sensitive information like password managers or encryption keys.",
           "Avoid using fewer than 5 words, as this significantly reduces security.",
-          "Note: The number of words depends on the wordlist size you are using. In this case, it is assumed that you are using any of 7776 words wordlist. The smaller the wordlist, the more words you need to use to achieve the same security level."
+          "Note: The number of words depends on the wordlist size you are using. In this case, it is assumed that you are using any of 7776 words wordlist. The smaller the wordlist, the more words you need to use to achieve the same security level.",
         ],
         q2: "What's a good password strategy?",
         a2Title: "The best approach:",
@@ -594,22 +595,22 @@ export const translations: Record<Locale, Translations> = {
           "Use a password manager (like Bitwarden, 1Password, or ProtonPass)",
           "Create one strong Diceware passphrase (7-8 words) as your master password and make sure to remember it by heart and/or store it in a secure location (physical paper, encrypted file, etc.)",
           "Generate random passwords for all other accounts and store them in the password manager",
-          "Enable two-factor authentication (2FA) wherever possible"
+          "Enable two-factor authentication (2FA) wherever possible",
         ],
         a2Footer: "This way, you only memorize one password while having unique, strong passwords everywhere.",
         q3: "Why use Ukrainian wordlists?",
         a3: [
           "Passphrases in your native language are easier to remember and feel more natural. Mova Pass is the first tool to offer comprehensive Ukrainian Diceware wordlists.",
-          "The transliteration feature lets you type Ukrainian words using a standard Latin keyboard (e.g., \"собака\" becomes \"sobaka\"), making it easier to enter on any device while maintaining Ukrainian vocabulary."
+          'The transliteration feature lets you type Ukrainian words using a standard Latin keyboard (e.g., "собака" becomes "sobaka"), making it easier to enter on any device while maintaining Ukrainian vocabulary.',
         ],
         q4: "Should I exclude ambiguous characters in passwords?",
         a4: [
           "If you frequently type your password manually, excluding ambiguous characters (like 'O' vs '0', 'l' vs '1') reduces typing errors. This slightly decreases entropy but improves usability.",
-          "For passwords stored in a password manager that you'll copy-paste, keep all characters for maximum strength."
+          "For passwords stored in a password manager that you'll copy-paste, keep all characters for maximum strength.",
         ],
         q5: "Can I use this tool offline?",
         a5: "Yes! After the page loads once, you can use it without a network connection. All generation happens locally in your browser, and wordlists are cached for offline use.",
-        q6: "How is \"time to crack\" calculated?",
+        q6: 'How is "time to crack" calculated?',
         a6: "We calculate the average time an attacker would need to guess your password by trying combinations. The calculation assumes a powerful adversary with 1 trillion guesses per second (using specialized hardware). Real-world attacks are usually much slower due to rate limiting and other protections. You can configure the guess rate in the advanced options.",
         q7: "What are good use cases for Diceware passphrases?",
         a7GoodTitle: "Excellent use cases:",
@@ -619,29 +620,27 @@ export const translations: Record<Locale, Translations> = {
           "Wi-Fi passwords that you need to share with guests",
           "Shared computers where you can't install password managers",
           "Full-disk encryption passwords",
-          "Any password you need to type frequently by hand"
+          "Any password you need to type frequently by hand",
         ],
         a7BadTitle: "Not recommended for:",
-        a7BadList: [
-          "Usage with small number of words (less than 5). This significantly reduces security"
-        ],
+        a7BadList: ["Usage with small number of words (less than 5). This significantly reduces security"],
         q8: "Should I add numbers or symbols to my passphrase?",
         a8: [
           "Generally, no — length is more important than complexity. Adding a single number or symbol only adds a few bits of entropy, while adding another word adds ~13 bits.",
           "For example: correct-horse-battery-staple-7 is barely stronger than correct-horse-battery-staple, but correct-horse-battery-staple-magnet is significantly stronger.",
-          "Only add special characters if a website requires them — otherwise, keep it simple and memorable."
+          "Only add special characters if a website requires them — otherwise, keep it simple and memorable.",
         ],
         q9: "Will a strong password protect me from phishing?",
         a9: [
-          "Unfortunately, no. Even the strongest password in the world won't help if you enter it on a fake website. However, using unique passwords for each service means that if one gets phished, your other accounts remain safe."
+          "Unfortunately, no. Even the strongest password in the world won't help if you enter it on a fake website. However, using unique passwords for each service means that if one gets phished, your other accounts remain safe.",
         ],
         a9Title: "Protect yourself from phishing:",
         a9List: [
           "Always check the website URL before entering passwords",
           "Enable two-factor authentication (2FA) on all accounts",
           "Use a password manager — they won't autofill on fake sites",
-          "Be suspicious of urgent emails or messages asking you to log in"
-        ]
+          "Be suspicious of urgent emails or messages asking you to log in",
+        ],
       },
       comparison: {
         title: "Detailed Method Comparison",
@@ -665,7 +664,7 @@ export const translations: Record<Locale, Translations> = {
         securityDiceware: "6 words ≈ 77 bits",
         bestFor: "Best For",
         bestForRandom: "Password manager accounts",
-        bestForDiceware: "Master passwords"
+        bestForDiceware: "Master passwords",
       },
       bestPractices: {
         title: "Security Best Practices",
@@ -676,8 +675,8 @@ export const translations: Record<Locale, Translations> = {
           "Update passwords if there's a security breach",
           "Never share passwords via email, text, or messaging apps",
           "Don't use personal information (birthdays, names, pet names)",
-          "Be suspicious of phishing attempts asking for passwords"
-        ]
+          "Be suspicious of phishing attempts asking for passwords",
+        ],
       },
       whatIsDiceware: {
         title: "What is Diceware?",
@@ -704,13 +703,17 @@ export const translations: Record<Locale, Translations> = {
         title: "Get a Password Manager",
         description: "Securely store and manage your strong passwords with these trusted tools:",
         bitwarden: "Bitwarden",
-        bitwardenDescription: "Open-source password manager with free tier, cross-platform sync, and secure sharing. Excellent for teams and individuals.",
+        bitwardenDescription:
+          "Open-source password manager with free tier, cross-platform sync, and secure sharing. Excellent for teams and individuals.",
         keepass: "KeePassXC",
-        keepassDescription: "Free, open-source, and offline password manager. Your passwords stay on your device — no cloud required.",
+        keepassDescription:
+          "Free, open-source, and offline password manager. Your passwords stay on your device — no cloud required.",
         proton: "Proton Pass",
-        protonDescription: "Privacy-focused password manager from the ProtonMail team. End-to-end encrypted with zero-knowledge architecture.",
+        protonDescription:
+          "Privacy-focused password manager from the ProtonMail team. End-to-end encrypted with zero-knowledge architecture.",
         onepassword: "1Password",
-        onepasswordDescription: "Popular commercial password manager with excellent user experience, strong security features, and reliable cross-platform support.",
+        onepasswordDescription:
+          "Popular commercial password manager with excellent user experience, strong security features, and reliable cross-platform support.",
       },
       resources: {
         title: "Educational Resources",
@@ -734,7 +737,8 @@ export const translations: Record<Locale, Translations> = {
       overview: {
         title: "Overview",
         noDataMessage: "We DO NOT collect any data. Ever.",
-        description: "Mova Pass is a completely client-side application built with privacy as the core principle. All passwords and passphrases are generated locally in your browser and are never transmitted over the network, stored on our servers, or tracked in any way."
+        description:
+          "Mova Pass is a completely client-side application built with privacy as the core principle. All passwords and passphrases are generated locally in your browser and are never transmitted over the network, stored on our servers, or tracked in any way.",
       },
       whatWeDontCollect: {
         title: "What We DON'T Collect",
@@ -743,7 +747,7 @@ export const translations: Record<Locale, Translations> = {
         ipAddresses: "IP addresses or location information",
         analytics: "Usage analytics or telemetry",
         fingerprints: "Device fingerprints or tracking cookies",
-        anyPersonalData: "Any personal data whatsoever"
+        anyPersonalData: "Any personal data whatsoever",
       },
       whatWeStoreLocally: {
         title: "What We Store Locally",
@@ -754,31 +758,35 @@ export const translations: Record<Locale, Translations> = {
         languageDescription: "Your choice of Ukrainian/English (locale)",
         noPasswords: "No Passwords",
         noPasswordsDescription: "Passwords are never stored, even locally",
-        clearSettings: "You can clear these settings at any time by clearing site data in your browser settings."
+        clearSettings: "You can clear these settings at any time by clearing site data in your browser settings.",
       },
       howItWorks: {
         title: "How It Works",
         clientSideGeneration: {
           title: "1. Client-Side Only Generation",
-          description: "All passwords and passphrases are generated locally in your browser using the Web Crypto API (crypto.getRandomValues()). The generation code is JavaScript function that runs exclusively on your device."
+          description:
+            "All passwords and passphrases are generated locally in your browser using the Web Crypto API (crypto.getRandomValues()). The generation code is JavaScript function that runs exclusively on your device.",
         },
         noNetworkRequests: {
           title: "2. No Network Requests",
-          description: "No network requests are made during password generation. You can verify this by opening your browser's Developer Tools (Network tab) — you won't see any requests during generation."
+          description:
+            "No network requests are made during password generation. You can verify this by opening your browser's Developer Tools (Network tab) — you won't see any requests during generation.",
         },
         openSource: {
           title: "3. Open Source",
-          description: "All code is open source and available on GitHub for audit. You can review every line of code to verify we keep our privacy promises."
-        }
+          description:
+            "All code is open source and available on GitHub for audit. You can review every line of code to verify we keep our privacy promises.",
+        },
       },
       gdprCompliance: {
         title: "GDPR Compliance",
-        description: "Mova Pass is fully compliant with the General Data Protection Regulation (GDPR) and other privacy laws because we:",
+        description:
+          "Mova Pass is fully compliant with the General Data Protection Regulation (GDPR) and other privacy laws because we:",
         noPersonalData: "Do not collect any personal data",
         noUserIdentifyingInfo: "Do not process any user-identifying information",
         noTrackingCookies: "Do not use tracking cookies",
         userControl: "Give users full control over their settings",
-        noDataToManage: "Since we collect no data, there is no data to request, export, or delete."
+        noDataToManage: "Since we collect no data, there is no data to request, export, or delete.",
       },
       security: {
         title: "Security",
@@ -787,19 +795,20 @@ export const translations: Record<Locale, Translations> = {
         strictCsp: "Strict Content Security Policy (CSP) headers",
         httpsWithHsts: "HTTPS by default with HSTS (HTTP Strict Transport Security)",
         noThirdPartyScripts: "No third-party scripts or tracking",
-        regularAudits: "Regular security audits"
+        regularAudits: "Regular security audits",
       },
       changesToPolicy: {
         title: "Changes to This Policy",
-        description: "If we make changes to this privacy policy, we will update the \"Last Updated\" date at the top of this page. Since we don't collect contact information, we cannot notify you directly of changes. We encourage you to review this page periodically."
+        description:
+          'If we make changes to this privacy policy, we will update the "Last Updated" date at the top of this page. Since we don\'t collect contact information, we cannot notify you directly of changes. We encourage you to review this page periodically.',
       },
       contact: {
         title: "Contact",
         description: "If you have questions about this privacy policy or Mova Pass's privacy practices, you can:",
         openIssueOn: "Open an issue on ",
-        reviewSourceCode: "Review the source code for complete transparency"
+        reviewSourceCode: "Review the source code for complete transparency",
       },
-      backToGenerator: "Back to Generator"
+      backToGenerator: "Back to Generator",
     },
   },
 
@@ -859,8 +868,8 @@ export const translations: Record<Locale, Translations> = {
         "eff-large": "EFF великий",
         "eff-short": "EFF короткий",
         "eff-short-2": "EFF короткий 2",
-        "beale": "Beale",
-        "original": "Оригінальний Diceware",
+        beale: "Beale",
+        original: "Оригінальний Diceware",
       },
       uk: {
         wordlist: "Словник",
@@ -928,8 +937,7 @@ export const translations: Record<Locale, Translations> = {
       securityNotice:
         "Усі паролі створюються безпосередньо у вашому браузері. Нічого не зберігається та не передається через мережу. Можна використовувати без підключення до мережі.",
       supportUkraine: "Підтримати Україну 🇺🇦",
-      supportDescription:
-        "Розгляньте можливість підтримки українських гуманітарних та оборонних організацій:",
+      supportDescription: "Розгляньте можливість підтримки українських гуманітарних та оборонних організацій:",
       supportFundraising: "Або підтримайте наш поточний збір:",
       aboutProject: "Про проєкт",
       sourceCode: "Вихідний код",
@@ -957,7 +965,7 @@ export const translations: Record<Locale, Translations> = {
         "invalid-word-count": "Виберіть від 3 до 12 слів.",
         "invalid-separator": "Роздільник може містити не більше 3 символів.",
         "wordlist-unavailable": "Не вдалося завантажити словник. Перевірте з'єднання та спробуйте ще раз.",
-        "unexpected": "Під час генерації сталася помилка. Спробуйте ще раз.",
+        unexpected: "Під час генерації сталася помилка. Спробуйте ще раз.",
       },
     },
 
@@ -978,7 +986,8 @@ export const translations: Record<Locale, Translations> = {
       },
       safety: {
         title: "Чому цей інструмент безпечний",
-        point1: "✓ Усе відбувається у вашому браузері. Паролі не надсилаються через мережу (після завантаження вебсайту ви можете користуватися ним без доступу до мережі).",
+        point1:
+          "✓ Усе відбувається у вашому браузері. Паролі не надсилаються через мережу (після завантаження вебсайту ви можете користуватися ним без доступу до мережі).",
         point2: "✓ Нічого не зберігається. Паролі ніколи не зберігаються десь, якщо ви їх не скопіюєте самостійно.",
         point3: "✓ Криптографічно безпечний. Використовує вбудований генератор випадкових чисел вашого браузера.",
         point4: "✓ Відкритий код. Будь-хто може переглянути код на GitHub.",
@@ -989,15 +998,15 @@ export const translations: Record<Locale, Translations> = {
         randomList: [
           "Облікових записів, що зберігаються в менеджері паролів",
           "Максимальної безпеки з порівняно невеликою довжиною",
-          "Вебсайтів з вимогами до символів"
+          "Вебсайтів з вимогами до символів",
         ],
         dicewareTitle: "Використовуйте фрази-паролі Diceware для:",
         dicewareList: [
           "Головного пароля для вашого менеджера паролів",
           "Паролів шифрування диска",
           "Паролів Wi-Fi, якими потрібно часто ділитися",
-          "Будь-якого пароля, який потрібно запам'ятати та вводити вручну"
-        ]
+          "Будь-якого пароля, який потрібно запам'ятати та вводити вручну",
+        ],
       },
       strength: {
         title: "Розуміння надійності паролів",
@@ -1019,7 +1028,7 @@ export const translations: Record<Locale, Translations> = {
           "6 слів — оптимальний вибір для більшості користувачів. Це забезпечує надійну безпеку (близько 77 бітів) і водночас легко запам'ятовується.",
           "Використовуйте 7-8 слів для головних паролів, що захищають конфіденційну інформацію, такі як менеджери паролів або ключі шифрування.",
           "Уникайте використання менше ніж 5 слів, оскільки це суттєво знижує безпеку.",
-          "Пам'ятайте, що необхідна кількість слів залежить від розміру словника — чим менший словник, тим більше слів потрібно. У цьому випадку вважається, що ви використовуєте будь-який зі словників на 7,776 слів."
+          "Пам'ятайте, що необхідна кількість слів залежить від розміру словника — чим менший словник, тим більше слів потрібно. У цьому випадку вважається, що ви використовуєте будь-який зі словників на 7,776 слів.",
         ],
         q2: "Яка хороша стратегія паролів?",
         a2Title: "Найкращий підхід:",
@@ -1027,22 +1036,22 @@ export const translations: Record<Locale, Translations> = {
           "Використовуйте менеджер паролів (наприклад, Bitwarden, 1Password або ProtonPass)",
           "Створіть одну надійну фразу-пароль Diceware (7-8 слів) як головний пароль для менеджера паролів, запам'ятайте його та/або збережіть в безпечному місці (папір, зашифрований файл тощо)",
           "Генеруйте випадкові паролі для всіх інших облікових записів та зберігайте їх у менеджері паролів",
-          "Вмикайте двофакторну автентифікацію (2FA) всюди, де це можливо"
+          "Вмикайте двофакторну автентифікацію (2FA) всюди, де це можливо",
         ],
         a2Footer: "Таким чином вам потрібно запам'ятати лише один пароль, маючи унікальні надійні паролі скрізь.",
         q3: "Навіщо використовувати українські словники?",
         a3: [
           "Фрази-паролі рідною мовою легше запам'ятовувати і вони відчуваються природніше. Mova Pass — перший інструмент, що пропонує всеосяжні українські словники Diceware.",
-          "Функція транслітерації дозволяє вводити українські слова стандартною латинською клавіатурою (наприклад, \"собака\" стає \"sobaka\"), що полегшує введення на будь-якому пристрої, зберігаючи українську лексику."
+          'Функція транслітерації дозволяє вводити українські слова стандартною латинською клавіатурою (наприклад, "собака" стає "sobaka"), що полегшує введення на будь-якому пристрої, зберігаючи українську лексику.',
         ],
         q4: "Чи варто виключати неоднозначні символи в паролях?",
         a4: [
           "Якщо ви часто вводите пароль вручну, виключення неоднозначних символів (як-от 'O' чи '0', 'l' чи '1') зменшує помилки введення. Це трохи знижує ентропію, але покращує зручність.",
-          "Для паролів, збережених у менеджері паролів, які ви копіюватимете, залишайте всі символи для максимальної безпеки."
+          "Для паролів, збережених у менеджері паролів, які ви копіюватимете, залишайте всі символи для максимальної безпеки.",
         ],
         q5: "Чи можу я використовувати цей інструмент офлайн?",
         a5: "Так! Після першого завантаження сторінки ви можете використовувати її без підключення до мережі. Вся генерація відбувається локально у вашому браузері, а словники кешуються для офлайн-використання.",
-        q6: "Як розраховується \"час на злом\"?",
+        q6: 'Як розраховується "час на злом"?',
         a6: "Ми розраховуємо середній час, який знадобиться зловмиснику для підбору вашого пароля шляхом перебору комбінацій. Розрахунок припускає, що працює потужний зловмисник з 1 трильйоном спроб на секунду (використовуючи спеціалізоване обладнання). Реальні атаки зазвичай набагато повільніші через обмеження швидкості та інші захисти. Ви можете змінити швидкість злому у додаткових налаштування.",
         q7: "Які хороші варіанти використання фраз-паролів Diceware?",
         a7GoodTitle: "Відмінні варіанти використання:",
@@ -1052,29 +1061,27 @@ export const translations: Record<Locale, Translations> = {
           "Паролі Wi-Fi, якими потрібно ділитися з гостями",
           "Спільні комп'ютери, де не можна встановити менеджери паролів",
           "Паролі повного шифрування диска",
-          "Будь-який пароль, який потрібно часто вводити вручну"
+          "Будь-який пароль, який потрібно часто вводити вручну",
         ],
         a7BadTitle: "Не рекомендується для:",
-        a7BadList: [
-          "Використання з малою кількістю слів (менше ніж 5). Це значно зменшує безпеку"
-        ],
+        a7BadList: ["Використання з малою кількістю слів (менше ніж 5). Це значно зменшує безпеку"],
         q8: "Чи варто додавати цифри або символи до моєї фрази-пароля?",
         a8: [
           "Загалом ні — довжина важливіша за складність. Додавання однієї цифри або символу додає лише кілька бітів ентропії, тоді як додавання ще одного слова додає ~13 бітів.",
           "Наприклад: correct-horse-battery-staple-7 ледь надійніший за correct-horse-battery-staple, але correct-horse-battery-staple-magnet значно надійніший.",
-          "Додавайте спеціальні символи лише якщо вебсайт вимагає їх — інакше тримайте простоту та легкість запам'ятовування."
+          "Додавайте спеціальні символи лише якщо вебсайт вимагає їх — інакше тримайте простоту та легкість запам'ятовування.",
         ],
         q9: "Чи захистить мене надійний пароль від фішингу?",
         a9: [
-          "На жаль, ні. Навіть найнадійніший пароль у світі не допоможе, якщо ви введете його на підробленому вебсайті. Однак використання унікальних паролів для кожного сервісу означає, що якщо один з них викрадуть через фішинг, ваші інші облікові записи залишаться в безпеці."
+          "На жаль, ні. Навіть найнадійніший пароль у світі не допоможе, якщо ви введете його на підробленому вебсайті. Однак використання унікальних паролів для кожного сервісу означає, що якщо один з них викрадуть через фішинг, ваші інші облікові записи залишаться в безпеці.",
         ],
         a9Title: "Захистіть себе від фішингу:",
         a9List: [
           "Завжди перевіряйте URL вебсайту перед введенням паролів",
           "Вмикайте двофакторну автентифікацію (2FA) на всіх облікових записах",
           "Використовуйте менеджер паролів — вони не автозаповнюватимуть на підроблених вебсайтах",
-          "Будьте підозрілими до термінових листів та повідомлень, що просять вас увійти в систему"
-        ]
+          "Будьте підозрілими до термінових листів та повідомлень, що просять вас увійти в систему",
+        ],
       },
       comparison: {
         title: "Детальне порівняння методів",
@@ -1098,7 +1105,7 @@ export const translations: Record<Locale, Translations> = {
         securityDiceware: "6 слів ≈ 77 бітів",
         bestFor: "Найкраще для",
         bestForRandom: "Акаунтів у менеджері паролів",
-        bestForDiceware: "Головний пароль"
+        bestForDiceware: "Головний пароль",
       },
       bestPractices: {
         title: "Найкращі практики безпеки",
@@ -1109,8 +1116,8 @@ export const translations: Record<Locale, Translations> = {
           "Оновлюйте паролі у разі порушення безпеки",
           "Ніколи не діліться паролями через email, SMS або месенджери",
           "Не використовуйте персональну інформацію (дати народження, імена, імена домашніх тварин)",
-          "Остерігайтесь спроб фішингу, під час яких вас просять ввести паролі"
-        ]
+          "Остерігайтесь спроб фішингу, під час яких вас просять ввести паролі",
+        ],
       },
       whatIsDiceware: {
         title: "Що таке Diceware?",
@@ -1121,8 +1128,7 @@ export const translations: Record<Locale, Translations> = {
         wordlistsTitle: "Доступні словники:",
         ukrainian:
           "Українська: Перші українські словники Diceware (короткий і довгий) та словник на 10K слів, усі з транслітерацією",
-        english:
-          "Англійська: Словники EFF, Beale та Original Diceware — перевірені часом та широко довірені",
+        english: "Англійська: Словники EFF, Beale та Original Diceware — перевірені часом та широко довірені",
       },
       similarTools: {
         title: "Подібні інструменти",
@@ -1136,15 +1142,20 @@ export const translations: Record<Locale, Translations> = {
       },
       passwordManager: {
         title: "Отримайте менеджер паролів",
-        description: "Безпечне зберігання та управління вашими надійними паролями за допомогою цих перевірених інструментів:",
+        description:
+          "Безпечне зберігання та управління вашими надійними паролями за допомогою цих перевірених інструментів:",
         bitwarden: "Bitwarden",
-        bitwardenDescription: "Менеджер паролів з відкритим кодом з безкоштовним тарифом, синхронізацією між платформами та безпечним спільним доступом. Відмінно для команд та окремих користувачів.",
+        bitwardenDescription:
+          "Менеджер паролів з відкритим кодом з безкоштовним тарифом, синхронізацією між платформами та безпечним спільним доступом. Відмінно для команд та окремих користувачів.",
         keepass: "KeePassXC",
-        keepassDescription: "Безкоштовний, відкритий та офлайн менеджер паролів. Ваші паролі залишаються на вашому пристрої — хмара не потрібна.",
+        keepassDescription:
+          "Безкоштовний, відкритий та офлайн менеджер паролів. Ваші паролі залишаються на вашому пристрої — хмара не потрібна.",
         proton: "Proton Pass",
-        protonDescription: "Менеджер паролів, орієнтований на приватність від команди ProtonMail. Наскрізне шифрування з архітектурою нульового знання.",
+        protonDescription:
+          "Менеджер паролів, орієнтований на приватність від команди ProtonMail. Наскрізне шифрування з архітектурою нульового знання.",
         onepassword: "1Password",
-        onepasswordDescription: "Популярний комерційний менеджер паролів з відмінним користувацьким досвідом, потужними функціями безпеки та надійною підтримкою між платформами.",
+        onepasswordDescription:
+          "Популярний комерційний менеджер паролів з відмінним користувацьким досвідом, потужними функціями безпеки та надійною підтримкою між платформами.",
       },
       resources: {
         title: "Навчальні ресурси",
@@ -1157,8 +1168,7 @@ export const translations: Record<Locale, Translations> = {
         xkcdDescription:
           'Відомий комікс, що пояснює, чому "correct horse battery staple" безпечніший та легший для запам\'ятовування, ніж "Tr0ub4dor&3"',
         nist: "Настанови NIST щодо цифрової ідентифікації",
-        nistDescription:
-          "Офіційні настанови уряду США щодо аутентифікації та безпеки паролів",
+        nistDescription: "Офіційні настанови уряду США щодо аутентифікації та безпеки паролів",
       },
     },
 
@@ -1169,7 +1179,8 @@ export const translations: Record<Locale, Translations> = {
       overview: {
         title: "Огляд",
         noDataMessage: "Ми НЕ збираємо жодних даних. Ніколи.",
-        description: "Mova Pass — це повністю клієнтський застосунок, створений з особливою увагою до конфіденційності. Усі паролі та фрази-паролі генеруються локально у вашому браузері та ніколи не передаються через мережу, не зберігаються на наших серверах і не відстежуються жодним чином."
+        description:
+          "Mova Pass — це повністю клієнтський застосунок, створений з особливою увагою до конфіденційності. Усі паролі та фрази-паролі генеруються локально у вашому браузері та ніколи не передаються через мережу, не зберігаються на наших серверах і не відстежуються жодним чином.",
       },
       whatWeDontCollect: {
         title: "Що ми НЕ збираємо",
@@ -1178,7 +1189,7 @@ export const translations: Record<Locale, Translations> = {
         ipAddresses: "IP-адреси або інформацію про місцезнаходження",
         analytics: "Аналітику використання або телеметрію",
         fingerprints: "Відбитки пристроїв або файли cookie відстеження",
-        anyPersonalData: "Будь-які персональні дані"
+        anyPersonalData: "Будь-які персональні дані",
       },
       whatWeStoreLocally: {
         title: "Що зберігається локально",
@@ -1189,31 +1200,36 @@ export const translations: Record<Locale, Translations> = {
         languageDescription: "Ваш вибір між українською/англійською мовою (locale)",
         noPasswords: "Без паролів",
         noPasswordsDescription: "Паролі ніколи не зберігаються, навіть локально",
-        clearSettings: "Ви можете очистити ці налаштування в будь-який час, видаливши дані вебсайту в налаштуваннях вашого браузера."
+        clearSettings:
+          "Ви можете очистити ці налаштування в будь-який час, видаливши дані вебсайту в налаштуваннях вашого браузера.",
       },
       howItWorks: {
         title: "Як це працює",
         clientSideGeneration: {
           title: "1. Генерація лише на стороні клієнта",
-          description: "Усі паролі та парольні фрази генеруються безпосередньо у вашому браузері за допомогою Web Crypto API (crypto.getRandomValues()). Код генерації є функцією JavaScript, яка виконується виключно на вашому пристрої."
+          description:
+            "Усі паролі та парольні фрази генеруються безпосередньо у вашому браузері за допомогою Web Crypto API (crypto.getRandomValues()). Код генерації є функцією JavaScript, яка виконується виключно на вашому пристрої.",
         },
         noNetworkRequests: {
           title: "2. Без мережевих запитів",
-          description: "Під час генерації паролів мережеві запити не виконуються. Ви можете перевірити це, відкривши інструменти розробника вашого браузера (вкладка Мережа) — ви не побачите жодних запитів під час генерації."
+          description:
+            "Під час генерації паролів мережеві запити не виконуються. Ви можете перевірити це, відкривши інструменти розробника вашого браузера (вкладка Мережа) — ви не побачите жодних запитів під час генерації.",
         },
         openSource: {
           title: "3. Відкритий вихідний код",
-          description: "Весь код відкритий і доступний на GitHub для аудиту. Ви можете перевірити кожен рядок коду, щоб переконатися, що ми дотримуємося своїх обіцянок щодо конфіденційності."
-        }
+          description:
+            "Весь код відкритий і доступний на GitHub для аудиту. Ви можете перевірити кожен рядок коду, щоб переконатися, що ми дотримуємося своїх обіцянок щодо конфіденційності.",
+        },
       },
       gdprCompliance: {
         title: "Відповідність GDPR",
-        description: "Mova Pass повністю відповідає Загальному регламенту захисту даних (GDPR) та іншим законам про конфіденційність, оскільки ми:",
+        description:
+          "Mova Pass повністю відповідає Загальному регламенту захисту даних (GDPR) та іншим законам про конфіденційність, оскільки ми:",
         noPersonalData: "Не збираємо жодних персональних даних",
         noUserIdentifyingInfo: "Не обробляємо жодної інформації, яка ідентифікує користувача",
         noTrackingCookies: "Не використовуємо файли cookie для відстеження",
         userControl: "Надаємо користувачам повний контроль над своїми налаштуваннями",
-        noDataToManage: "Оскільки ми не збираємо жодних даних, немає даних для запиту, експорту чи видалення."
+        noDataToManage: "Оскільки ми не збираємо жодних даних, немає даних для запиту, експорту чи видалення.",
       },
       security: {
         title: "Безпека",
@@ -1222,20 +1238,21 @@ export const translations: Record<Locale, Translations> = {
         strictCsp: "Суворі заголовки Політики безпеки вмісту (CSP)",
         httpsWithHsts: "HTTPS за замовчуванням з HSTS (HTTP Strict Transport Security)",
         noThirdPartyScripts: "Без сторонніх скриптів або відстеження",
-        regularAudits: "Регулярні аудити безпеки"
+        regularAudits: "Регулярні аудити безпеки",
       },
       changesToPolicy: {
         title: "Зміни в цій політиці",
-        description: "Якщо ми внесемо зміни до цієї політики конфіденційності, ми оновимо дату «Останнє оновлення» вгорі цієї сторінки. Оскільки ми не збираємо контактну інформацію, ми не можемо повідомити вас безпосередньо про зміни. Рекомендуємо періодично переглядати цю сторінку."
+        description:
+          "Якщо ми внесемо зміни до цієї політики конфіденційності, ми оновимо дату «Останнє оновлення» вгорі цієї сторінки. Оскільки ми не збираємо контактну інформацію, ми не можемо повідомити вас безпосередньо про зміни. Рекомендуємо періодично переглядати цю сторінку.",
       },
       contact: {
         title: "Контакт",
-        description: "Якщо у вас є питання щодо цієї політики конфіденційності або практик конфіденційності Mova Pass, ви можете:",
+        description:
+          "Якщо у вас є питання щодо цієї політики конфіденційності або практик конфіденційності Mova Pass, ви можете:",
         openIssueOn: "Відкрити проблему на ",
-        reviewSourceCode: "Переглянути вихідний код для повної прозорості"
+        reviewSourceCode: "Переглянути вихідний код для повної прозорості",
       },
-      backToGenerator: "Повернутися до генератора"
+      backToGenerator: "Повернутися до генератора",
     },
   },
 }
-

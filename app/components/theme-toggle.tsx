@@ -3,7 +3,12 @@
 import { Moon, Sun, Monitor } from "lucide-react"
 import { useTheme } from "@/app/components/theme-provider"
 import { Button } from "@/app/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/app/components/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/app/components/ui/dropdown-menu"
 import { useI18n } from "@/lib/i18n"
 
 export function ThemeToggle() {

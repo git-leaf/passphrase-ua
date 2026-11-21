@@ -7,14 +7,14 @@
  */
 export interface WordlistEntry {
   /** Word in the Wordlist's language */
-  word: string;
+  word: string
   /** Latin-alphabet rendering, if available */
-  transliteration?: string;
+  transliteration?: string
 }
 
 /**
  * A loaded Wordlist, entries in file order
  */
 export interface Wordlist {
-  entries: WordlistEntry[];
+  entries: WordlistEntry[]
 }

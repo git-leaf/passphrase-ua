@@ -53,9 +53,11 @@
 **Mova Pass** (formerly **Passphrase UA**) is a client-side password and passphrase generator with first-class support for Ukrainian language wordlists. The project aims to fill the gap in Ukrainian-language Diceware implementations while providing a secure, privacy-focused, and user-friendly tool for generating strong passwords and passphrases across multiple languages.
 
 ### Vision
+
 To become the go-to passphrase generation tool for Ukrainian-speaking users while demonstrating the first comprehensive Ukrainian Diceware wordlists, and serving as a flexible, multilingual password generation platform for privacy-conscious users worldwide.
 
 ### Primary Goals
+
 1. Provide secure, client-side password/passphrase generation
 2. Introduce and showcase Ukrainian Diceware wordlists (small, normal, large)
 3. Support multiple generation methods with extensible architecture
@@ -66,16 +68,20 @@ To become the go-to passphrase generation tool for Ukrainian-speaking users whil
 ## 2. Background & Context
 
 ### Problem Statement
+
 The [Diceware method](https://theworld.com/~reinhold/diceware.html) for generating memorable yet cryptographically strong passphrases exists in 29+ languages, but Ukrainian support is missing. Users need:
+
 - Strong, memorable passphrases in their native language
 - Transparent, trustworthy generation methods
 - Client-side security guarantees
 - Multiple generation methods for different use cases
 
 ### Inspiration
+
 After learning about the Diceware method created by Arnold G. Reinhold, we noticed the lack of Ukrainian wordlist support. We set out to build comprehensive Ukrainian Diceware wordlists and develop a modern web application to showcase and utilize them.
 
 ### Key Differentiators
+
 - **First Ukrainian Diceware implementation** with 3+ wordlists of different sizes
 - **Completely client-side** — no server-side generation or data transmission
 - **Modern, accessible UI** built with Next.js and shadcn/ui
@@ -87,6 +93,7 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 ## 3. Target Users
 
 ### Primary Audience
+
 1. **Privacy-conscious individuals** — Users who need strong passphrases for encryption, password managers, cryptocurrency wallets, etc.
 2. **Ukrainian speakers** — Native Ukrainian users seeking security tools in their language
 3. **General public** — Anyone needing quick, secure password generation
@@ -95,24 +102,28 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 ### User Personas
 
 **Persona 1: Olena (Privacy Advocate)**
+
 - Age: 32, IT professional from Kyiv
 - Needs: Strong passphrase for PGP key and password manager
 - Pain points: Lack of Ukrainian security tools, distrust of online generators
 - Goals: Generate memorable Ukrainian passphrase offline
 
 **Persona 2: Mark (General User)**
+
 - Age: 28, non-technical user
 - Needs: Secure password for online accounts
 - Pain points: Weak passwords, password reuse
 - Goals: Quick, strong password generation with visual feedback
 
 **Persona 3: Developer/Security Pro**
+
 - Age: 35, security researcher
 - Needs: Cryptographically sound generation, transparency
 - Pain points: Closed-source generators, vendor lock-in
 - Goals: Auditable code, multiple methods, extensibility
 
 ### Use Cases
+
 - Generate passphrase for GPG/PGP encryption
 - Create master password for password manager (1Password, ProtonPass, Bitwarden, KeePass)
 - Secure cryptocurrency wallet seed phrases
@@ -128,6 +139,7 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 ### In Scope (MVP)
 
 #### Generation Methods
+
 1. **Random Characters (Password)**
    - Configurable length (8-128 characters)
    - Character set options: lowercase, uppercase, numbers, symbols
@@ -143,17 +155,20 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
    - Digit/symbol insertion options
 
 #### Ukrainian Diceware Wordlists
+
 - **Small** (4 dice, 1,296 words)
 - **Normal** (5 dice, 7,776 words)
 - **Large** (6 dice, 46,656 words)
 
 #### English Diceware Wordlists
+
 - **Original Diceware** (5 dice, 7,776 words)
 - **EFF Short List** (4 dice, 1,296 words)
 - **EFF Long List** (5 dice, 7,776 words)
 - **Beale List** (5 dice, 7,776 words)
 
 #### Security Features
+
 - **100% client-side generation** — No network requests during generation
 - **Cryptographically secure RNG** — Use `window.crypto.getRandomValues()`
 - **No analytics or tracking** — Complete privacy
@@ -162,6 +177,7 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 - **Open source** — Auditable code
 
 #### User Experience
+
 - **Strength Meter** with multiple indicators:
   - Entropy (bits)
   - Possible combinations
@@ -175,6 +191,7 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 - **Keyboard navigation** — Full keyboard support
 
 #### Technical Requirements
+
 - **Offline-first** — Must work without network connection
 - **Fast load time** — Initial load < 2 seconds on 3G
 - **Service Worker** — Cache wordlists and assets
@@ -185,6 +202,7 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 ### Out of Scope (Future Phases)
 
 #### Phase 2 (Post-MVP)
+
 - Progressive Web App (PWA) with install prompt
 - Additional languages (TODO: need to decide)
 - Additional generation methods:
@@ -197,6 +215,7 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 - Export options (CSV, JSON, encrypted file)
 
 #### Phase 3 (Long-term)
+
 - Browser extension
 - Mobile apps (iOS, Android)
 - CLI tool
@@ -205,6 +224,7 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 - Community-contributed wordlists
 
 ### Explicitly Excluded
+
 - Server-side generation
 - User accounts or authentication
 - Cloud sync
@@ -219,33 +239,39 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 ### Tech Stack
 
 #### Frontend Framework
+
 - **Next.js 16** with App Router
 - **TypeScript** (strict mode)
 - **React 19**
 
 #### UI/Styling
+
 - **Tailwind CSS** — Utility-first styling
 - **shadcn/ui** — Component library built on Radix UI
 - **Radix UI** — Accessible primitives
 - **Lucide Icons** — Icon library
 
 #### Security & Cryptography
+
 - **Web Crypto API** (`crypto.getRandomValues()`) — Primary RNG (sufficient for MVP, built-in browser API, zero dependencies)
 - **zod** — Input validation and schema validation
 - **No custom crypto** — Use platform/battle-tested libraries only
 
 #### State Management
+
 - **React hooks** (`useState`, `useReducer`) for local state
 - **Context API** for theme and settings
 - **No global state library** initially (keep it simple)
 
 #### Build & Tooling
+
 - **pnpm** — Package manager
 - **ESLint + Prettier** — Code quality
 - **Vitest** — Unit testing (faster, better Vite/Next.js integration)
 - **TypeScript strict mode** — Type safety
 
 #### Deployment
+
 - **Vercel**
 - **Static export** if possible for maximum portability
 - **Service Worker** for offline support
@@ -254,6 +280,7 @@ After learning about the Diceware method created by Arnold G. Reinhold, we notic
 ### Architecture Principles
 
 #### Code Organization
+
 ```
 app/
 ├── components/
@@ -295,27 +322,29 @@ app/
 ```
 
 #### Generator Architecture
+
 ```typescript
 // Pure, testable, composable functions
 interface GeneratorConfig {
-  method: 'random' | 'diceware';
+  method: "random" | "diceware"
   // Method-specific options
 }
 
 interface GeneratorResult {
-  password: string;
-  entropy: number;
+  password: string
+  entropy: number
   metadata: {
-    method: string;
-    timestamp: number;
+    method: string
+    timestamp: number
     // Method-specific metadata
-  };
+  }
 }
 
-type Generator = (config: GeneratorConfig) => GeneratorResult;
+type Generator = (config: GeneratorConfig) => GeneratorResult
 ```
 
 **Key Principles:**
+
 - **Pure functions** for all generation logic
 - **Separation of concerns** — generation logic separate from UI
 - **Composability** — Easy to add new methods
@@ -323,6 +352,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **Type safety** — Leverage TypeScript for correctness
 
 #### Security Considerations
+
 1. **RNG Source**: Use `window.crypto.getRandomValues()` exclusively
 2. **No server calls**: All generation client-side, verifiable in dev tools
 3. **No persistence**: Passwords never stored (unless user explicitly copies)
@@ -335,6 +365,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 ## 6. Functional Requirements
 
 ### FR-1: Random Character Password Generation
+
 **Priority:** P0 (MVP)
 
 - **FR-1.1** User can select character length (8-128, default: 16)
@@ -351,6 +382,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **FR-1.8** Human-readable evaluation of the password strength (weak/moderate/strong/very strong/excessive)
 
 ### FR-2: Diceware Passphrase Generation
+
 **Priority:** P0 (MVP)
 
 - **FR-2.1** User can select language: Ukrainian or English
@@ -365,12 +397,13 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
   - First letter of each word
   - Random letter per word
   - All uppercase
-  - All letters uppercase of a random word 
+  - All letters uppercase of a random word
 - **FR-2.7** User can insert random digit/symbol between words
 - **FR-2.8** Wordlist loads asynchronously with loading state
 - **FR-2.9** Entropy calculated based on wordlist size and word count
 
 ### FR-3: Strength Meter
+
 **Priority:** P0 (MVP)
 
 - **FR-3.1** Display entropy in bits
@@ -386,6 +419,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
   - Custom (user can specify the cost to crack in USD)
 
 ### FR-4: User Actions
+
 **Priority:** P0 (MVP)
 
 - **FR-4.1** "Generate" button triggers generation
@@ -396,6 +430,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **FR-4.6** Keyboard shortcut for copy (Ctrl/Cmd + C when output focused)
 
 ### FR-5: Offline Support
+
 **Priority:** P0 (MVP)
 
 - **FR-5.1** All generation works without network
@@ -405,6 +440,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **FR-5.5** Graceful handling of missing wordlists
 
 ### FR-6: Theme Support
+
 **Priority:** P0 (MVP)
 
 - **FR-6.1** Light mode (default)
@@ -414,6 +450,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **FR-6.5** Theme preference persisted in localStorage
 
 ### FR-7: Settings Persistence
+
 **Priority:** P1 (Nice to have)
 
 - **FR-7.1** Last used method saved to localStorage
@@ -425,6 +462,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 ## 7. Non-Functional Requirements
 
 ### NFR-1: Security
+
 **Priority:** P0
 
 - **NFR-1.1** All password generation uses `window.crypto.getRandomValues()`
@@ -438,6 +476,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **NFR-1.9** Regular security audits of generation code
 
 ### NFR-2: Privacy
+
 **Priority:** P0
 
 - **NFR-2.1** GDPR compliant (no personal data collected)
@@ -448,6 +487,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **NFR-2.6** Open source for auditability
 
 ### NFR-3: Performance
+
 **Priority:** P0
 
 - **NFR-3.1** Initial page load < 2 seconds (3G connection)
@@ -458,6 +498,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **NFR-3.6** Bundle size < 500KB (initial, gzipped)
 
 ### NFR-4: Accessibility
+
 **Priority:** P0
 
 - **NFR-4.1** WCAG 2.1 Level AA compliance
@@ -469,6 +510,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **NFR-4.7** ARIA labels where needed
 
 ### NFR-5: Browser Compatibility
+
 **Priority:** P0
 
 - **NFR-5.1** Support last 2 versions of major browsers:
@@ -480,6 +522,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **NFR-5.4** Polyfill-free if possible
 
 ### NFR-6: Maintainability
+
 **Priority:** P0
 
 - **NFR-6.1** TypeScript strict mode, no `any` types
@@ -491,6 +534,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 - **NFR-6.7** Contribution guidelines
 
 ### NFR-7: Extensibility
+
 **Priority:** P1
 
 - **NFR-7.1** Plugin architecture for new generation methods
@@ -503,6 +547,7 @@ type Generator = (config: GeneratorConfig) => GeneratorResult;
 ## 8. User Interface & Experience
 
 ### UI Principles
+
 1. **Simplicity first** — One-click generation, minimal configuration
 2. **Progressive disclosure** — Advanced options hidden by default
 3. **Immediate feedback** — Real-time strength meter, instant copy confirmation
@@ -538,6 +583,7 @@ Homepage / Generator
 ### Key Screens
 
 #### 1. Generator (Main Screen)
+
 - Prominent method selector at top
 - Configuration panel below with primary options visible
 - Advanced options in collapsible accordion (no modal interruption)
@@ -547,6 +593,7 @@ Homepage / Generator
 - Clean, uncluttered layout
 
 #### 2. About/FAQ Page
+
 - Explanation of Diceware method (link to [original](https://theworld.com/~reinhold/diceware.html))
 - Why Ukrainian wordlists matter
 - How the generator works (security, privacy)
@@ -554,6 +601,7 @@ Homepage / Generator
 - Credits and acknowledgments
 
 #### 3. Privacy Policy Page
+
 - Clear statement: "No data collected, ever"
 - Explanation of localStorage usage (settings only)
 - GDPR compliance statement
@@ -562,10 +610,12 @@ Homepage / Generator
 ### Copy & Messaging
 
 #### Primary CTA
+
 - "Generate Secure Password" (Random method)
 - "Generate Passphrase" (Diceware method)
 
 #### Strength Meter Labels
+
 - 0-40 bits: "Weak" (red)
 - 41-60 bits: "Moderate" (yellow)
 - 61-80 bits: "Strong" (light green)
@@ -573,11 +623,13 @@ Homepage / Generator
 - 121+ bits: "Excessive" (blue)
 
 #### Help Text Examples
+
 - Diceware: "Generates memorable passphrase using random words from a wordlist. Recommended for master passwords."
 - Random: "Generates completely random password. Strong but harder to remember."
 - Entropy: "Higher entropy = more secure. 60+ bits recommended for most uses, 80+ for high-security."
 
 #### Copy Success Message
+
 - Toast: "Copied to clipboard!"
 - Accessible announcement for screen readers
 
@@ -586,6 +638,7 @@ Homepage / Generator
 ## 9. Success Metrics
 
 ### MVP Success Criteria
+
 1. **Functional completeness**: All P0 requirements implemented
 2. **Security audit**: Independent review of RNG and generation logic
 3. **Performance**: All NFR-3 targets met
@@ -593,19 +646,23 @@ Homepage / Generator
 5. **User testing**: 10+ users successfully generate passwords
 
 ### Post-Launch Metrics (Optional, Privacy-Preserving)
+
 If any analytics are added (with user consent), track:
+
 - Page load time (RUM)
 - Generation method usage distribution
 - Error rates
 - Browser/OS distribution (for compatibility)
 
 **Note**: All analytics must be:
+
 - Opt-in
 - Privacy-preserving (no fingerprinting)
 - Self-hosted (e.g., Plausible, Umami)
 - Open about data collection
 
 ### Long-Term Success Indicators
+
 1. GitHub stars/forks (community interest)
 2. Community-contributed wordlists
 3. Ukrainian wordlist adoption by other tools
@@ -619,11 +676,13 @@ If any analytics are added (with user consent), track:
 ### Threat Model
 
 #### Assets to Protect
+
 - Generated passwords/passphrases (primary)
 - User privacy (no tracking)
 - Code integrity (no tampering)
 
 #### Threats
+
 1. **Weak RNG**: Predictable password generation
    - **Mitigation**: Use only `crypto.getRandomValues()`
 2. **XSS Attack**: Injection of malicious code
@@ -638,6 +697,7 @@ If any analytics are added (with user consent), track:
    - **Mitigation**: Constant-time operations where possible, not a primary concern for this use case
 
 #### Assumptions
+
 - User's device is not compromised
 - User's browser is up-to-date
 - User will store generated password securely (outside our control)
@@ -645,41 +705,45 @@ If any analytics are added (with user consent), track:
 ### Security Best Practices
 
 #### Random Number Generation
+
 ```typescript
 // GOOD: Use Web Crypto API
-const array = new Uint32Array(10);
-window.crypto.getRandomValues(array);
+const array = new Uint32Array(10)
+window.crypto.getRandomValues(array)
 
 // BAD: Never use Math.random()
 // const random = Math.random(); // ❌ NOT CRYPTOGRAPHICALLY SECURE
 ```
 
 #### No Sensitive Data Logging
+
 ```typescript
 // GOOD: Log events, not data
-console.log('Password generated with method: diceware');
+console.log("Password generated with method: diceware")
 
 // BAD: Never log passwords
 // console.log('Generated password:', password); // ❌ NEVER DO THIS
 ```
 
 #### Content Security Policy
+
 ```
-Content-Security-Policy: 
-  default-src 'self'; 
-  script-src 'self'; 
-  style-src 'self' 'unsafe-inline'; 
-  img-src 'self' data:; 
-  font-src 'self'; 
-  connect-src 'self'; 
-  frame-ancestors 'none'; 
-  base-uri 'self'; 
+Content-Security-Policy:
+  default-src 'self';
+  script-src 'self';
+  style-src 'self' 'unsafe-inline';
+  img-src 'self' data:;
+  font-src 'self';
+  connect-src 'self';
+  frame-ancestors 'none';
+  base-uri 'self';
   form-action 'self';
 ```
 
 ### Privacy Considerations
 
 #### What We DON'T Collect
+
 - No passwords or generated output
 - No user accounts or emails
 - No IP addresses
@@ -688,18 +752,21 @@ Content-Security-Policy:
 - No device fingerprinting
 
 #### What We MAY Store (LocalStorage Only)
+
 - Theme preference (light/dark)
 - Last used generator method
 - Last used configuration options
 - No passwords, ever
 
 #### GDPR Compliance
+
 - No personal data collected → no GDPR concerns
 - Privacy policy clearly states practices
 - No cookie banner needed (no tracking cookies)
 - User has full control (can clear localStorage anytime)
 
 ### Audit & Transparency
+
 - **Open source**: Code available on GitHub for review
 - **Documentation**: Clear explanation of security measures
 - **Reproducible builds**: Users can verify deployed version matches source
@@ -716,6 +783,7 @@ All Ukrainian wordlists include **transliteration support** to enable easier typ
 - **Source**: https://github.com/git-leaf/diceware-ua — canonical repository for Ukrainian Diceware and general wordlist assets, formats, and curation pipeline. Files under `public/wordlists/uk/` in this application track that project.
 
 #### Wordlist (10,000 words)
+
 - **Format**: `WORD TRANSLITERATION`
 - **File format**: Wordlist with Transliteration
 - **Use case**: Non-Diceware generation methods, custom passphrases
@@ -728,6 +796,7 @@ All Ukrainian wordlists include **transliteration support** to enable easier typ
   - No offensive or easily confused words
 
 #### Small Diceware Wordlist (4 dice, 1,296 words)
+
 - **Format**: `INDEX WORD TRANSLITERATION`
 - **File format**: Diceware Wordlist with Transliteration
 - **Dice range**: 1111-6666
@@ -740,6 +809,7 @@ All Ukrainian wordlists include **transliteration support** to enable easier typ
   - No offensive or easily confused words
 
 #### Normal Diceware Wordlist (5 dice, 7,776 words)
+
 - **Format**: `INDEX WORD TRANSLITERATION`
 - **File format**: Diceware Wordlist with Transliteration
 - **Dice range**: 11111-66666
@@ -752,6 +822,7 @@ All Ukrainian wordlists include **transliteration support** to enable easier typ
   - Suitable for most security needs
 
 #### Large Diceware Wordlist (6 dice, 46,656 words)
+
 - **Format**: `INDEX WORD TRANSLITERATION`
 - **File format**: Diceware Wordlist with Transliteration
 - **Dice range**: 111111-666666
@@ -768,6 +839,7 @@ All Ukrainian wordlists include **transliteration support** to enable easier typ
 English wordlists use standard formats without transliteration.
 
 #### Original Diceware Wordlist
+
 - **Format**: `INDEX WORD`
 - **File format**: Diceware Wordlist
 - **Source**: https://theworld.com/~reinhold/diceware.html
@@ -778,6 +850,7 @@ English wordlists use standard formats without transliteration.
 - **Notes**: Original, time-tested list with short words (avg 4.2 characters), created by Arnold G. Reinhold
 
 #### EFF Short Diceware Wordlist
+
 - **Format**: `INDEX WORD`
 - **File format**: Diceware Wordlist
 - **Source**: https://www.eff.org/dice
@@ -788,6 +861,7 @@ English wordlists use standard formats without transliteration.
 - **Notes**: Short, memorable words, no offensive content
 
 #### EFF Long Diceware Wordlist
+
 - **Format**: `INDEX WORD`
 - **File format**: Diceware Wordlist
 - **Source**: https://www.eff.org/dice
@@ -798,6 +872,7 @@ English wordlists use standard formats without transliteration.
 - **Notes**: Longer, more memorable words (avg 7.0 characters), no offensive content
 
 #### Beale Diceware Wordlist
+
 - **Format**: `INDEX WORD`
 - **File format**: Diceware Wordlist
 - **Source**: https://theworld.com/~reinhold/beale.wordlist.asc
@@ -821,6 +896,7 @@ The application supports **4 wordlist file formats** based on two main structure
 ##### General Format Rules
 
 **Comments and Metadata:**
+
 - Comments start with `#` and are optional but highly recommended
 - Comments do not influence execution, only provide metadata
 - Recommended metadata fields:
@@ -832,6 +908,7 @@ The application supports **4 wordlist file formats** based on two main structure
   - `Size`: Total number of words (e.g., "7776")
 
 **Word Order:**
+
 - All words must be in **alphabetical order** (by word, not dice number)
 - For Diceware formats, dice numbers correspond to alphabetical position
 
@@ -855,6 +932,7 @@ zulu
 ```
 
 **Specifications:**
+
 - One word per line
 - Words in alphabetical order
 - No dice numbers or additional columns
@@ -880,6 +958,7 @@ Word list with transliteration support. Each line contains a word and its transl
 ```
 
 **Specifications:**
+
 - One word per line with transliteration
 - Format: `WORD<space>TRANSLITERATION`
 - Words in alphabetical order (by original word)
@@ -907,6 +986,7 @@ Diceware word list with dice numbers as keys. Each line contains a dice number a
 ```
 
 **Specifications:**
+
 - Format: `DICE_NUMBER<space>WORD`
 - Dice number: 4, 5, or 6 digits (depending on wordlist size)
   - 4 dice = 1,296 words (1111-6666)
@@ -938,6 +1018,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 ```
 
 **Specifications:**
+
 - Format: `DICE_NUMBER<space>WORD<space>TRANSLITERATION`
 - Same dice number rules as Diceware Wordlist format
 - Single space separator between each column
@@ -945,6 +1026,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - Transliteration typically follows standard romanization rules
 
 #### Loading Strategy
+
 1. **Lazy loading**: Load wordlist only when method selected
 2. **Caching**: Service Worker caches wordlists
 3. **Compression**: Serve as gzip/brotli compressed raw text (simpler, standard format, automatic server compression)
@@ -952,6 +1034,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 5. **Error handling**: Graceful fallback if wordlist fails to load
 
 #### Future Wordlist Additions
+
 - TODO: Decide on the list of languages and wordlists to add
 - Community contributions welcome (with review process)
 
@@ -960,6 +1043,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 ## 12. Roadmap
 
 ### Phase 0: Preparation (Current)
+
 - ✅ Create PRD
 - ⬜ Finalize Ukrainian wordlists
 - ⬜ Set up Next.js project structure
@@ -968,6 +1052,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 ### Phase 1: MVP (Target: 4-6 weeks)
 
 **Week 1-2: Core Foundation**
+
 - Set up Next.js + TypeScript + Tailwind + shadcn/ui
 - Implement random password generator (pure function)
 - Implement entropy calculator
@@ -975,6 +1060,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - Create basic UI layout
 
 **Week 3-4: Diceware Implementation**
+
 - Implement Diceware generator (pure function)
 - Create wordlist loader
 - Integrate Ukrainian wordlists (all 3 sizes)
@@ -982,6 +1068,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - Wordlist selection UI
 
 **Week 5: Polish & Testing**
+
 - Implement strength meter with all metrics
 - Copy to clipboard functionality
 - Theme support (light/dark)
@@ -990,6 +1077,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - Security review
 
 **Week 6: Launch Preparation**
+
 - Service Worker for offline support
 - Documentation (README, FAQ)
 - Privacy policy
@@ -997,6 +1085,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - Soft launch for testing
 
 ### Phase 2: Enhancements (Target: 2-3 months post-MVP)
+
 - PWA capabilities (install prompt, app manifest)
 - Additional generation methods:
   - Memorable passwords (pronounceable)
@@ -1007,6 +1096,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - Community feedback integration
 
 ### Phase 3: Expansion (Target: 6 months post-MVP)
+
 - Additional language wordlists
 - Browser extension (Chrome, Firefox)
 - Password strength checker (separate tool)
@@ -1014,6 +1104,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - Community wordlist contributions
 
 ### Ongoing
+
 - Security audits (quarterly)
 - Dependency updates
 - Bug fixes
@@ -1025,12 +1116,14 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 ## 13. Open Questions & Decisions Needed
 
 ### Content Decisions
+
 - [ ] **Ukrainian wordlist completion**: When will wordlists be ready?
   - **Action**: Confirm timeline with wordlist creator
 - [ ] **English wordlist licensing**: Verify we can redistribute
   - **Action**: Review licenses (CC-BY 3.0 confirmed for Original Diceware and EFF lists, Public Domain for Beale)
 
 ### Launch Decisions
+
 - [ ] **Domain name**: passphrase.ua, diceware.ua, or other?
   - **Action**: Check availability and register
 - [ ] **Announcement strategy**: Where to share (Reddit, Hacker News, Ukrainian tech communities)?
@@ -1041,6 +1134,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 ## 14. Success Criteria & Definition of Done
 
 ### MVP Launch Criteria
+
 - [ ] All P0 functional requirements implemented
 - [ ] All P0 non-functional requirements met
 - [ ] Unit test coverage > 80% for generation logic
@@ -1055,6 +1149,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - [ ] 10+ manual user tests with positive feedback
 
 ### Definition of Done (Per Feature)
+
 - [ ] Code written in TypeScript (strict mode)
 - [ ] Unit tests written and passing
 - [ ] Accessible (keyboard + screen reader tested)
@@ -1068,30 +1163,36 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 ## 15. Resources & References
 
 ### Diceware Method
+
 - **Original Diceware**: https://theworld.com/~reinhold/diceware.html
 - **Diceware FAQ**: https://theworld.com/~reinhold/dicewarefaq.html
 - **Interactive demo**: https://diceware.dmuth.org/
 - **EFF Dice-Generated Passphrases**: https://www.eff.org/dice
 
 ### Ukrainian wordlists
+
 - **diceware-ua** (wordlists and tooling): https://github.com/git-leaf/diceware-ua
 
 ### Security Standards
+
 - **OWASP**: https://owasp.org/www-project-web-security-testing-guide/
 - **NIST SP 800-63B** (Digital Identity Guidelines): https://pages.nist.gov/800-63-3/sp800-63b.html
 - **Web Crypto API**: https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API
 
 ### Privacy & Compliance
+
 - **GDPR**: https://gdpr.eu/
 - **Privacy by Design**: https://www.ipc.on.ca/privacy-by-design/
 
 ### Technical Documentation
+
 - **Next.js Docs**: https://nextjs.org/docs
 - **shadcn/ui**: https://ui.shadcn.com/
 - **Radix UI**: https://www.radix-ui.com/
 - **Tailwind CSS**: https://tailwindcss.com/docs
 
 ### Similar Projects (Inspiration)
+
 - **StrongPhrase**: https://strongphrase.net/ - Open-source passphrase generator focused on memorable, secure passphrases
 - **Diceware (Dmuth)**: https://diceware.dmuth.org/ - Interactive Diceware passphrase generator with good UX
 - **1Password Password Generator**: https://1password.com/password-generator/ - Commercial password manager with web generator
@@ -1102,6 +1203,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 ## 16. Glossary
 
 ### Security & Cryptography Terms
+
 - **Diceware**: A method for creating passphrases using dice and a word list, invented by Arnold G. Reinhold
 - **Entropy**: A measure of password strength in bits; higher entropy means more secure (e.g., 77 bits is very strong)
 - **Passphrase**: A password composed of multiple words, typically longer and more memorable than random characters
@@ -1110,17 +1212,20 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 - **Web Crypto API**: Browser API for cryptographic operations including `crypto.getRandomValues()`
 
 ### Web Technologies
+
 - **PWA**: Progressive Web App - web application that can work offline and be installed like a native app
 - **Service Worker**: Background script that enables offline functionality and caching
 - **CSP**: Content Security Policy - HTTP header that helps prevent XSS attacks
 - **SRI**: Subresource Integrity - security feature that verifies external resources haven't been tampered with
 
 ### Accessibility & Compliance
+
 - **WCAG**: Web Content Accessibility Guidelines - standards for making web content accessible
 - **GDPR**: General Data Protection Regulation - EU law on data protection and privacy
 - **OWASP**: Open Web Application Security Project - nonprofit focused on web application security
 
 ### Project-Specific Terms
+
 - **Transliteration**: Conversion of text from one script to another (e.g., Ukrainian Cyrillic "слово" → Latin "slovo")
 - **Wordlist**: Simple word list format, one word per line (optionally with transliteration)
 - **Diceware Wordlist**: Word list with dice number indices for Diceware method (e.g., "11111 word")
@@ -1140,6 +1245,7 @@ Diceware word list with transliteration support. Each line contains a dice numbe
 ## Appendix A: Entropy Calculations
 
 ### Random Password Entropy
+
 ```
 Entropy = log₂(charset_size ^ length)
 
@@ -1149,6 +1255,7 @@ Entropy = log₂(94^16) ≈ 105 bits
 ```
 
 ### Diceware Entropy
+
 ```
 Entropy = log₂(wordlist_size ^ word_count)
 
@@ -1166,7 +1273,9 @@ Ukrainian Large (46,656 words):
 ```
 
 ### Time to Crack Estimates
+
 Assumptions:
+
 - Online attack: 1,000 attempts/second (throttled)
 - Offline attack (leaked hash): 100 billion attempts/second (GPU cluster)
 
@@ -1187,6 +1296,7 @@ Time = (2^entropy / attempts_per_second) / 2  (average case)
 ## Appendix B: Example User Flows
 
 ### Flow 1: Quick Password Generation
+
 1. User lands on homepage
 2. Random Password method selected by default
 3. User clicks "Generate" (default settings: 16 chars, all types)
@@ -1198,6 +1308,7 @@ Time = (2^entropy / attempts_per_second) / 2  (average case)
 **Time**: ~5 seconds
 
 ### Flow 2: Ukrainian Diceware Passphrase
+
 1. User lands on homepage
 2. User clicks "Diceware Passphrase" tab
 3. User selects "Ukrainian" language
@@ -1212,6 +1323,7 @@ Time = (2^entropy / attempts_per_second) / 2  (average case)
 **Time**: ~15 seconds
 
 ### Flow 3: Advanced Custom Password
+
 1. User lands on homepage
 2. Random Password selected
 3. User expands "Advanced Options"
@@ -1228,6 +1340,7 @@ Time = (2^entropy / attempts_per_second) / 2  (average case)
 **Time**: ~30 seconds
 
 ### Flow 4: Ukrainian Diceware with Transliteration
+
 1. User lands on homepage
 2. User clicks "Diceware Passphrase" tab
 3. User selects "Ukrainian" language
@@ -1248,14 +1361,13 @@ Time = (2^entropy / attempts_per_second) / 2  (average case)
 
 ## Revision History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0.0 | 2025-11-08 | Project Founder | Initial PRD creation |
-| 1.0.1 | 2025-11-09 | Project Founder | Reviewed and refined PRD |
-| 1.0.2 | 2025-11-16 | Project Founder | Replaced the term "dictionary" with "wordlist" |
-| 1.0.3 | 2025-11-20 | Project Founder | Renamed project from "Passphrase UA" to "Mova Pass" |
+| Version | Date       | Author          | Changes                                             |
+| ------- | ---------- | --------------- | --------------------------------------------------- |
+| 1.0.0   | 2025-11-08 | Project Founder | Initial PRD creation                                |
+| 1.0.1   | 2025-11-09 | Project Founder | Reviewed and refined PRD                            |
+| 1.0.2   | 2025-11-16 | Project Founder | Replaced the term "dictionary" with "wordlist"      |
+| 1.0.3   | 2025-11-20 | Project Founder | Renamed project from "Passphrase UA" to "Mova Pass" |
 
 ---
 
 **End of Product Requirements Document**
-

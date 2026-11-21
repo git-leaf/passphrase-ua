@@ -18,11 +18,11 @@ interface StrengthMeterProps {
 }
 
 const LEVEL_COLORS: Record<StrengthLevel, string> = {
-  "weak": "bg-destructive",
-  "moderate": "bg-amber-500",
-  "strong": "bg-emerald-500",
+  weak: "bg-destructive",
+  moderate: "bg-amber-500",
+  strong: "bg-emerald-500",
   "very-strong": "bg-emerald-600",
-  "excessive": "bg-blue-500",
+  excessive: "bg-blue-500",
 }
 
 /** A preset value, or the custom input; an empty custom input falls back to the default. */
@@ -47,15 +47,15 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
       guessesPerSecond: attackerValue(guessRate, customGuessRate, DEFAULT_ATTACKER.guessesPerSecond),
       costPer2pow32: attackerValue(costPer32, customCostPer32, DEFAULT_ATTACKER.costPer2pow32),
     },
-    locale
+    locale,
   )
 
   const levelLabels: Record<StrengthLevel, string> = {
-    "weak": t.output.strength.weak,
-    "moderate": t.output.strength.moderate,
-    "strong": t.output.strength.strong,
+    weak: t.output.strength.weak,
+    moderate: t.output.strength.moderate,
+    strong: t.output.strength.strong,
     "very-strong": t.output.strength.veryStrong,
-    "excessive": t.output.strength.excessive,
+    excessive: t.output.strength.excessive,
   }
   const guessRateLabels = [
     t.output.guessRateMillion,
@@ -91,11 +91,15 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
           <p className="font-mono font-medium text-xs sm:text-sm">{analysis.combinations}</p>
         </div>
         <div className="space-y-1">
-          <p className="text-muted-foreground">{t.output.timeToCrack} ({t.output.avgTime})</p>
+          <p className="text-muted-foreground">
+            {t.output.timeToCrack} ({t.output.avgTime})
+          </p>
           <p className="font-mono font-medium text-xs sm:text-sm">{analysis.timeToCrack}</p>
         </div>
         <div className="space-y-1">
-          <p className="text-muted-foreground">{t.output.costToCrack} ({t.output.avgTime})</p>
+          <p className="text-muted-foreground">
+            {t.output.costToCrack} ({t.output.avgTime})
+          </p>
           <p className="font-mono font-medium text-xs sm:text-sm">{analysis.costToCrack}</p>
         </div>
       </div>
@@ -116,7 +120,9 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
                   </SelectTrigger>
                   <SelectContent>
                     {ATTACKER_PRESETS.guessesPerSecond.map((rate, i) => (
-                      <SelectItem key={rate} value={String(rate)}>{guessRateLabels[i]}</SelectItem>
+                      <SelectItem key={rate} value={String(rate)}>
+                        {guessRateLabels[i]}
+                      </SelectItem>
                     ))}
                     <SelectItem value="custom">{t.output.guessRateCustom}</SelectItem>
                   </SelectContent>
@@ -141,7 +147,10 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
                   <SelectContent>
                     {ATTACKER_PRESETS.costPer2pow32.map((cost) => (
                       <SelectItem key={cost} value={String(cost)}>
-                        ${new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 3 }).format(cost)}
+                        $
+                        {new Intl.NumberFormat(locale, { minimumFractionDigits: 2, maximumFractionDigits: 3 }).format(
+                          cost,
+                        )}
                       </SelectItem>
                     ))}
                     <SelectItem value="custom">{t.output.guessRateCustom}</SelectItem>
@@ -165,4 +174,3 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
     </div>
   )
 }
-

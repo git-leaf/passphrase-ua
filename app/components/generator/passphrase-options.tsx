@@ -51,7 +51,9 @@ export function PassphraseOptions({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label>{t.passphrase.wordCount}</Label>
-            <span className="text-sm font-medium">{options.wordCount} {t.passphrase.words}</span>
+            <span className="text-sm font-medium">
+              {options.wordCount} {t.passphrase.words}
+            </span>
           </div>
           <Slider
             value={[options.wordCount]}
@@ -93,7 +95,7 @@ export function PassphraseOptions({
                       .replace("{name}", wordlistNames[id])
                       .replace(
                         "{count}",
-                        new Intl.NumberFormat(locale).format(wordlistInfo({ language, id } as WordlistChoice).size)
+                        new Intl.NumberFormat(locale).format(wordlistInfo({ language, id } as WordlistChoice).size),
                       )}
                   </SelectItem>
                 ))}
@@ -140,7 +142,6 @@ export function PassphraseOptions({
             />
           )}
         </div>
-
       </div>
 
       {/* Advanced Options */}
@@ -184,16 +185,10 @@ export function PassphraseOptions({
       </Accordion>
 
       {/* Generate Button */}
-      <Button 
-        onClick={onGenerate} 
-        size="lg" 
-        className="w-full text-lg"
-        disabled={pending}
-      >
+      <Button onClick={onGenerate} size="lg" className="w-full text-lg" disabled={pending}>
         <RefreshCw className={`mr-2 h-5 w-5 ${pending ? "animate-spin" : ""}`} />
         {pending ? t.passphrase.generating : t.passphrase.generate}
       </Button>
     </div>
   )
 }
-
