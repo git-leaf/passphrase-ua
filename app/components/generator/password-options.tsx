@@ -7,49 +7,30 @@ import { Switch } from "@/app/components/ui/switch"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
 import { useI18n } from "@/lib/i18n"
 import { RefreshCw } from "lucide-react"
+import { PASSWORD_LIMITS, type PasswordOptions as PasswordGeneratorOptions } from "@/lib/generators/password"
 
 interface PasswordOptionsProps {
-  // Configuration state
-  length: number[]
-  includeUppercase: boolean
-  includeLowercase: boolean
-  includeNumbers: boolean
-  includeSymbols: boolean
-  excludeAmbiguous: boolean
-  isGenerating?: boolean
-
-  // State setters
-  onLengthChange: (value: number[]) => void
-  onUppercaseChange: (checked: boolean) => void
-  onLowercaseChange: (checked: boolean) => void
-  onNumbersChange: (checked: boolean) => void
-  onSymbolsChange: (checked: boolean) => void
-  onAmbiguousChange: (checked: boolean) => void
-
-  // Actions
+  options: PasswordGeneratorOptions
+  onChange: (patch: Partial<PasswordGeneratorOptions>) => void
   onGenerate: () => void
 }
+
+type CharacterClass = "includeUppercase" | "includeLowercase" | "includeNumbers" | "includeSymbols"
 
 /**
  * Password generation configuration panel with primary and advanced options
  */
-export function PasswordOptions({
-  length,
-  includeUppercase,
-  includeLowercase,
-  includeNumbers,
-  includeSymbols,
-  excludeAmbiguous,
-  isGenerating = false,
-  onLengthChange,
-  onUppercaseChange,
-  onLowercaseChange,
-  onNumbersChange,
-  onSymbolsChange,
-  onAmbiguousChange,
-  onGenerate,
-}: PasswordOptionsProps) {
+export function PasswordOptions({ options, onChange, onGenerate }: PasswordOptionsProps) {
   const { t } = useI18n()
+
+  const classes: { key: CharacterClass; id: string; label: string }[] = [
+    { key: "includeUppercase", id: "uppercase", label: t.password.uppercase },
+    { key: "includeLowercase", id: "lowercase", label: t.password.lowercase },
+    { key: "includeNumbers", id: "numbers", label: t.password.numbers },
+    { key: "includeSymbols", id: "symbols", label: t.password.symbols },
+  ]
+  // The last enabled class can't be switched off
+  const enabledCount = classes.filter((c) => options[c.key]).length
 
   return (
     <div className="space-y-6">
@@ -58,35 +39,30 @@ export function PasswordOptions({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label>{t.password.length}</Label>
-            <span className="text-sm font-medium">{length[0]}</span>
+            <span className="text-sm font-medium">{options.length}</span>
           </div>
           <Slider
-            value={length}
-            onValueChange={onLengthChange}
-            min={8}
-            max={64}
+            value={[options.length]}
+            onValueChange={([length]) => onChange({ length })}
+            min={PASSWORD_LIMITS.minLength}
+            max={PASSWORD_LIMITS.maxLength}
             step={1}
             className="w-full"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center justify-between space-x-2">
-            <Label htmlFor="uppercase">{t.password.uppercase}</Label>
-            <Switch id="uppercase" checked={includeUppercase} onCheckedChange={onUppercaseChange} />
-          </div>
-          <div className="flex items-center justify-between space-x-2">
-            <Label htmlFor="lowercase">{t.password.lowercase}</Label>
-            <Switch id="lowercase" checked={includeLowercase} onCheckedChange={onLowercaseChange} />
-          </div>
-          <div className="flex items-center justify-between space-x-2">
-            <Label htmlFor="numbers">{t.password.numbers}</Label>
-            <Switch id="numbers" checked={includeNumbers} onCheckedChange={onNumbersChange} />
-          </div>
-          <div className="flex items-center justify-between space-x-2">
-            <Label htmlFor="symbols">{t.password.symbols}</Label>
-            <Switch id="symbols" checked={includeSymbols} onCheckedChange={onSymbolsChange} />
-          </div>
+          {classes.map(({ key, id, label }) => (
+            <div key={key} className="flex items-center justify-between space-x-2">
+              <Label htmlFor={id}>{label}</Label>
+              <Switch
+                id={id}
+                checked={options[key]}
+                disabled={options[key] && enabledCount === 1}
+                onCheckedChange={(checked) => onChange({ [key]: checked })}
+              />
+            </div>
+          ))}
         </div>
       </div>
 
@@ -101,16 +77,20 @@ export function PasswordOptions({
               <Label htmlFor="ambiguous">
                 {t.password.excludeAmbiguous} {t.password.excludeAmbiguousDetail}
               </Label>
-              <Switch id="ambiguous" checked={excludeAmbiguous} onCheckedChange={onAmbiguousChange} />
+              <Switch
+                id="ambiguous"
+                checked={options.excludeAmbiguous}
+                onCheckedChange={(excludeAmbiguous) => onChange({ excludeAmbiguous })}
+              />
             </div>
           </AccordionContent>
         </AccordionItem>
       </Accordion>
 
       {/* Generate Button */}
-      <Button onClick={onGenerate} size="lg" className="w-full text-lg" disabled={isGenerating}>
-        <RefreshCw className={`mr-2 h-5 w-5 ${isGenerating ? "animate-spin" : ""}`} />
-        {isGenerating ? t.password.generating : t.password.generate}
+      <Button onClick={onGenerate} size="lg" className="w-full text-lg">
+        <RefreshCw className="mr-2 h-5 w-5" />
+        {t.password.generate}
       </Button>
     </div>
   )

@@ -2,6 +2,7 @@
  * Translation dictionaries for English and Ukrainian
  */
 
+import type { GeneratorErrorCode } from "@/lib/generators/errors"
 import type { WordlistId } from "@/lib/wordlists/catalogue"
 
 export type Locale = "en" | "uk"
@@ -31,7 +32,6 @@ export interface Translations {
     excludeAmbiguous: string
     excludeAmbiguousDetail: string
     generate: string
-    generating: string
   }
 
   // Passphrase Options
@@ -228,8 +228,8 @@ export interface Translations {
     copied: string
     copiedDescription: string
     error: string
-    errorPassword: string
-    errorPassphrase: string
+    copyFailed: string
+    generatorErrors: Record<GeneratorErrorCode, string>
   }
 
   // Learn content (section titles and key content)
@@ -392,7 +392,6 @@ export const translations: Record<Locale, Translations> = {
       excludeAmbiguous: "Exclude Ambiguous",
       excludeAmbiguousDetail: "(i, l, 1, L, o, 0, O)",
       generate: "Generate Password",
-      generating: "Generating...",
     },
 
     passphrase: {
@@ -518,8 +517,15 @@ export const translations: Record<Locale, Translations> = {
       copied: "Copied!",
       copiedDescription: "Password copied to clipboard",
       error: "Error",
-      errorPassword: "Failed to generate password",
-      errorPassphrase: "Failed to generate passphrase",
+      copyFailed: "Could not copy to the clipboard",
+      generatorErrors: {
+        "invalid-length": "Password length must be between 8 and 64 characters.",
+        "no-character-classes": "Select at least one character type.",
+        "invalid-word-count": "Choose between 3 and 12 words.",
+        "invalid-separator": "The separator can be at most 3 characters.",
+        "wordlist-unavailable": "The wordlist could not be loaded. Check your connection and try again.",
+        "unexpected": "Something went wrong while generating. Please try again.",
+      },
     },
 
     learn: {
@@ -819,7 +825,6 @@ export const translations: Record<Locale, Translations> = {
       excludeAmbiguous: "Виключити неоднозначні символи",
       excludeAmbiguousDetail: "(i, l, 1, L, o, 0, O)",
       generate: "Згенерувати пароль",
-      generating: "Генерація...",
     },
 
     passphrase: {
@@ -945,8 +950,15 @@ export const translations: Record<Locale, Translations> = {
       copied: "Скопійовано!",
       copiedDescription: "Пароль скопійовано в буфер обміну",
       error: "Помилка",
-      errorPassword: "Не вдалося згенерувати пароль",
-      errorPassphrase: "Не вдалося згенерувати фразу-пароль",
+      copyFailed: "Не вдалося скопіювати в буфер обміну",
+      generatorErrors: {
+        "invalid-length": "Довжина пароля має бути від 8 до 64 символів.",
+        "no-character-classes": "Виберіть хоча б один тип символів.",
+        "invalid-word-count": "Виберіть від 3 до 12 слів.",
+        "invalid-separator": "Роздільник може містити не більше 3 символів.",
+        "wordlist-unavailable": "Не вдалося завантажити словник. Перевірте з'єднання та спробуйте ще раз.",
+        "unexpected": "Під час генерації сталася помилка. Спробуйте ще раз.",
+      },
     },
 
     learn: {
