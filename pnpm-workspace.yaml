@@ -1,0 +1,2 @@
+# Wait 7 days (in minutes) before installing a newly published version: docs/adr/0003-automatic-dependency-updates.md
+minimumReleaseAge: 10080

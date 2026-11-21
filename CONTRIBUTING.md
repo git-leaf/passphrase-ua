@@ -20,7 +20,8 @@ There are no releases, tags or changelog. The squashed history on `main` is the 
 
 Formatting, lint (including no `any`), types, tests and PR titles are checked by `pnpm check` and CI, because tooling is followed more reliably than prose. The rest:
 
-- **pnpm only.** Commit the lockfile.
+- **pnpm only.** Commit the lockfile. pnpm refuses versions published less than 7 days ago, and Dependabot keeps dependencies current ([ADR-0003](docs/adr/0003-automatic-dependency-updates.md)).
+- **Pin GitHub Actions to a full commit SHA**, with the version in a comment.
 - **Domain logic lives in `lib/`** as deep modules (secure random, generators, wordlists, strength analysis, generator session) with small interfaces. `app/` holds UI only, so the code that decides how strong a Secret is stays easy to test and audit.
 - **Tests sit next to the code** in a `__tests__` folder and use Vitest.
 - **Use the words in [GLOSSARY.md](GLOSSARY.md)** for names in code, tests, issues and PRs. A missing term is a gap worth adding.
