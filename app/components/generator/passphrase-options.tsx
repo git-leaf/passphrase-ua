@@ -9,59 +9,40 @@ import { Input } from "@/app/components/ui/input"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
 import { useI18n } from "@/lib/i18n"
 import { RefreshCw } from "lucide-react"
-import { WORDLIST_CATALOGUE, wordlistIds, wordlistInfo, type WordlistChoice } from "@/lib/wordlists/catalogue"
-import type { CapitalizationStyle } from "@/lib/generators/passphrase"
+import { PASSPHRASE_LIMITS, type CapitalizationStyle } from "@/lib/generators/passphrase"
+import { CUSTOM_SEPARATOR, type PassphraseSettings } from "@/lib/session/generator-session"
+import { wordlistIds, wordlistInfo, type WordlistChoice, type WordlistLanguage } from "@/lib/wordlists/catalogue"
 
 interface PassphraseOptionsProps {
-  // Configuration state
-  wordCount: number[]
-  sourceLanguage: "en" | "uk"
-  wordlist: string
-  separator: string
-  customSeparator: string
-  capitalization: CapitalizationStyle
-  includeNumbers: boolean
-  showTransliteration: boolean
-  isGenerating: boolean
-
-  // State setters
-  onWordCountChange: (value: number[]) => void
-  onSourceLanguageChange: (value: "en" | "uk") => void
-  onWordlistChange: (value: string) => void
-  onSeparatorChange: (value: string) => void
-  onCustomSeparatorChange: (value: string) => void
-  onCapitalizationChange: (value: CapitalizationStyle) => void
-  onIncludeNumbersChange: (checked: boolean) => void
-  onShowTransliterationChange: (checked: boolean) => void
-
-  // Actions
+  options: PassphraseSettings
+  pending: boolean
+  onChange: (patch: Partial<PassphraseSettings>) => void
+  onLanguageChange: (language: WordlistLanguage) => void
   onGenerate: () => void
 }
+
+const SEPARATOR_PRESETS = [
+  { value: "-", labelKey: "separatorDash", symbol: "-" },
+  { value: "_", labelKey: "separatorUnderscore", symbol: "_" },
+  { value: " ", labelKey: "separatorSpace", symbol: "␣" },
+  { value: ".", labelKey: "separatorPeriod", symbol: "." },
+  { value: "", labelKey: "separatorNone", symbol: "∅" },
+  { value: CUSTOM_SEPARATOR, labelKey: "separatorCustom", symbol: "..." },
+] as const
 
 /**
  * Passphrase generation configuration panel with Diceware options
  */
 export function PassphraseOptions({
-  wordCount,
-  sourceLanguage,
-  wordlist,
-  separator,
-  customSeparator,
-  capitalization,
-  includeNumbers,
-  showTransliteration,
-  isGenerating,
-  onWordCountChange,
-  onSourceLanguageChange,
-  onWordlistChange,
-  onSeparatorChange,
-  onCustomSeparatorChange,
-  onCapitalizationChange,
-  onIncludeNumbersChange,
-  onShowTransliterationChange,
+  options,
+  pending,
+  onChange,
+  onLanguageChange,
   onGenerate,
 }: PassphraseOptionsProps) {
   const { t, locale } = useI18n()
+  const { language, id: wordlistId } = options.wordlist
+  const wordlistNames = t.wordlists[language] as Record<string, string>
 
   return (
     <div className="space-y-6">
@@ -70,13 +51,13 @@ export function PassphraseOptions({
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <Label>{t.passphrase.wordCount}</Label>
-            <span className="text-sm font-medium">{wordCount[0]} {t.passphrase.words}</span>
+            <span className="text-sm font-medium">{options.wordCount} {t.passphrase.words}</span>
           </div>
           <Slider
-            value={wordCount}
-            onValueChange={onWordCountChange}
-            min={3}
-            max={12}
+            value={[options.wordCount]}
+            onValueChange={([wordCount]) => onChange({ wordCount })}
+            min={PASSPHRASE_LIMITS.minWords}
+            max={PASSPHRASE_LIMITS.maxWords}
             step={1}
             className="w-full"
           />
@@ -85,10 +66,7 @@ export function PassphraseOptions({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label>{t.passphrase.sourceLanguage}</Label>
-            <Select 
-              value={sourceLanguage} 
-              onValueChange={onSourceLanguageChange}
-            >
+            <Select value={language} onValueChange={(value) => onLanguageChange(value as WordlistLanguage)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -101,18 +79,22 @@ export function PassphraseOptions({
 
           <div className="space-y-2">
             <Label>{t.passphrase.wordlist}</Label>
-            <Select value={wordlist} onValueChange={onWordlistChange}>
+            <Select
+              value={wordlistId}
+              onValueChange={(id) => onChange({ wordlist: { language, id } as WordlistChoice })}
+            >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {wordlistIds(sourceLanguage).map((id) => (
+                {wordlistIds(language).map((id) => (
                   <SelectItem key={id} value={id}>
                     {t.wordlists.withSize
-                      .replace("{name}", (t.wordlists[sourceLanguage] as Record<string, string>)[id])
-                      .replace("{count}", new Intl.NumberFormat(locale).format(
-                        (WORDLIST_CATALOGUE[sourceLanguage] as Record<string, { size: number }>)[id].size
-                      ))}
+                      .replace("{name}", wordlistNames[id])
+                      .replace(
+                        "{count}",
+                        new Intl.NumberFormat(locale).format(wordlistInfo({ language, id } as WordlistChoice).size)
+                      )}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -121,13 +103,13 @@ export function PassphraseOptions({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          {wordlistInfo({ language: sourceLanguage, id: wordlist } as WordlistChoice).transliteration && (
+          {wordlistInfo(options.wordlist).transliteration && (
             <div className="flex items-center justify-between space-x-2">
               <Label htmlFor="transliteration">{t.passphrase.useTransliteration}</Label>
               <Switch
                 id="transliteration"
-                checked={showTransliteration}
-                onCheckedChange={onShowTransliterationChange}
+                checked={options.useTransliteration}
+                onCheckedChange={(useTransliteration) => onChange({ useTransliteration })}
               />
             </div>
           )}
@@ -136,31 +118,24 @@ export function PassphraseOptions({
         <div className="space-y-2">
           <Label>{t.passphrase.separator}</Label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {[
-              { value: "-", labelKey: "separatorDash" as const, symbol: "-" },
-              { value: "_", labelKey: "separatorUnderscore" as const, symbol: "_" },
-              { value: " ", labelKey: "separatorSpace" as const, symbol: "␣" },
-              { value: ".", labelKey: "separatorPeriod" as const, symbol: "." },
-              { value: "", labelKey: "separatorNone" as const, symbol: "∅" },
-              { value: "custom", labelKey: "separatorCustom" as const, symbol: "..." },
-            ].map((sep) => (
+            {SEPARATOR_PRESETS.map((sep) => (
               <Button
                 key={sep.value}
-                variant={separator === sep.value ? "default" : "outline"}
+                variant={options.separator === sep.value ? "default" : "outline"}
                 size="sm"
-                onClick={() => onSeparatorChange(sep.value)}
+                onClick={() => onChange({ separator: sep.value })}
                 className="w-full"
               >
                 {t.passphrase[sep.labelKey]} <span className="ml-1">{sep.symbol}</span>
               </Button>
             ))}
           </div>
-          {separator === "custom" && (
+          {options.separator === CUSTOM_SEPARATOR && (
             <Input
               placeholder={t.passphrase.customSeparatorPlaceholder}
-              value={customSeparator}
-              onChange={(e) => onCustomSeparatorChange(e.target.value)}
-              maxLength={3}
+              value={options.customSeparator}
+              onChange={(e) => onChange({ customSeparator: e.target.value })}
+              maxLength={PASSPHRASE_LIMITS.maxSeparatorLength}
               className="mt-2"
             />
           )}
@@ -177,7 +152,10 @@ export function PassphraseOptions({
           <AccordionContent className="space-y-4 pt-4">
             <div className="space-y-2">
               <Label>{t.passphrase.capitalization}</Label>
-              <Select value={capitalization} onValueChange={onCapitalizationChange}>
+              <Select
+                value={options.capitalization}
+                onValueChange={(value) => onChange({ capitalization: value as CapitalizationStyle })}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -193,8 +171,12 @@ export function PassphraseOptions({
 
             <div className="grid grid-cols-2 gap-4">
               <div className="flex items-center justify-between space-x-2">
-                <Label htmlFor="numbers2">{t.passphrase.includeNumber}</Label>
-                <Switch id="numbers2" checked={includeNumbers} onCheckedChange={onIncludeNumbersChange} />
+                <Label htmlFor="passphrase-number">{t.passphrase.includeNumber}</Label>
+                <Switch
+                  id="passphrase-number"
+                  checked={options.includeNumber}
+                  onCheckedChange={(includeNumber) => onChange({ includeNumber })}
+                />
               </div>
             </div>
           </AccordionContent>
@@ -206,10 +188,10 @@ export function PassphraseOptions({
         onClick={onGenerate} 
         size="lg" 
         className="w-full text-lg"
-        disabled={isGenerating}
+        disabled={pending}
       >
-        <RefreshCw className={`mr-2 h-5 w-5 ${isGenerating ? "animate-spin" : ""}`} />
-        {isGenerating ? t.passphrase.generating : t.passphrase.generate}
+        <RefreshCw className={`mr-2 h-5 w-5 ${pending ? "animate-spin" : ""}`} />
+        {pending ? t.passphrase.generating : t.passphrase.generate}
       </Button>
     </div>
   )

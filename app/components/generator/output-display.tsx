@@ -5,7 +5,7 @@ import { Copy, RefreshCw } from "lucide-react"
 import { StrengthMeter } from "./strength-meter"
 
 interface OutputDisplayProps {
-  password: string
+  secret: string
   entropy: number
   onCopy: () => void
   onRegenerate: () => void
@@ -16,7 +16,7 @@ interface OutputDisplayProps {
  * Displays generated password/passphrase with copy and regenerate actions, plus strength metrics
  */
 export function OutputDisplay({ 
-  password, 
+  secret,
   entropy, 
   onCopy, 
   onRegenerate,
@@ -26,7 +26,7 @@ export function OutputDisplay({
     <div className="mt-8 space-y-4 rounded-lg border-2 bg-muted/30 p-6">
       <div className="space-y-2">
         <div className="flex items-start justify-between gap-4">
-          <code className="break-all text-lg font-mono leading-relaxed">{password}</code>
+          <code className="break-all text-lg font-mono leading-relaxed">{secret}</code>
           <div className="flex shrink-0 gap-2">
             <Button size="icon" variant="ghost" onClick={onCopy} className="h-8 w-8">
               <Copy className="h-4 w-4" />
