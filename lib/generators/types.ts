@@ -8,38 +8,11 @@
 export type GenerationMethod = 'password' | 'passphrase';
 
 /**
- * Base generator result interface
+ * A generated Secret and its entropy
  */
-export interface GeneratorResult {
-  /** Generated password/passphrase */
-  password: string;
+export interface GeneratedSecret {
+  /** The password or passphrase */
+  secret: string;
   /** Entropy in bits */
   entropy: number;
-  /** Generation metadata */
-  metadata: {
-    method: GenerationMethod;
-    timestamp: number;
-    [key: string]: unknown;
-  };
 }
-
-/**
- * Configuration validation error
- */
-export class GeneratorConfigError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'GeneratorConfigError';
-  }
-}
-
-/**
- * Cryptographic operation error
- */
-export class CryptoError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = 'CryptoError';
-  }
-}
-
