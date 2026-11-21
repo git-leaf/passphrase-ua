@@ -9,11 +9,9 @@ import { ThemeToggle } from "@/app/components/theme-toggle"
 import { LanguageToggle } from "@/app/components/language-toggle"
 import { useI18n } from "@/lib/i18n"
 import { generatePassword } from "@/lib/generators/password"
-import { DEFAULT_WORDLIST } from "@/lib/wordlists/catalogue"
-import {
-  generatePassphraseWithWordlist,
-  type CapitalizationStyle
-} from "@/lib/generators/passphrase"
+import { DEFAULT_WORDLIST, type WordlistChoice } from "@/lib/wordlists/catalogue"
+import { generatePassphrase, type CapitalizationStyle } from "@/lib/generators/passphrase"
+import { createWordlistSource } from "@/lib/wordlists/wordlist-source"
 
 // Generator components
 import { MethodSelector } from "@/app/components/generator/method-selector"
@@ -27,6 +25,8 @@ import { LearnContent } from "@/app/components/learn/learn-content"
 // Footer components
 import { DonationSection } from "@/app/components/footer/donation-section"
 import { FooterLinks } from "@/app/components/footer/footer-links"
+
+const wordlistSource = createWordlistSource()
 
 export default function Home() {
   const { toast } = useToast()
@@ -92,9 +92,9 @@ export default function Home() {
       const actualSeparator = separator === "custom" ? customSeparator : separator
 
       // Generate passphrase using the secure generator
-      const result = await generatePassphraseWithWordlist(
-        sourceLanguage,
-        wordlist,
+      const loaded = await wordlistSource.load({ language: sourceLanguage, id: wordlist } as WordlistChoice)
+      const result = generatePassphrase(
+        loaded,
         {
           wordCount: wordCount[0],
           separator: actualSeparator,
@@ -105,7 +105,7 @@ export default function Home() {
       )
 
       // Update UI state
-      setGeneratedPassword(result.passphrase)
+      setGeneratedPassword(result.secret)
       setEntropy(result.entropy)
     } catch (error) {
       // Handle errors (e.g., wordlist loading failure)
