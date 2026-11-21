@@ -1,0 +1,61 @@
+# Turns on squash auto-merge for Dependabot PRs that need no human decision, so
+# they merge once the required checks pass. Policy: docs/adr/0003-automatic-dependency-updates.md
+name: Dependabot auto-merge
+
+# pull_request_target gives a write token; this workflow never checks out or runs the PR's code
+on: pull_request_target
+
+permissions: {}
+
+jobs:
+  auto-merge:
+    if: github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      PR_URL: ${{ github.event.pull_request.html_url }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      # Fails unless every commit on the PR is a verified Dependabot commit, so
+      # a PR someone else pushed to falls through to the last step
+      - id: metadata
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+
+      # Without required checks, auto-merge would merge before CI has run
+      - name: Require status checks on main
+        run: |
+          if [ "$(gh api "repos/$GITHUB_REPOSITORY/rules/branches/main" --jq 'any(.[]; .type == "required_status_checks")')" != true ]; then
+            echo "::error::main has no required status checks"
+            exit 1
+          fi
+
+      # Safe without a human: GitHub Actions updates, npm patches, and npm minors
+      # from 1.0.0 up. A 0.x minor may break, like a major, so it waits.
+      - name: Turn on auto-merge if no update needs a human
+        env:
+          UPDATES: ${{ steps.metadata.outputs.updated-dependencies-json }}
+        run: |
+          needs_human=$(jq '
+            if length == 0 then 1 else
+              [.[] | select(.packageEcosystem != "github_actions")
+                   | select(.updateType == "version-update:semver-patch"
+                       or (.updateType == "version-update:semver-minor" and (.prevVersion | startswith("0.") | not))
+                     | not)
+              ] | length
+            end' <<< "$UPDATES")
+          if [ "$needs_human" -eq 0 ]; then
+            gh pr merge --auto --squash "$PR_URL"
+          else
+            echo "$needs_human update(s) need a human; leaving this PR open"
+            echo "AUTO_MERGE=off" >> "$GITHUB_ENV"
+          fi
+
+      # Also covers a PR whose auto-merge was turned on before someone else pushed to it
+      - name: Turn off auto-merge
+        if: failure() || env.AUTO_MERGE == 'off'
+        run: |
+          if [ "$(gh pr view "$PR_URL" --json autoMergeRequest --jq '.autoMergeRequest != null')" = true ]; then
+            gh pr merge --disable-auto "$PR_URL"
+          fi

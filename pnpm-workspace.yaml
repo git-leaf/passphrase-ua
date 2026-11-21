@@ -1,0 +1,34 @@
+# Wait 7 days (in minutes) before installing a newly published version: docs/adr/0003-automatic-dependency-updates.md
+minimumReleaseAge: 10080
+
+# Exact versions trusted before they turned 7 days old. Entries stop mattering
+# once their version matures; this list was already in the lockfile when the
+# policy arrived, and all of it is mature on 2026-11-26.
+minimumReleaseAgeExclude:
+  - "axe-core@4.14.1"
+  - "baseline-browser-mapping@2.11.38"
+  - "browserslist@4.29.6"
+  - "csstype@3.2.4"
+  - "electron-to-chromium@1.5.491"
+  - "ignore@7.0.16"
+  - "minimatch@11.0.9"
+  - "node-releases@2.0.65"
+  - "object-inspect@1.14.0"
+  - "source-map-js@1.2.4"
+  - "tinybench@6.2.4"
+  - "@tybys/wasm-util@0.10.5"
+  - "typescript-eslint@8.73.0"
+  - "@typescript-eslint/eslint-plugin@8.73.0"
+  - "@typescript-eslint/parser@8.73.0"
+  - "@typescript-eslint/project-service@8.73.0"
+  - "@typescript-eslint/scope-manager@8.73.0"
+  - "@typescript-eslint/tsconfig-utils@8.73.0"
+  - "@typescript-eslint/types@8.73.0"
+  - "@typescript-eslint/typescript-estree@8.73.0"
+  - "@typescript-eslint/type-utils@8.73.0"
+  - "@typescript-eslint/utils@8.73.0"
+  - "@typescript-eslint/visitor-keys@8.73.0"
+  - "update-browserslist-db@1.4.0"
+  - "vitest@5.1.1"
+  - "@vitest/mocker@5.1.1"
+  - "@vitest/spy@5.1.1"
