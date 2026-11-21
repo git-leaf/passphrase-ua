@@ -1,3 +1,5 @@
+> **Historical, not authoritative.** Kept for reference only. For current decisions see [CONTRIBUTING.md](../CONTRIBUTING.md), [docs/adr/](adr/) and [GLOSSARY.md](../GLOSSARY.md).
+
 # Security & Privacy Audit Report
 **Passphrase UA**  
 **Date:** November 16, 2025  
