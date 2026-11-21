@@ -2,6 +2,15 @@
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
 import { useI18n } from "@/lib/i18n"
+import { STRENGTH_BANDS, type StrengthLevel } from "@/lib/strength/strength-analysis"
+
+/** The bit range of a Strength level, e.g. "40–60" or "128+". */
+function bandRange(level: StrengthLevel): string {
+  const index = STRENGTH_BANDS.findIndex((band) => band.level === level)
+  const min = index === 0 ? 0 : STRENGTH_BANDS[index - 1].maxBits
+  const { maxBits } = STRENGTH_BANDS[index]
+  return Number.isFinite(maxBits) ? `${min}–${maxBits}` : `${min}+`
+}
 
 /**
  * Educational content about password security, Diceware method, and FAQs
@@ -86,11 +95,11 @@ export function LearnContent() {
           <div className="rounded-lg border bg-muted/30 p-4">
             <p className="text-sm font-medium mb-2">{t.learn.strength.guidelinesTitle}</p>
             <ul className="text-sm space-y-2 text-muted-foreground">
-              <li>{t.learn.strength.weak}</li>
-              <li>{t.learn.strength.moderate}</li>
-              <li>{t.learn.strength.strong}</li>
-              <li>{t.learn.strength.veryStrong}</li>
-              <li>{t.learn.strength.excessive}</li>
+              <li>{t.learn.strength.weak.replace("{range}", bandRange("weak"))}</li>
+              <li>{t.learn.strength.moderate.replace("{range}", bandRange("moderate"))}</li>
+              <li>{t.learn.strength.strong.replace("{range}", bandRange("strong"))}</li>
+              <li>{t.learn.strength.veryStrong.replace("{range}", bandRange("very-strong"))}</li>
+              <li>{t.learn.strength.excessive.replace("{range}", bandRange("excessive"))}</li>
             </ul>
             <p className="text-xs text-muted-foreground mt-3 italic">
               {t.learn.strength.example}
