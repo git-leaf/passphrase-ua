@@ -14,7 +14,8 @@ function bandRange(level: StrengthLevel): string {
 
 /**
  * Educational content about password security, Diceware method, and FAQs
- * Organized from most important/general topics to more advanced concepts
+ * Organized from most important/general topics to more advanced concepts.
+ * Each section has an id, so a link can point at it, e.g. /en/learn#faq
  */
 export function LearnContent() {
   const { t } = useI18n()
@@ -25,7 +26,7 @@ export function LearnContent() {
 
       <div className="space-y-6">
         {/* Getting Started: The Basics */}
-        <section className="space-y-3">
+        <section id="getting-started" className="scroll-mt-4 space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.gettingStarted.title}</h3>
           <p className="text-muted-foreground leading-relaxed">{t.learn.gettingStarted.description}</p>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -44,7 +45,7 @@ export function LearnContent() {
         </section>
 
         {/* Why This Tool is Safe */}
-        <section className="space-y-3">
+        <section id="safety" className="scroll-mt-4 space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.safety.title}</h3>
           <div className="rounded-lg border bg-green-500/10 border-green-500/20 p-4 space-y-2">
             <p className="text-sm leading-relaxed">{t.learn.safety.point1}</p>
@@ -55,7 +56,7 @@ export function LearnContent() {
         </section>
 
         {/* When to Use Each Method */}
-        <section className="space-y-3">
+        <section id="when-to-use" className="scroll-mt-4 space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.whenToUse.title}</h3>
           <div className="space-y-3">
             <div className="rounded-lg border bg-muted/30 p-4">
@@ -79,7 +80,7 @@ export function LearnContent() {
         </section>
 
         {/* Understanding Strength */}
-        <section className="space-y-3">
+        <section id="strength" className="scroll-mt-4 space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.strength.title}</h3>
           <p className="text-muted-foreground leading-relaxed">{t.learn.strength.description}</p>
           <div className="rounded-lg border bg-muted/30 p-4">
@@ -96,7 +97,7 @@ export function LearnContent() {
         </section>
 
         {/* Common Questions */}
-        <section className="space-y-3">
+        <section id="faq" className="scroll-mt-4 space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.faq.title}</h3>
 
           <Accordion type="single" collapsible className="space-y-2">
@@ -213,7 +214,7 @@ export function LearnContent() {
         </section>
 
         {/* Method Comparison (Advanced) */}
-        <section className="space-y-3">
+        <section id="comparison" className="scroll-mt-4 space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.comparison.title}</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm border-collapse">
@@ -261,7 +262,7 @@ export function LearnContent() {
         </section>
 
         {/* Security Best Practices */}
-        <section className="space-y-3">
+        <section id="best-practices" className="scroll-mt-4 space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.bestPractices.title}</h3>
           <div className="rounded-lg border bg-muted/30 p-4">
             <ul className="text-sm space-y-2 text-muted-foreground list-disc list-inside">
@@ -273,7 +274,7 @@ export function LearnContent() {
         </section>
 
         {/* What is Diceware? (Advanced) */}
-        <section className="space-y-3">
+        <section id="diceware" className="scroll-mt-4 space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.whatIsDiceware.title}</h3>
           <p className="text-muted-foreground leading-relaxed">{t.learn.whatIsDiceware.description1}</p>
           <p className="text-muted-foreground leading-relaxed">{t.learn.whatIsDiceware.description2}</p>
@@ -287,7 +288,7 @@ export function LearnContent() {
         </section>
 
         {/* Similar Tools */}
-        <section className="space-y-3">
+        <section id="similar-tools" className="scroll-mt-4 space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.similarTools.title}</h3>
           <p className="text-sm text-muted-foreground">{t.learn.similarTools.description}</p>
           <div className="space-y-2">
@@ -313,7 +314,7 @@ export function LearnContent() {
         </section>
 
         {/* Get a Password Manager */}
-        <section className="space-y-3">
+        <section id="password-managers" className="scroll-mt-4 space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.passwordManager.title}</h3>
           <p className="text-sm text-muted-foreground">{t.learn.passwordManager.description}</p>
           <div className="space-y-2">
@@ -357,7 +358,7 @@ export function LearnContent() {
         </section>
 
         {/* Additional Resources */}
-        <section className="space-y-3">
+        <section id="resources" className="scroll-mt-4 space-y-3">
           <h3 className="text-xl font-semibold">{t.learn.resources.title}</h3>
           <p className="text-sm text-muted-foreground">{t.learn.resources.description}</p>
           <div className="space-y-2">

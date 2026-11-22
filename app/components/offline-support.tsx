@@ -1,10 +1,14 @@
 "use client"
 
 import { useEffect } from "react"
+import { localizedPaths } from "@/lib/i18n"
 import { wordlistPaths } from "@/lib/wordlists/catalogue"
 
-/** Pages that open offline once the service worker holds them */
-const OFFLINE_PAGES = ["/", "/privacy"]
+/**
+ * Pages that open offline once the service worker holds them: every page in every
+ * language, and the root and old /privacy URL, which pick the visitor's language
+ */
+const OFFLINE_PAGES = ["/", "/privacy", ...localizedPaths()]
 
 /**
  * Registers the service worker that keeps the app working offline (public/sw.js)

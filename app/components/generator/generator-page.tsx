@@ -1,19 +1,16 @@
 "use client"
 
-import { useState } from "react"
 import Image from "next/image"
 import { Card, CardContent } from "@/app/components/ui/card"
-import { TabsContent } from "@/app/components/ui/tabs"
 import { useToast } from "@/app/hooks/use-toast"
 import { ThemeToggle } from "@/app/components/theme-toggle"
 import { LanguageToggle } from "@/app/components/language-toggle"
 import { OfflineIndicator } from "@/app/components/offline-indicator"
 import { useI18n } from "@/lib/i18n"
 import { useGeneratorSession } from "@/app/hooks/use-generator-session"
-import type { GenerationMethod } from "@/lib/generators/types"
 
 // Generator components
-import { MethodSelector } from "@/app/components/generator/method-selector"
+import { MethodSelector, type GeneratorView } from "@/app/components/generator/method-selector"
 import { PasswordOptions } from "@/app/components/generator/password-options"
 import { PassphraseOptions } from "@/app/components/generator/passphrase-options"
 import { OutputDisplay } from "@/app/components/generator/output-display"
@@ -25,10 +22,14 @@ import { LearnContent } from "@/app/components/learn/learn-content"
 import { DonationSection } from "@/app/components/footer/donation-section"
 import { FooterLinks } from "@/app/components/footer/footer-links"
 
-export default function Home() {
+/**
+ * A page of the generator: the Passphrase generator, the Password generator or Learn.
+ * The Generator session outlives the page, so each Generation method keeps its
+ * options and latest Secret while the visitor moves between them.
+ */
+export function GeneratorPage({ page }: { page: GeneratorView }) {
   const { toast } = useToast()
   const { t } = useI18n()
-  const [activeTab, setActiveTab] = useState("password")
   const { state, session } = useGeneratorSession((code) => {
     toast({
       title: t.toast.error,
@@ -37,7 +38,7 @@ export default function Home() {
     })
   })
 
-  const method: GenerationMethod | null = activeTab === "password" || activeTab === "passphrase" ? activeTab : null
+  const method = page === "learn" ? null : page
   const output = method && state[method].output
 
   const copyToClipboard = async (secret: string) => {
@@ -63,7 +64,7 @@ export default function Home() {
         <div className="mb-8 text-center">
           <div className="mb-4 flex items-center justify-end gap-2">
             <OfflineIndicator />
-            <LanguageToggle />
+            <LanguageToggle page={page} />
             <ThemeToggle />
           </div>
           <div className="mb-2 flex items-center justify-center gap-2">
@@ -76,19 +77,10 @@ export default function Home() {
 
         <Card className="border-2">
           <CardContent className="pt-6">
-            {/* Method Selector with Tab Content */}
-            <MethodSelector activeTab={activeTab} onTabChange={setActiveTab}>
-              {/* Password Configuration */}
-              <TabsContent value="password" className="space-y-6">
-                <PasswordOptions
-                  options={state.password.options}
-                  onChange={session.updatePasswordOptions}
-                  onGenerate={() => session.generate("password")}
-                />
-              </TabsContent>
+            <MethodSelector current={page} />
 
-              {/* Passphrase Configuration */}
-              <TabsContent value="passphrase" className="space-y-6">
+            <div className="space-y-6">
+              {page === "passphrase" && (
                 <PassphraseOptions
                   options={state.passphrase.options}
                   pending={state.passphrase.pending}
@@ -96,14 +88,18 @@ export default function Home() {
                   onLanguageChange={session.setWordlistLanguage}
                   onGenerate={() => session.generate("passphrase")}
                 />
-              </TabsContent>
+              )}
 
-              {/* Learn Tab */}
-              <TabsContent value="learn" className="space-y-6">
-                <LearnContent />
-              </TabsContent>
+              {page === "password" && (
+                <PasswordOptions
+                  options={state.password.options}
+                  onChange={session.updatePasswordOptions}
+                  onGenerate={() => session.generate("password")}
+                />
+              )}
 
-              {/* Output Display */}
+              {page === "learn" && <LearnContent />}
+
               {method && output && (
                 <OutputDisplay
                   secret={output.secret}
@@ -113,7 +109,7 @@ export default function Home() {
                   isRegenerating={method === "passphrase" && state.passphrase.pending}
                 />
               )}
-            </MethodSelector>
+            </div>
           </CardContent>
         </Card>
 

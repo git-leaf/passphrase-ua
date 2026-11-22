@@ -14,5 +14,5 @@ Offline use backs the advice to generate in airplane mode, and the README, FAQ a
 
 - A service worker stays installed in visitors' browsers after it is removed from the site. Turning it off means shipping a `sw.js` that clears the cache and unregisters itself, not deleting the file.
 - Changing the caching rules means changing the cache version in `sw.js`, so the old cache is cleared on the next visit.
-- A new page must be added to the offline list in `app/components/offline-support.tsx`; a page test fails if any route in `app/` is missing.
+- The offline list in `app/components/offline-support.tsx` holds every page in every language (from `lib/i18n/routes.ts`) and the root; a page test fails if any route in `app/` is missing.
 - The worker's rules are tested by running `sw.js` against fake Cache Storage and network (`app/__tests__/service-worker.test.ts`). That test lives in `app/` because anything in `public/` is published.

@@ -125,7 +125,7 @@ We appreciate security researchers who help keep our users safe. Contributors wi
 
 ## Additional Resources
 
-- [Privacy Policy](/privacy)
+- [Privacy Policy](https://movapass.net/en/privacy)
 
 ---
 

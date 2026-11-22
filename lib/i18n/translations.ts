@@ -9,7 +9,21 @@ export const locales = ["en", "uk"] as const
 
 export type Locale = (typeof locales)[number]
 
+/** A page's title and description for browsers and search engines */
+interface PageMeta {
+  title: string
+  description: string
+}
+
 export interface Translations {
+  // Page titles and descriptions
+  meta: {
+    passphrase: PageMeta
+    password: PageMeta
+    learn: PageMeta
+    privacy: PageMeta
+  }
+
   // Header
   header: {
     title: string
@@ -376,6 +390,29 @@ export interface Translations {
 
 export const translations: Record<Locale, Translations> = {
   en: {
+    meta: {
+      passphrase: {
+        title: "Mova Pass - Ukrainian and English Passphrase Generator",
+        description:
+          "Generate a strong, memorable passphrase from Ukrainian or English words, right in your browser. Nothing you generate leaves your device.",
+      },
+      password: {
+        title: "Password Generator - Mova Pass",
+        description:
+          "Generate a strong random password in your browser and see how long it would take to crack. Nothing you generate leaves your device.",
+      },
+      learn: {
+        title: "Learn About Passwords and Passphrases - Mova Pass",
+        description:
+          "How strong passwords and passphrases work, what Entropy means, how Diceware works, and how to keep your accounts safe.",
+      },
+      privacy: {
+        title: "Privacy Policy - Mova Pass",
+        description:
+          "Mova Pass collects no personal data: every password and passphrase is generated in your browser and never leaves it.",
+      },
+    },
+
     header: {
       title: "Mova Pass",
       subtitle: "Generate secure passwords and memorable passphrases",
@@ -820,6 +857,29 @@ export const translations: Record<Locale, Translations> = {
   },
 
   uk: {
+    meta: {
+      passphrase: {
+        title: "Mova Pass - генератор фраз-паролів українською та англійською",
+        description:
+          "Створіть надійну фразу-пароль з українських або англійських слів, яку легко запам'ятати, просто у браузері. Ніщо зі згенерованого не залишає ваш пристрій.",
+      },
+      password: {
+        title: "Генератор паролів - Mova Pass",
+        description:
+          "Створіть надійний випадковий пароль у браузері та дізнайтеся, скільки часу знадобиться, щоб його зламати. Ніщо зі згенерованого не залишає ваш пристрій.",
+      },
+      learn: {
+        title: "Усе про паролі та фрази-паролі - Mova Pass",
+        description:
+          "Як працюють надійні паролі та фрази-паролі, що таке ентропія, як працює Diceware і як захистити свої облікові записи.",
+      },
+      privacy: {
+        title: "Політика конфіденційності - Mova Pass",
+        description:
+          "Mova Pass не збирає жодних персональних даних: кожен пароль і фраза-пароль генеруються у вашому браузері й нікуди з нього не передаються.",
+      },
+    },
+
     header: {
       title: "Mova Pass",
       subtitle: "Генерація безпечних паролів та фраз-паролів",
