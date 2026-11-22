@@ -9,7 +9,7 @@ body:
     id: what-happened
     attributes:
       label: What happened
-      description: What you did, what you expected, and what you saw instead. Never paste a Secret you use.
+      description: What you did, what you expected, and what you saw instead. Never paste a password or passphrase you actually use.
     validations:
       required: true
   - type: textarea
@@ -18,7 +18,7 @@ body:
       label: Steps to reproduce
       placeholder: |
         1. Switch to Passphrase
-        2. Choose the English Wordlist
+        2. Choose an English Wordlist
         3. …
     validations:
       required: true

@@ -63,7 +63,7 @@ Mova Pass implements multiple security measures to protect user privacy and pass
 
 - Every pull request and every push to `main` is scanned for committed secrets (gitleaks)
 - Pull requests that add a dependency with a known vulnerability of high or critical severity fail (dependency review)
-- CodeQL scans the code on every pull request and weekly
+- CodeQL scans the code on every pull request, every push to `main` and weekly
 - Dependabot proposes dependency and GitHub Actions updates weekly, each version at least 7 days old
 
 ## Security Best Practices for Users
