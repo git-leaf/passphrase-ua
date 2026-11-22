@@ -1,10 +1,10 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
 import { RootDocument } from "@/app/components/root-document"
 import { ThemeProvider } from "@/app/components/theme-provider"
 import { Toaster } from "@/app/components/ui/toaster"
 import { OfflineSupport } from "@/app/components/offline-support"
-import { I18nProvider, isLocale, locales, SITE_URL } from "@/lib/i18n"
+import { I18nProvider, locales, SITE_URL } from "@/lib/i18n"
+import { localeParam } from "./locale-param"
 
 export const metadata: Metadata = {
   metadataBase: SITE_URL,
@@ -25,8 +25,7 @@ export default async function LocaleLayout({
   children: React.ReactNode
   params: Promise<{ locale: string }>
 }>) {
-  const { locale } = await params
-  if (!isLocale(locale)) notFound()
+  const locale = await localeParam(params)
 
   return (
     <RootDocument lang={locale}>

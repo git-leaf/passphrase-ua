@@ -1,19 +1,17 @@
 "use client"
 
 import { useEffect } from "react"
-import { locales, pagePath, preferredLocale, type Page } from "@/lib/i18n"
-
-const LANGUAGE_NAMES = { en: "English", uk: "Українська" } as const
+import { languageNames, locales, pagePath, preferredLocale, type Page } from "@/lib/i18n"
 
 /**
  * Sends the visitor to the page in their language: the one they last chose, else their
  * browser's, else English. It runs in the browser because only the browser knows the
- * saved choice, and so it works offline too (docs/adr/0012). Until it runs, or without
- * JavaScript, the visitor picks a language themselves.
+ * saved choice, and so it works offline too (docs/adr/0012). The query and anchor come
+ * along. Until it runs, or without JavaScript, the visitor picks a language themselves.
  */
 export function LanguageRedirect({ page }: { page: Page }) {
   useEffect(() => {
-    location.replace(pagePath(page, preferredLocale()))
+    location.replace(pagePath(page, preferredLocale()) + location.search + location.hash)
   }, [page])
 
   return (
@@ -28,7 +26,7 @@ export function LanguageRedirect({ page }: { page: Page }) {
               lang={locale}
               className="text-primary underline underline-offset-4"
             >
-              {LANGUAGE_NAMES[locale]}
+              {languageNames[locale].name}
             </a>
           </li>
         ))}

@@ -4,10 +4,17 @@
 
 import type { GeneratorErrorCode } from "@/lib/generators/errors"
 import type { WordlistId } from "@/lib/wordlists/catalogue"
+import type { Page } from "./routes"
 
 export const locales = ["en", "uk"] as const
 
 export type Locale = (typeof locales)[number]
+
+/** Each language as its speakers write it, with its flag, for choosing between them */
+export const languageNames: Record<Locale, { name: string; flag: string }> = {
+  en: { name: "English", flag: "🇬🇧" },
+  uk: { name: "Українська", flag: "🇺🇦" },
+}
 
 /** A page's title and description for browsers and search engines */
 interface PageMeta {
@@ -17,12 +24,7 @@ interface PageMeta {
 
 export interface Translations {
   // Page titles and descriptions
-  meta: {
-    passphrase: PageMeta
-    password: PageMeta
-    learn: PageMeta
-    privacy: PageMeta
-  }
+  meta: Record<Page, PageMeta>
 
   // Header
   header: {

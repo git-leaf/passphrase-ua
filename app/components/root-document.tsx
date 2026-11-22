@@ -1,4 +1,5 @@
 import type { ReactNode } from "react"
+import type { Locale } from "@/lib/i18n"
 import { Geist, Geist_Mono } from "next/font/google"
 import "@/app/globals.css"
 
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 /**
  * The <html> and <body> every root layout renders, in the page's language
  */
-export function RootDocument({ lang, children }: { lang: string; children: ReactNode }) {
+export function RootDocument({ lang, children }: { lang: Locale; children: ReactNode }) {
   return (
     <html lang={lang} suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>

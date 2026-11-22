@@ -12,7 +12,7 @@ The [Next.js internationalization guide](https://nextjs.org/docs/app/guides/inte
 
 ## Consequences
 
-- The language toggle links to the same page in the other language and saves the choice in `localStorage`, which only the root reads.
+- The language toggle links to the same page in the other language and saves the choice in `localStorage`, which only the root and the old `/privacy` URL read.
 - `hreflang`'s `x-default` is the root for the home page, which picks a language for the visitor, and the English page for the others, as [Google describes](https://developers.google.com/search/docs/specialty/international/localized-versions#xdefault).
 - Without JavaScript, the root shows a link to each language instead of redirecting.
 - The URLs are hard to change once search engines and visitors' bookmarks hold them; a moved page needs a redirect, as `/privacy` has.

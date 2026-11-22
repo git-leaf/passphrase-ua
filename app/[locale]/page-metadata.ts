@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
-import { notFound } from "next/navigation"
-import { isLocale, languageAlternates, pagePath, translations, type Page } from "@/lib/i18n"
+import { languageAlternates, pagePath, translations, type Page } from "@/lib/i18n"
+import { localeParam } from "./locale-param"
 
 /**
  * The generateMetadata of a page: its title and description in the page's language,
@@ -8,9 +8,7 @@ import { isLocale, languageAlternates, pagePath, translations, type Page } from 
  */
 export function pageMetadata(page: Page) {
   return async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
-    const { locale } = await params
-    if (!isLocale(locale)) notFound()
-
+    const locale = await localeParam(params)
     const { title, description } = translations[locale].meta[page]
     return {
       title,

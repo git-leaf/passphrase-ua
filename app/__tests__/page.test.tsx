@@ -117,10 +117,10 @@ async function renderPage(path: string) {
   )
 }
 
-/** Where the page sent the browser with location.replace, if anywhere */
-function stubRedirect() {
+/** Where the page sent the browser with location.replace, if anywhere; `at` is the current URL's query and anchor */
+function stubRedirect(at: { search?: string; hash?: string } = {}) {
   const replace = vi.fn()
-  vi.stubGlobal("location", { ...location, replace })
+  vi.stubGlobal("location", { ...location, search: "", hash: "", ...at, replace })
   return replace
 }
 
@@ -259,20 +259,20 @@ describe("generator page", () => {
 
   it("serves each page in each language at its own URL, marking the current page", async () => {
     const pages = [
-      { path: "", tab: "passphrase", shows: (t: typeof en) => t.passphrase.generate },
-      { path: "/password", tab: "password", shows: (t: typeof en) => t.password.generate },
-      { path: "/learn", tab: "learn", shows: (t: typeof en) => t.learn.title },
+      { path: "", view: "passphrase", shows: (t: typeof en) => t.passphrase.generate },
+      { path: "/password", view: "password", shows: (t: typeof en) => t.password.generate },
+      { path: "/learn", view: "learn", shows: (t: typeof en) => t.learn.title },
     ] as const
 
     for (const locale of locales) {
       const t = translations[locale]
-      for (const { path, tab, shows } of pages) {
+      for (const { path, view, shows } of pages) {
         cleanup()
         await renderApp(`/${locale}${path}`)
 
         expect(screen.getByText(t.header.subtitle)).toBeTruthy()
         expect(await screen.findByText(shows(t))).toBeTruthy()
-        expect(screen.getByRole("link", { current: "page" }).textContent).toBe(t.tabs[tab])
+        expect(screen.getByRole("link", { current: "page" }).textContent).toBe(t.tabs[view])
       }
 
       cleanup()
@@ -305,6 +305,25 @@ describe("generator page", () => {
     await waitFor(() => expect(redirect).toHaveBeenCalledWith("/uk"))
   })
 
+  it("keeps the Learn section when switching language", async () => {
+    location.hash = "#faq"
+    const user = await renderApp("/en/learn")
+
+    await user.click(screen.getByRole("button", { name: en.header.toggleLanguage }))
+
+    expect((await screen.findByRole("menuitem", { name: /Українська/ })).getAttribute("href")).toBe("/uk/learn#faq")
+    location.hash = ""
+  })
+
+  it("generates nothing on Learn, so no Wordlist is downloaded", async () => {
+    const fetchSpy = vi.spyOn(globalThis, "fetch")
+    await renderApp("/en/learn")
+
+    await new Promise((resolve) => setTimeout(resolve, 50))
+
+    expect(fetchSpy.mock.calls.map(([url]) => String(url)).filter((url) => url.includes("/wordlists/"))).toEqual([])
+  })
+
   it("sends the root and the old privacy URL to the browser's language, else English", async () => {
     const languages = vi.spyOn(navigator, "languages", "get")
     const cases = [
@@ -312,11 +331,17 @@ describe("generator page", () => {
       { path: "/", browser: ["de-DE"], to: "/en" },
       { path: "/privacy", browser: ["uk"], to: "/uk/privacy" },
       { path: "/privacy", browser: ["en-GB"], to: "/en/privacy" },
+      {
+        path: "/privacy",
+        browser: ["uk"],
+        at: { search: "?ref=x", hash: "#contact" },
+        to: "/uk/privacy?ref=x#contact",
+      },
     ]
 
-    for (const { path, browser, to } of cases) {
+    for (const { path, browser, at, to } of cases) {
       cleanup()
-      const redirect = stubRedirect()
+      const redirect = stubRedirect(at)
       languages.mockReturnValue(browser)
 
       await renderApp(path)

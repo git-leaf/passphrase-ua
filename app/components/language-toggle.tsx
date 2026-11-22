@@ -1,5 +1,6 @@
 "use client"
 
+import { useSyncExternalStore } from "react"
 import Link from "next/link"
 import { Languages } from "lucide-react"
 import { Button } from "@/app/components/ui/button"
@@ -9,19 +10,25 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu"
-import { pagePath, rememberLocale, useI18n, type Locale, type Page } from "@/lib/i18n"
+import { languageNames, locales, pagePath, rememberLocale, useI18n, type Page } from "@/lib/i18n"
 
-const LANGUAGES: { locale: Locale; flag: string; name: string }[] = [
-  { locale: "en", flag: "🇬🇧", name: "English" },
-  { locale: "uk", flag: "🇺🇦", name: "Українська" },
-]
+function subscribeToHash(onChange: () => void) {
+  window.addEventListener("hashchange", onChange)
+  return () => window.removeEventListener("hashchange", onChange)
+}
 
 /**
  * Language toggle component with dropdown menu
- * Links to the same page in English and Ukrainian, and remembers the choice
+ * Links to the same page in English and Ukrainian, and remembers the choice.
+ * Section anchors are the same in both languages, so the link keeps the current one.
  */
 export function LanguageToggle({ page }: { page: Page }) {
   const { locale, t } = useI18n()
+  const hash = useSyncExternalStore(
+    subscribeToHash,
+    () => location.hash,
+    () => "",
+  )
 
   return (
     <DropdownMenu>
@@ -31,15 +38,15 @@ export function LanguageToggle({ page }: { page: Page }) {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        {LANGUAGES.map((language) => (
-          <DropdownMenuItem key={language.locale} asChild className={locale === language.locale ? "bg-accent" : ""}>
+        {locales.map((language) => (
+          <DropdownMenuItem key={language} asChild className={locale === language ? "bg-accent" : ""}>
             <Link
-              href={pagePath(page, language.locale)}
-              hrefLang={language.locale}
-              lang={language.locale}
-              onClick={() => rememberLocale(language.locale)}
+              href={pagePath(page, language) + hash}
+              hrefLang={language}
+              lang={language}
+              onClick={() => rememberLocale(language)}
             >
-              <span className="mr-2">{language.flag}</span> {language.name}
+              <span className="mr-2">{languageNames[language].flag}</span> {languageNames[language].name}
             </Link>
           </DropdownMenuItem>
         ))}

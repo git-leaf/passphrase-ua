@@ -30,7 +30,8 @@ import { FooterLinks } from "@/app/components/footer/footer-links"
 export function GeneratorPage({ page }: { page: GeneratorView }) {
   const { toast } = useToast()
   const { t } = useI18n()
-  const { state, session } = useGeneratorSession((code) => {
+  const method = page === "learn" ? null : page
+  const { state, session } = useGeneratorSession(method, (code) => {
     toast({
       title: t.toast.error,
       description: t.toast.generatorErrors[code],
@@ -38,7 +39,6 @@ export function GeneratorPage({ page }: { page: GeneratorView }) {
     })
   })
 
-  const method = page === "learn" ? null : page
   const output = method && state[method].output
 
   const copyToClipboard = async (secret: string) => {
