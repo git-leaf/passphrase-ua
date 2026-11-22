@@ -2,7 +2,7 @@
 # If you discover a security vulnerability, please report it responsibly.
 
 Contact: https://github.com/git-leaf/passphrase-ua/security/advisories/new
-Expires: 2026-12-31T23:59:59.000Z
+Expires: 2027-12-31T23:59:59.000Z
 Preferred-Languages: en, uk
 Canonical: https://movapass.net/.well-known/security.txt
 
@@ -14,7 +14,7 @@ Canonical: https://movapass.net/.well-known/security.txt
 
 # Vulnerability Reporting
 # Please report security vulnerabilities via GitHub Security Advisories.
-# We appreciate responsible disclosure and will respond promptly.
+# We appreciate responsible disclosure and aim to acknowledge reports within 7 days.
 
 # Out of Scope
 # - Browser vulnerabilities (report to browser vendors)
