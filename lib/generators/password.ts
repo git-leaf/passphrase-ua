@@ -66,6 +66,13 @@ function buildCharacterSet(options: PasswordOptions): string {
 }
 
 /**
+ * The Entropy of any Password these options produce
+ */
+export function passwordEntropy(options: PasswordOptions): number {
+  return options.length * Math.log2(buildCharacterSet(options).length)
+}
+
+/**
  * Generates a password
  *
  * @param options - Password options
@@ -90,5 +97,5 @@ export function generatePassword(options: PasswordOptions, bytes: RandomBytes = 
     .map((index) => characters[index])
     .join("")
 
-  return { secret, entropy: length * Math.log2(characters.length) }
+  return { secret, entropy: passwordEntropy(options) }
 }

@@ -465,6 +465,37 @@ describe("generator page", () => {
     expect((await screen.findByRole("menuitem", { name: /Українська/ })).getAttribute("href")).toBe("/uk/learn#faq")
   })
 
+  it("compares the Methods on Learn with the figures of the default Character set", async () => {
+    // 26 + 26 + 10 + 26 = 88 characters: log2(88) ≈ 6.46 bits each, 16 × 6.46 ≈ 103 bits
+    const expected = { en: { perCharacter: "~6.5", total: "≈ 103" }, uk: { perCharacter: "~6,5", total: "≈ 103" } }
+
+    for (const locale of locales) {
+      cleanup()
+      await renderApp(`/${locale}/learn`)
+      const { comparison } = translations[locale].learn
+      const passwordCell = (feature: string) => screen.getByText(feature).closest("tr")!.children[1]
+
+      expect(passwordCell(comparison.entropyPerChar).textContent).toContain(expected[locale].perCharacter)
+      expect(passwordCell(comparison.totalSecurity).textContent).toMatch(new RegExp(`^16 .*${expected[locale].total} `))
+    }
+  })
+
+  it("colours each Strength level on Learn as the strength meter does", async () => {
+    const user = await renderApp("/en/password")
+    await untilDefaultPasswordShown()
+    // The default Password, about 103 bits, is Very Strong
+    const bar = screen.getByText(en.output.strengthLabel).parentElement!.nextElementSibling!.firstElementChild!
+    const meterColour = /bg-\S+/.exec(bar.className)![0]
+
+    await followLink(user, screen.getByRole("link", { name: en.tabs.learn }))
+
+    const levels = within(document.getElementById("strength")!).getAllByRole("listitem")
+    expect(levels).toHaveLength(5)
+    for (const level of levels) expect(level.textContent).not.toMatch(/\p{Extended_Pictographic}/u)
+    const veryStrong = levels.find((level) => level.textContent?.includes("80–128"))!
+    expect(veryStrong.querySelector("[aria-hidden='true']")!.classList).toContain(meterColour)
+  })
+
   it("generates nothing on Learn, so no Wordlist is downloaded", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch")
     await renderApp("/en/learn")

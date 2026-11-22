@@ -2,6 +2,8 @@
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
 import { useI18n } from "@/app/components/i18n-provider"
+import { LEVEL_COLORS } from "@/app/components/strength-level-colors"
+import { DEFAULT_PASSWORD_OPTIONS, passwordEntropy } from "@/lib/generators/password"
 import { STRENGTH_BANDS, type StrengthLevel } from "@/lib/strength/strength-analysis"
 
 /** The bit range of a Strength level, e.g. "40–60" or "128+". */
@@ -18,7 +20,19 @@ function bandRange(level: StrengthLevel): string {
  * Each section has an id, so a link can point at it, e.g. /en/learn#faq
  */
 export function LearnContent() {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
+  // The comparison describes the default Password, so its figures follow the default Character set
+  const { length } = DEFAULT_PASSWORD_OPTIONS
+  const passwordBits = passwordEntropy(DEFAULT_PASSWORD_OPTIONS)
+  const bitsPerCharacter = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(passwordBits / length)
+  const totalBits = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(passwordBits)
+  const levelGuidelines: Record<StrengthLevel, string> = {
+    weak: t.learn.strength.weak,
+    moderate: t.learn.strength.moderate,
+    strong: t.learn.strength.strong,
+    "very-strong": t.learn.strength.veryStrong,
+    excessive: t.learn.strength.excessive,
+  }
 
   return (
     <div className="prose prose-sm dark:prose-invert max-w-none">
@@ -86,11 +100,12 @@ export function LearnContent() {
           <div className="rounded-lg border bg-muted/30 p-4">
             <p className="text-sm font-medium mb-2">{t.learn.strength.guidelinesTitle}</p>
             <ul className="text-sm space-y-2 text-muted-foreground">
-              <li>{t.learn.strength.weak.replace("{range}", bandRange("weak"))}</li>
-              <li>{t.learn.strength.moderate.replace("{range}", bandRange("moderate"))}</li>
-              <li>{t.learn.strength.strong.replace("{range}", bandRange("strong"))}</li>
-              <li>{t.learn.strength.veryStrong.replace("{range}", bandRange("very-strong"))}</li>
-              <li>{t.learn.strength.excessive.replace("{range}", bandRange("excessive"))}</li>
+              {STRENGTH_BANDS.map(({ level }) => (
+                <li key={level} className="flex items-baseline gap-2">
+                  <span aria-hidden="true" className={`size-2.5 shrink-0 rounded-full ${LEVEL_COLORS[level]}`} />
+                  <span>{levelGuidelines[level].replace("{range}", bandRange(level))}</span>
+                </li>
+              ))}
             </ul>
             <p className="text-xs text-muted-foreground mt-3 italic">{t.learn.strength.example}</p>
           </div>
@@ -243,12 +258,14 @@ export function LearnContent() {
                 </tr>
                 <tr className="border-b">
                   <td className="p-2">{t.learn.comparison.entropyPerChar}</td>
-                  <td className="p-2">{t.learn.comparison.entropyRandom}</td>
+                  <td className="p-2">{t.learn.comparison.entropyRandom.replace("{bits}", bitsPerCharacter)}</td>
                   <td className="p-2">{t.learn.comparison.entropyDiceware}</td>
                 </tr>
                 <tr className="border-b">
                   <td className="p-2">{t.learn.comparison.totalSecurity}</td>
-                  <td className="p-2">{t.learn.comparison.securityRandom}</td>
+                  <td className="p-2">
+                    {t.learn.comparison.securityRandom.replace("{length}", String(length)).replace("{bits}", totalBits)}
+                  </td>
                   <td className="p-2">{t.learn.comparison.securityDiceware}</td>
                 </tr>
                 <tr className="border-b">
