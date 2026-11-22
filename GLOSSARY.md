@@ -70,7 +70,7 @@ The named band an Entropy falls in: Weak (≤40 bits), Moderate (≤60), Strong 
 _Avoid_: rating, grade
 
 **Attacker model**:
-The assumed adversary, described by a Guess rate and a Cost per 2^32 guesses; either a preset or custom values.
+The assumed adversary, described by a Guess rate and a Cost per 2^32 guesses, as chosen in the Attacker settings.
 _Avoid_: threat model, attack scenario
 
 **Attacker settings**:
