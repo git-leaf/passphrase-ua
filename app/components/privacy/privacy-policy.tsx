@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/app/components/ui/card"
-import { Shield, Lock, Eye, Database, Code, Cookie } from "lucide-react"
+import { Shield, Lock, Eye, Database, Code, Cookie, Server } from "lucide-react"
 import Link from "next/link"
 import { ThemeToggle } from "@/app/components/theme-toggle"
 import { LanguageToggle } from "@/app/components/language-toggle"
@@ -72,21 +72,40 @@ export function PrivacyPolicy() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive font-bold mt-1">✗</span>
-                  <span>{t.privacy.whatWeDontCollect.ipAddresses}</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive font-bold mt-1">✗</span>
                   <span>{t.privacy.whatWeDontCollect.analytics}</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="text-destructive font-bold mt-1">✗</span>
                   <span>{t.privacy.whatWeDontCollect.fingerprints}</span>
                 </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-destructive font-bold mt-1">✗</span>
-                  <span>{t.privacy.whatWeDontCollect.anyPersonalData}</span>
-                </li>
               </ul>
+            </CardContent>
+          </Card>
+
+          {/* Hosting */}
+          <Card>
+            <CardHeader>
+              <CardTitle asChild className="flex items-center gap-2">
+                <h2>
+                  <Server className="h-5 w-5" />
+                  {t.privacy.hosting.title}
+                </h2>
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4 text-muted-foreground">
+              <p>{t.privacy.hosting.description}</p>
+              <p>
+                {t.privacy.hosting.policyLinkBefore}
+                <a
+                  href="https://vercel.com/legal/privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary underline underline-offset-4"
+                >
+                  {t.privacy.hosting.policyLink}
+                </a>
+                .
+              </p>
             </CardContent>
           </Card>
 
@@ -124,6 +143,14 @@ export function PrivacyPolicy() {
                   </div>
                 </li>
                 <li className="flex items-start gap-2">
+                  <span className="text-primary font-bold mt-1">✓</span>
+                  <div>
+                    <span className="font-semibold text-foreground">{t.privacy.whatWeStoreLocally.offlineCopy}</span>
+                    {" — "}
+                    {t.privacy.whatWeStoreLocally.offlineCopyDescription}
+                  </div>
+                </li>
+                <li className="flex items-start gap-2">
                   <span className="text-destructive font-bold mt-1">✗</span>
                   <div>
                     <span className="font-semibold text-foreground">{t.privacy.whatWeStoreLocally.noPasswords}</span>
@@ -154,8 +181,8 @@ export function PrivacyPolicy() {
                 <p>{t.privacy.howItWorks.clientSideGeneration.description}</p>
               </div>
               <div>
-                <h3 className="font-semibold text-foreground mb-2">{t.privacy.howItWorks.noNetworkRequests.title}</h3>
-                <p>{t.privacy.howItWorks.noNetworkRequests.description}</p>
+                <h3 className="font-semibold text-foreground mb-2">{t.privacy.howItWorks.noSecretSent.title}</h3>
+                <p>{t.privacy.howItWorks.noSecretSent.description}</p>
               </div>
               <div>
                 <h3 className="font-semibold text-foreground mb-2">{t.privacy.howItWorks.openSource.title}</h3>
@@ -164,25 +191,25 @@ export function PrivacyPolicy() {
             </CardContent>
           </Card>
 
-          {/* GDPR Compliance */}
+          {/* Your Data */}
           <Card>
             <CardHeader>
               <CardTitle asChild className="flex items-center gap-2">
                 <h2>
                   <Lock className="h-5 w-5" />
-                  {t.privacy.gdprCompliance.title}
+                  {t.privacy.yourData.title}
                 </h2>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-muted-foreground">
-              <p>{t.privacy.gdprCompliance.description}</p>
+              <p>{t.privacy.yourData.description}</p>
               <ul className="space-y-2 ml-6 list-disc">
-                <li>{t.privacy.gdprCompliance.noPersonalData}</li>
-                <li>{t.privacy.gdprCompliance.noUserIdentifyingInfo}</li>
-                <li>{t.privacy.gdprCompliance.noTrackingCookies}</li>
-                <li>{t.privacy.gdprCompliance.userControl}</li>
+                <li>{t.privacy.yourData.noPersonalData}</li>
+                <li>{t.privacy.yourData.noUserIdentifyingInfo}</li>
+                <li>{t.privacy.yourData.noTrackingCookies}</li>
+                <li>{t.privacy.yourData.userControl}</li>
               </ul>
-              <p>{t.privacy.gdprCompliance.noDataToManage}</p>
+              <p>{t.privacy.yourData.noDataToManage}</p>
             </CardContent>
           </Card>
 
@@ -200,10 +227,10 @@ export function PrivacyPolicy() {
               <p>{t.privacy.security.description}</p>
               <ul className="space-y-2 ml-6 list-disc">
                 <li>{t.privacy.security.cryptoSecureRng}</li>
-                <li>{t.privacy.security.strictCsp}</li>
+                <li>{t.privacy.security.contentSecurityPolicy}</li>
                 <li>{t.privacy.security.httpsWithHsts}</li>
                 <li>{t.privacy.security.noThirdPartyScripts}</li>
-                <li>{t.privacy.security.regularAudits}</li>
+                <li>{t.privacy.security.automatedChecks}</li>
               </ul>
             </CardContent>
           </Card>

@@ -354,6 +354,16 @@ describe("generator page", () => {
     }
   })
 
+  it("names the host and links its privacy policy on the privacy page", async () => {
+    for (const locale of locales) {
+      cleanup()
+      await renderApp(`/${locale}/privacy`)
+
+      const link = screen.getByRole("link", { name: translations[locale].privacy.hosting.policyLink })
+      expect(link.getAttribute("href")).toBe("https://vercel.com/legal/privacy-policy")
+    }
+  })
+
   it("links every Learn section by an anchor", async () => {
     await renderApp("/en/learn")
 

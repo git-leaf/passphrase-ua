@@ -178,10 +178,14 @@ export interface Translations {
       title: string
       passwords: string
       accounts: string
-      ipAddresses: string
       analytics: string
       fingerprints: string
-      anyPersonalData: string
+    }
+    hosting: {
+      title: string
+      description: string
+      policyLinkBefore: string
+      policyLink: string
     }
     whatWeStoreLocally: {
       title: string
@@ -190,6 +194,8 @@ export interface Translations {
       themeDescription: string
       languagePreference: string
       languageDescription: string
+      offlineCopy: string
+      offlineCopyDescription: string
       noPasswords: string
       noPasswordsDescription: string
       clearSettings: string
@@ -200,7 +206,7 @@ export interface Translations {
         title: string
         description: string
       }
-      noNetworkRequests: {
+      noSecretSent: {
         title: string
         description: string
       }
@@ -209,7 +215,7 @@ export interface Translations {
         description: string
       }
     }
-    gdprCompliance: {
+    yourData: {
       title: string
       description: string
       noPersonalData: string
@@ -222,10 +228,10 @@ export interface Translations {
       title: string
       description: string
       cryptoSecureRng: string
-      strictCsp: string
+      contentSecurityPolicy: string
       httpsWithHsts: string
       noThirdPartyScripts: string
-      regularAudits: string
+      automatedChecks: string
     }
     changesToPolicy: {
       title: string
@@ -542,7 +548,7 @@ export const translations: Record<Locale, Translations> = {
 
     footer: {
       securityNotice:
-        "All passwords are generated locally in your browser. Nothing is stored or transmitted. You can use it offline.",
+        "All passwords are generated locally in your browser and are never stored or sent. You can use it offline.",
       supportUkraine: "Support Ukraine 🇺🇦",
       supportDescription:
         "Consider supporting Ukrainian humanitarian and defense efforts through trusted organizations:",
@@ -789,29 +795,36 @@ export const translations: Record<Locale, Translations> = {
     privacy: {
       title: "Privacy Policy",
       lastUpdated: "Last Updated:",
-      lastUpdatedDate: "November 18, 2025",
+      lastUpdatedDate: "November 22, 2026",
       overview: {
         title: "Overview",
-        noDataMessage: "We DO NOT collect any data. Ever.",
+        noDataMessage: "We don't collect any data about you.",
         description:
-          "Mova Pass is a completely client-side application built with privacy as the core principle. All passwords and passphrases are generated locally in your browser and are never transmitted over the network, stored on our servers, or tracked in any way.",
+          "Mova Pass is a completely client-side application built with privacy as the core principle. All passwords and passphrases are generated locally in your browser and are never sent over the network, stored on a server, or tracked in any way.",
       },
       whatWeDontCollect: {
         title: "What We DON'T Collect",
         passwords: "Passwords or generated passphrases",
         accounts: "User accounts or email addresses",
-        ipAddresses: "IP addresses or location information",
         analytics: "Usage analytics or telemetry",
         fingerprints: "Device fingerprints or tracking cookies",
-        anyPersonalData: "Any personal data whatsoever",
+      },
+      hosting: {
+        title: "Hosting",
+        description:
+          "Vercel hosts Mova Pass. Like any web host, it records the requests your browser makes to the site, including your IP address. Those requests fetch pages and wordlists, never a password or passphrase.",
+        policyLinkBefore: "How Vercel handles that data is described in ",
+        policyLink: "Vercel's privacy policy",
       },
       whatWeStoreLocally: {
         title: "What We Store Locally",
-        description: "In your browser (localStorage) — under your control",
+        description: "In your browser — under your control",
         themePreference: "Theme Preference",
         themeDescription: "Your choice of light/dark mode (theme)",
         languagePreference: "Language Preference",
         languageDescription: "Your choice of Ukrainian/English (locale)",
+        offlineCopy: "Offline Copy",
+        offlineCopyDescription: "The pages and wordlists, kept so the app works without a connection",
         noPasswords: "No Passwords",
         noPasswordsDescription: "Passwords are never stored, even locally",
         clearSettings: "You can clear these settings at any time by clearing site data in your browser settings.",
@@ -823,10 +836,10 @@ export const translations: Record<Locale, Translations> = {
           description:
             "All passwords and passphrases are generated locally in your browser using the Web Crypto API (crypto.getRandomValues()). The generation code is JavaScript function that runs exclusively on your device.",
         },
-        noNetworkRequests: {
-          title: "2. No Network Requests",
+        noSecretSent: {
+          title: "2. Nothing You Generate Is Sent",
           description:
-            "No network requests are made during password generation. You can verify this by opening your browser's Developer Tools (Network tab) — you won't see any requests during generation.",
+            "A password or passphrase never leaves your device. The only request generating one can make downloads a wordlist the first time it's used, and after your first visit the app downloads every wordlist in the background so it works offline. You can verify this in your browser's Developer Tools (Network tab).",
         },
         openSource: {
           title: "3. Open Source",
@@ -834,24 +847,25 @@ export const translations: Record<Locale, Translations> = {
             "All code is open source and available on GitHub for audit. You can review every line of code to verify we keep our privacy promises.",
         },
       },
-      gdprCompliance: {
-        title: "GDPR Compliance",
-        description:
-          "Mova Pass is fully compliant with the General Data Protection Regulation (GDPR) and other privacy laws because we:",
-        noPersonalData: "Do not collect any personal data",
-        noUserIdentifyingInfo: "Do not process any user-identifying information",
-        noTrackingCookies: "Do not use tracking cookies",
-        userControl: "Give users full control over their settings",
-        noDataToManage: "Since we collect no data, there is no data to request, export, or delete.",
+      yourData: {
+        title: "Your Data",
+        description: "Mova Pass itself keeps no data about you, because we:",
+        noPersonalData: "Have no accounts and never ask for personal details",
+        noUserIdentifyingInfo: "Run no analytics, tracking or error reporting",
+        noTrackingCookies: "Set no cookies",
+        userControl: "Keep your settings only in your browser, where you can clear them",
+        noDataToManage:
+          "So we hold no data of yours to request, export, or delete. Vercel's request logs are covered by its own privacy policy, linked above.",
       },
       security: {
         title: "Security",
         description: "We implement numerous security measures to protect your privacy:",
         cryptoSecureRng: "Cryptographically secure random number generation (Web Crypto API)",
-        strictCsp: "Strict Content Security Policy (CSP) headers",
+        contentSecurityPolicy: "Content Security Policy (CSP) that loads scripts, styles and fonts only from this site",
         httpsWithHsts: "HTTPS by default with HSTS (HTTP Strict Transport Security)",
         noThirdPartyScripts: "No third-party scripts or tracking",
-        regularAudits: "Regular security audits",
+        automatedChecks:
+          "Automated checks on every change: secret scanning, dependency review and CodeQL code scanning",
       },
       changesToPolicy: {
         title: "Changes to This Policy",
@@ -1015,7 +1029,7 @@ export const translations: Record<Locale, Translations> = {
 
     footer: {
       securityNotice:
-        "Усі паролі створюються безпосередньо у вашому браузері. Нічого не зберігається та не передається через мережу. Можна використовувати без підключення до мережі.",
+        "Усі паролі створюються безпосередньо у вашому браузері, ніде не зберігаються й нікуди не надсилаються. Можна використовувати без підключення до мережі.",
       supportUkraine: "Підтримати Україну 🇺🇦",
       supportDescription: "Розгляньте можливість підтримки українських гуманітарних та оборонних організацій:",
       supportFundraising: "Або підтримайте наш поточний збір:",
@@ -1262,29 +1276,36 @@ export const translations: Record<Locale, Translations> = {
     privacy: {
       title: "Політика конфіденційності",
       lastUpdated: "Останнє оновлення:",
-      lastUpdatedDate: "18 листопада 2025",
+      lastUpdatedDate: "22 листопада 2026",
       overview: {
         title: "Огляд",
-        noDataMessage: "Ми НЕ збираємо жодних даних. Ніколи.",
+        noDataMessage: "Ми не збираємо жодних даних про вас.",
         description:
-          "Mova Pass — це повністю клієнтський застосунок, створений з особливою увагою до конфіденційності. Усі паролі та фрази-паролі генеруються локально у вашому браузері та ніколи не передаються через мережу, не зберігаються на наших серверах і не відстежуються жодним чином.",
+          "Mova Pass — це повністю клієнтський застосунок, створений з особливою увагою до конфіденційності. Усі паролі та фрази-паролі генеруються локально у вашому браузері та ніколи не передаються через мережу, не зберігаються на сервері й не відстежуються жодним чином.",
       },
       whatWeDontCollect: {
         title: "Що ми НЕ збираємо",
         passwords: "Паролі або згенеровані парольні фрази",
         accounts: "Облікові записи користувачів або адреси електронної пошти",
-        ipAddresses: "IP-адреси або інформацію про місцезнаходження",
         analytics: "Аналітику використання або телеметрію",
         fingerprints: "Відбитки пристроїв або файли cookie відстеження",
-        anyPersonalData: "Будь-які персональні дані",
+      },
+      hosting: {
+        title: "Хостинг",
+        description:
+          "Mova Pass розміщено на Vercel. Як і будь-який хостинг, Vercel записує запити, які ваш браузер надсилає до сайту, разом з вашою IP-адресою. Ці запити завантажують сторінки та словники, але ніколи не пароль чи фразу-пароль.",
+        policyLinkBefore: "Як Vercel поводиться з цими даними, описано в ",
+        policyLink: "політиці конфіденційності Vercel",
       },
       whatWeStoreLocally: {
         title: "Що зберігається локально",
-        description: "У вашому браузері (localStorage) — під вашим контролем",
+        description: "У вашому браузері — під вашим контролем",
         themePreference: "Вибір теми",
         themeDescription: "Ваш вибір між світлою/темною темою (theme)",
         languagePreference: "Вибір мови",
         languageDescription: "Ваш вибір між українською/англійською мовою (locale)",
+        offlineCopy: "Офлайн-копія",
+        offlineCopyDescription: "Сторінки та словники, збережені, щоб застосунок працював без підключення",
         noPasswords: "Без паролів",
         noPasswordsDescription: "Паролі ніколи не зберігаються, навіть локально",
         clearSettings:
@@ -1297,10 +1318,10 @@ export const translations: Record<Locale, Translations> = {
           description:
             "Усі паролі та парольні фрази генеруються безпосередньо у вашому браузері за допомогою Web Crypto API (crypto.getRandomValues()). Код генерації є функцією JavaScript, яка виконується виключно на вашому пристрої.",
         },
-        noNetworkRequests: {
-          title: "2. Без мережевих запитів",
+        noSecretSent: {
+          title: "2. Згенероване нікуди не надсилається",
           description:
-            "Під час генерації паролів мережеві запити не виконуються. Ви можете перевірити це, відкривши інструменти розробника вашого браузера (вкладка Мережа) — ви не побачите жодних запитів під час генерації.",
+            "Пароль чи фраза-пароль ніколи не залишає ваш пристрій. Єдиний запит, який може зробити генерація, завантажує словник, коли його використано вперше, а після першого відвідування застосунок у фоні завантажує всі словники, щоб працювати офлайн. Ви можете перевірити це в інструментах розробника вашого браузера (вкладка Мережа).",
         },
         openSource: {
           title: "3. Відкритий вихідний код",
@@ -1308,24 +1329,26 @@ export const translations: Record<Locale, Translations> = {
             "Весь код відкритий і доступний на GitHub для аудиту. Ви можете перевірити кожен рядок коду, щоб переконатися, що ми дотримуємося своїх обіцянок щодо конфіденційності.",
         },
       },
-      gdprCompliance: {
-        title: "Відповідність GDPR",
-        description:
-          "Mova Pass повністю відповідає Загальному регламенту захисту даних (GDPR) та іншим законам про конфіденційність, оскільки ми:",
-        noPersonalData: "Не збираємо жодних персональних даних",
-        noUserIdentifyingInfo: "Не обробляємо жодної інформації, яка ідентифікує користувача",
-        noTrackingCookies: "Не використовуємо файли cookie для відстеження",
-        userControl: "Надаємо користувачам повний контроль над своїми налаштуваннями",
-        noDataToManage: "Оскільки ми не збираємо жодних даних, немає даних для запиту, експорту чи видалення.",
+      yourData: {
+        title: "Ваші дані",
+        description: "Сам Mova Pass не зберігає жодних даних про вас, оскільки ми:",
+        noPersonalData: "Не маємо облікових записів і ніколи не просимо персональних даних",
+        noUserIdentifyingInfo: "Не використовуємо аналітику, відстеження чи звіти про помилки",
+        noTrackingCookies: "Не встановлюємо файлів cookie",
+        userControl: "Зберігаємо ваші налаштування лише у вашому браузері, де ви можете їх очистити",
+        noDataToManage:
+          "Тож у нас немає ваших даних для запиту, експорту чи видалення. На журнали запитів Vercel поширюється його власна політика конфіденційності, посилання на яку наведено вище.",
       },
       security: {
         title: "Безпека",
         description: "Ми реалізували численні заходи безпеки для захисту вашої конфіденційності:",
         cryptoSecureRng: "Криптографічно безпечна генерація випадкових чисел (Web Crypto API)",
-        strictCsp: "Суворі заголовки Політики безпеки вмісту (CSP)",
+        contentSecurityPolicy:
+          "Політика безпеки вмісту (CSP), що завантажує скрипти, стилі й шрифти лише з цього сайту",
         httpsWithHsts: "HTTPS за замовчуванням з HSTS (HTTP Strict Transport Security)",
         noThirdPartyScripts: "Без сторонніх скриптів або відстеження",
-        regularAudits: "Регулярні аудити безпеки",
+        automatedChecks:
+          "Автоматичні перевірки кожної зміни: пошук секретів у коді, перевірка залежностей і сканування коду CodeQL",
       },
       changesToPolicy: {
         title: "Зміни в цій політиці",
