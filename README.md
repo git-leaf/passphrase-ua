@@ -80,7 +80,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ```bash
 pnpm dev      # Start development server
-pnpm check    # Run every check CI runs: format, lint, types, tests, build
+pnpm check    # Run every check CI runs: format, lint, types, tests with coverage, build
 pnpm format   # Format all files with Prettier
 pnpm lint     # Run ESLint
 pnpm test     # Run tests
