@@ -49,6 +49,7 @@ afterEach(() => {
   cleanup()
   localStorage.clear()
   vi.unstubAllGlobals()
+  vi.unstubAllEnvs()
   vi.restoreAllMocks()
   // jsdom has no service worker; a test may add one
   Reflect.deleteProperty(navigator, "serviceWorker")
@@ -448,6 +449,47 @@ describe("generator page", () => {
     expect(type).toBe("cache-for-offline")
     expect(pages).toEqual(expect.arrayContaining(["/", "/uk/privacy", "/en/learn"]))
     expect(urls).toEqual(expect.arrayContaining([...pages, ...wordlists.flat()]))
+  })
+
+  it("names the donation links and logos in the page's language", async () => {
+    vi.stubEnv("NEXT_PUBLIC_MONOBANK_JAR_URL", "https://send.monobank.ua/jar/test")
+
+    for (const locale of locales) {
+      cleanup()
+      await renderApp(`/${locale}`)
+
+      for (const name of Object.values(translations[locale].footer.donations)) {
+        const link = screen.getByRole("link", { name })
+        expect(within(link).getAllByRole("img", { name })).toHaveLength(2)
+      }
+    }
+  })
+
+  it("links each charity's site in the page's language", async () => {
+    await renderApp("/uk")
+    const prytula = screen.getByRole("link", { name: uk.footer.donations.prytulafoundation })
+    expect(prytula.getAttribute("href")).toBe("https://prytulafoundation.org/")
+
+    cleanup()
+    await renderApp("/en")
+    const sternenko = screen.getByRole("link", { name: en.footer.donations.sternenkofund })
+    expect(sternenko.getAttribute("href")).toBe("https://www.sternenkofund.org/en")
+  })
+
+  it("shows the personal fundraising link only when its URL is configured", async () => {
+    // The page reads the URL as it loads, and renderApp reloads it
+    vi.stubEnv("NEXT_PUBLIC_MONOBANK_JAR_URL", "")
+    await renderApp("/en")
+    expect(screen.queryByText(en.footer.supportFundraising)).toBeNull()
+    expect(screen.queryByRole("link", { name: en.footer.donations.monobank })).toBeNull()
+
+    cleanup()
+    vi.stubEnv("NEXT_PUBLIC_MONOBANK_JAR_URL", "https://send.monobank.ua/jar/test")
+    await renderApp("/en")
+    expect(screen.getByText(en.footer.supportFundraising)).toBeTruthy()
+    expect(screen.getByRole("link", { name: en.footer.donations.monobank }).getAttribute("href")).toBe(
+      "https://send.monobank.ua/jar/test",
+    )
   })
 
   it("shows when the app is offline", async () => {

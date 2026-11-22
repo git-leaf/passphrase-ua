@@ -6,6 +6,9 @@ import type { GeneratorErrorCode } from "@/lib/generators/errors"
 import type { WordlistId } from "@/lib/wordlists/catalogue"
 import type { Page } from "./routes"
 
+/** The charities and fundraisers the footer links to */
+export type DonationId = "comebackalive" | "prytulafoundation" | "united24" | "sternenkofund" | "monobank"
+
 export const locales = ["en", "uk"] as const
 
 export type Locale = (typeof locales)[number]
@@ -152,6 +155,8 @@ export interface Translations {
     supportUkraine: string
     supportDescription: string
     supportFundraising: string
+    /** Each donation link's name, also its logo's alt text */
+    donations: Record<DonationId, string>
     aboutProject: string
     sourceCode: string
     reportIssue: string
@@ -544,6 +549,13 @@ export const translations: Record<Locale, Translations> = {
       supportDescription:
         "Consider supporting Ukrainian humanitarian and defense efforts through trusted organizations:",
       supportFundraising: "Or support our current fundraising:",
+      donations: {
+        comebackalive: "Come Back Alive Foundation",
+        prytulafoundation: "Serhiy Prytula Charity Foundation",
+        united24: "United24 - Official fundraising platform",
+        sternenkofund: "Sternenko Community Foundation",
+        monobank: "Personal charity account via Monobank",
+      },
       aboutProject: "About Project",
       sourceCode: "Source Code",
       reportIssue: "Report Issue",
@@ -1010,6 +1022,13 @@ export const translations: Record<Locale, Translations> = {
       supportUkraine: "Підтримати Україну 🇺🇦",
       supportDescription: "Розгляньте можливість підтримки українських гуманітарних та оборонних організацій:",
       supportFundraising: "Або підтримайте наш поточний збір:",
+      donations: {
+        comebackalive: "Фонд «Повернись живим»",
+        prytulafoundation: "Благодійний фонд Сергія Притули",
+        united24: "United24 — офіційна платформа збору коштів",
+        sternenkofund: "Фонд «Спільнота Стерненка»",
+        monobank: "Особистий збір через банку Monobank",
+      },
       aboutProject: "Про проєкт",
       sourceCode: "Вихідний код",
       reportIssue: "Повідомити про проблему",
