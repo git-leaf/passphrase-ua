@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
 import nextConfig from "@/next.config"
 
-async function pageHeaders(nodeEnv: "production" | "development") {
+async function headersOfEveryRoute(nodeEnv: "production" | "development") {
   vi.stubEnv("NODE_ENV", nodeEnv)
   const rules = (await nextConfig.headers?.()) ?? []
   const rule = rules.find(({ source }) => source === "/:path*")
@@ -19,26 +19,26 @@ describe("security headers", () => {
   })
 
   it("allows eval only in development, which needs it", async () => {
-    expect(scriptSrc(await pageHeaders("production"))).toBe("script-src 'self' 'unsafe-inline'")
-    expect(scriptSrc(await pageHeaders("development"))).toBe("script-src 'self' 'unsafe-inline' 'unsafe-eval'")
+    expect(scriptSrc(await headersOfEveryRoute("production"))).toBe("script-src 'self' 'unsafe-inline'")
+    expect(scriptSrc(await headersOfEveryRoute("development"))).toBe("script-src 'self' 'unsafe-inline' 'unsafe-eval'")
   })
 
   it("keeps other sites from holding a reference to the page or embedding its files", async () => {
-    const headers = await pageHeaders("production")
+    const headers = await headersOfEveryRoute("production")
 
     expect(headers.get("Cross-Origin-Opener-Policy")).toBe("same-origin")
     expect(headers.get("Cross-Origin-Resource-Policy")).toBe("same-origin")
   })
 
-  it("drops the retired XSS auditor and opts out of Topics instead of FLoC", async () => {
-    const headers = await pageHeaders("production")
+  it("sends no XSS auditor header and opts out of Topics", async () => {
+    const headers = await headersOfEveryRoute("production")
 
     expect(headers.has("X-XSS-Protection")).toBe(false)
     expect(headers.get("Permissions-Policy")).toBe("camera=(), microphone=(), geolocation=(), browsing-topics=()")
   })
 
   it("asks to be preloaded as HTTPS-only, subdomains included", async () => {
-    expect((await pageHeaders("production")).get("Strict-Transport-Security")).toBe(
+    expect((await headersOfEveryRoute("production")).get("Strict-Transport-Security")).toBe(
       "max-age=31536000; includeSubDomains; preload",
     )
   })

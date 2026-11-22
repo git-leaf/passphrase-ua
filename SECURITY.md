@@ -52,6 +52,7 @@ Mova Pass implements multiple security measures to protect user privacy and pass
 - HTTP Strict Transport Security (HSTS)
 - X-Frame-Options to prevent clickjacking
 - X-Content-Type-Options to prevent MIME sniffing
+- Cross-Origin-Opener-Policy and Cross-Origin-Resource-Policy, so other sites can't reach the window or load its files
 
 ### 5. Open Source
 

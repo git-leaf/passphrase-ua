@@ -44,11 +44,12 @@ const nextConfig: NextConfig = {
             value: "nosniff",
           },
           {
-            // Windows of other sites get no handle on this one, and other sites can't load its files
+            // Windows of other sites get no handle on this one
             key: "Cross-Origin-Opener-Policy",
             value: "same-origin",
           },
           {
+            // Other sites' pages can't embed its files (servers can still fetch them)
             key: "Cross-Origin-Resource-Policy",
             value: "same-origin",
           },
