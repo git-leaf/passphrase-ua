@@ -1,7 +1,7 @@
 "use client"
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
-import { useI18n } from "@/lib/i18n"
+import { useI18n } from "@/app/components/i18n-provider"
 import { STRENGTH_BANDS, type StrengthLevel } from "@/lib/strength/strength-analysis"
 
 /** The bit range of a Strength level, e.g. "40–60" or "128+". */

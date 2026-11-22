@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useSyncExternalStore } from "react"
+import { useEffect, useEffectEvent, useSyncExternalStore } from "react"
 import type { GeneratorErrorCode } from "@/lib/generators/errors"
 import type { GenerationMethod } from "@/lib/generators/types"
 import {
@@ -38,17 +38,20 @@ const URL_UPDATE_DELAY_MS = 300
 export function useGeneratorSession(method: GenerationMethod | null, onError: ErrorListener) {
   const state = useSyncExternalStore(session.subscribe, session.getState, () => INITIAL_SESSION_STATE)
 
+  // Subscribed once, so a new onError each render doesn't resubscribe
+  const reportError = useEffectEvent(onError)
   useEffect(() => {
-    errorListeners.add(onError)
+    const listener: ErrorListener = (code) => reportError(code)
+    errorListeners.add(listener)
     return () => {
-      errorListeners.delete(onError)
+      errorListeners.delete(listener)
     }
-  }, [onError])
+  }, [])
 
   useEffect(() => {
     if (!method) return
 
-    if (!session.getState()[method].output) {
+    if (!session.getState()[method].secret) {
       // The first time the page is shown, options in its URL apply; afterwards the URL follows the session
       if (!location.search) session.generate(method)
       else if (method === "password") session.updatePasswordOptions(optionsFromQuery(method, location.search))

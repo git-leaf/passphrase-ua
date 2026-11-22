@@ -2,7 +2,7 @@
 
 import { useSyncExternalStore } from "react"
 import { WifiOff } from "lucide-react"
-import { useI18n } from "@/lib/i18n"
+import { useI18n } from "@/app/components/i18n-provider"
 
 function subscribe(onChange: () => void) {
   window.addEventListener("online", onChange)

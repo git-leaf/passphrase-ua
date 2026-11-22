@@ -2,7 +2,7 @@
 
 import { Button } from "@/app/components/ui/button"
 import { Copy, RefreshCw } from "lucide-react"
-import { useI18n } from "@/lib/i18n"
+import { useI18n } from "@/app/components/i18n-provider"
 import { StrengthMeter } from "./strength-meter"
 
 interface OutputDisplayProps {

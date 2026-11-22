@@ -10,7 +10,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu"
-import { languageNames, locales, pagePath, rememberLocale, useI18n, type Page } from "@/lib/i18n"
+import { useI18n } from "@/app/components/i18n-provider"
+import { languageNames, locales, pagePath, rememberLocale, type Page } from "@/lib/i18n"
 
 function subscribeToHash(onChange: () => void) {
   window.addEventListener("hashchange", onChange)

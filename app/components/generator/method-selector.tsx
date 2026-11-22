@@ -1,7 +1,8 @@
 "use client"
 
 import Link from "next/link"
-import { pagePath, useI18n, type Page } from "@/lib/i18n"
+import { useI18n } from "@/app/components/i18n-provider"
+import { pagePath, type Page } from "@/lib/i18n"
 
 /** The pages the method selector moves between */
 export type GeneratorView = Exclude<Page, "privacy">

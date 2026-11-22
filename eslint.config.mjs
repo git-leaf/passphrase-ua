@@ -12,6 +12,16 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-explicit-any": "error",
     },
   },
+  // lib/ stays framework-free (CONTRIBUTING.md)
+  {
+    files: ["lib/**"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        { patterns: [{ regex: "^(react|react-dom|next)(/|$)", message: "lib/ is framework-free; UI goes in app/." }] },
+      ],
+    },
+  },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

@@ -6,7 +6,7 @@ import { useToast } from "@/app/hooks/use-toast"
 import { ThemeToggle } from "@/app/components/theme-toggle"
 import { LanguageToggle } from "@/app/components/language-toggle"
 import { OfflineIndicator } from "@/app/components/offline-indicator"
-import { useI18n } from "@/lib/i18n"
+import { useI18n } from "@/app/components/i18n-provider"
 import { useGeneratorSession } from "@/app/hooks/use-generator-session"
 
 // Generator components
@@ -39,7 +39,7 @@ export function GeneratorPage({ page }: { page: GeneratorView }) {
     })
   })
 
-  const output = method && state[method].output
+  const secret = method && state[method].secret
 
   const copyToClipboard = async (secret: string) => {
     try {
@@ -100,11 +100,11 @@ export function GeneratorPage({ page }: { page: GeneratorView }) {
 
               {page === "learn" && <LearnContent />}
 
-              {method && output && (
+              {method && secret && (
                 <OutputDisplay
-                  secret={output.secret}
-                  entropy={output.entropy}
-                  onCopy={() => copyToClipboard(output.secret)}
+                  secret={secret.secret}
+                  entropy={secret.entropy}
+                  onCopy={() => copyToClipboard(secret.secret)}
                   onRegenerate={() => session.generate(method)}
                   isRegenerating={method === "passphrase" && state.passphrase.pending}
                 />

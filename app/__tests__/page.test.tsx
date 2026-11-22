@@ -105,7 +105,7 @@ async function renderPage(path: string) {
   history.replaceState(null, "", path)
   const [{ default: Page }, { I18nProvider }, { ThemeProvider }, { Toaster }, { OfflineSupport }] = await Promise.all([
     LOCALIZED_PAGES[rest](),
-    import("@/lib/i18n"),
+    import("@/app/components/i18n-provider"),
     import("@/app/components/theme-provider"),
     import("@/app/components/ui/toaster"),
     import("@/app/components/offline-support"),

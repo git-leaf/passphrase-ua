@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest"
 import type { GeneratorErrorCode } from "@/lib/generators/errors"
+import type { GenerationMethod } from "@/lib/generators/types"
 import { createWordlistSource, type ReadText } from "@/lib/wordlists/wordlist-source"
-import { createGeneratorSession } from "../generator-session"
+import { createGeneratorSession, type GeneratorSession } from "../generator-session"
 
 const UK_WORDS = ["кіт", "пес", "сова", "лис"]
 const EN_WORDS = ["acid", "acorn", "acre", "acts"]
@@ -27,6 +28,11 @@ function setup(readText: ReadText = readFiles) {
   return { session, errors }
 }
 
+/** The text of a method's latest Secret */
+function secretOf(session: GeneratorSession, method: GenerationMethod) {
+  return session.getState()[method].secret?.secret
+}
+
 /** A promise you resolve from outside. */
 function deferred<T>() {
   let resolve!: (value: T) => void
@@ -41,20 +47,20 @@ describe("generator session", () => {
 
     expect(state.password.options.length).toBe(16)
     expect(state.passphrase.options.wordlist).toEqual({ language: "uk", id: "wordlist" })
-    expect(state.password.output).toBeNull()
-    expect(state.passphrase.output).toBeNull()
+    expect(state.password.secret).toBeNull()
+    expect(state.passphrase.secret).toBeNull()
   })
 
   it("keeps each method’s Secret separate", async () => {
     const { session } = setup()
 
     await session.generate("password")
-    const password = session.getState().password.output
+    const password = session.getState().password.secret
     await session.generate("passphrase")
 
     expect(password?.secret).toHaveLength(16)
-    expect(session.getState().password.output).toBe(password)
-    expect(session.getState().passphrase.output?.secret.split("-")).toHaveLength(6)
+    expect(session.getState().password.secret).toBe(password)
+    expect(secretOf(session, "passphrase")?.split("-")).toHaveLength(6)
   })
 
   it("regenerates the password when its options change", async () => {
@@ -62,8 +68,7 @@ describe("generator session", () => {
 
     await session.updatePasswordOptions({ length: 24, includeSymbols: false })
 
-    const output = session.getState().password.output
-    expect(output?.secret).toMatch(/^[A-Za-z0-9]{24}$/)
+    expect(secretOf(session, "password")).toMatch(/^[A-Za-z0-9]{24}$/)
   })
 
   it("regenerates the passphrase when its options change", async () => {
@@ -71,7 +76,7 @@ describe("generator session", () => {
 
     await session.updatePassphraseOptions({ wordCount: 4, separator: "." })
 
-    const words = session.getState().passphrase.output!.secret.split(".")
+    const words = secretOf(session, "passphrase")!.split(".")
     expect(words).toHaveLength(4)
     for (const word of words) expect(UK_WORDS).toContain(word)
   })
@@ -81,7 +86,7 @@ describe("generator session", () => {
 
     await session.updatePassphraseOptions({ separator: "custom", customSeparator: "+" })
 
-    expect(session.getState().passphrase.output!.secret.split("+")).toHaveLength(6)
+    expect(secretOf(session, "passphrase")!.split("+")).toHaveLength(6)
   })
 
   it("switches to the default wordlist of a newly chosen language", async () => {
@@ -90,7 +95,7 @@ describe("generator session", () => {
     await session.setWordlistLanguage("en")
 
     expect(session.getState().passphrase.options.wordlist).toEqual({ language: "en", id: "eff-large" })
-    for (const word of session.getState().passphrase.output!.secret.split("-")) {
+    for (const word of secretOf(session, "passphrase")!.split("-")) {
       expect(EN_WORDS).toContain(word)
     }
   })
@@ -116,7 +121,7 @@ describe("generator session", () => {
     english.resolve(FILES["/wordlists/en/eff_large_diceware.txt"])
     await slow
 
-    for (const word of session.getState().passphrase.output!.secret.split("-")) {
+    for (const word of secretOf(session, "passphrase")!.split("-")) {
       expect(UK_WORDS).toContain(word)
     }
   })
@@ -133,7 +138,7 @@ describe("generator session", () => {
     })
 
     expect(errors).toEqual(["no-character-classes"])
-    expect(session.getState().password.output).toBeNull()
+    expect(session.getState().password.secret).toBeNull()
   })
 
   it("reports a wordlist that cannot be loaded as wordlist-unavailable", async () => {

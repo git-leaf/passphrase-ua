@@ -3,7 +3,8 @@ import { RootDocument } from "@/app/components/root-document"
 import { ThemeProvider } from "@/app/components/theme-provider"
 import { Toaster } from "@/app/components/ui/toaster"
 import { OfflineSupport } from "@/app/components/offline-support"
-import { I18nProvider, locales, SITE_URL } from "@/lib/i18n"
+import { I18nProvider } from "@/app/components/i18n-provider"
+import { locales, SITE_URL } from "@/lib/i18n"
 import { localeParam } from "./locale-param"
 
 export const metadata: Metadata = {
