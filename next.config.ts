@@ -17,7 +17,9 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline'", // Next.js requires unsafe-eval and unsafe-inline for dev
+              // Next.js's inline scripts need unsafe-inline (docs/adr/0014); only React in development uses eval
+              // https://nextjs.org/docs/app/guides/content-security-policy
+              `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
               "style-src 'self' 'unsafe-inline'", // Tailwind/shadcn requires unsafe-inline
               "img-src 'self' data: blob:",
               "font-src 'self' data:",
@@ -42,8 +44,13 @@ const nextConfig: NextConfig = {
             value: "nosniff",
           },
           {
-            key: "X-XSS-Protection",
-            value: "1; mode=block",
+            // Windows of other sites get no handle on this one, and other sites can't load its files
+            key: "Cross-Origin-Opener-Policy",
+            value: "same-origin",
+          },
+          {
+            key: "Cross-Origin-Resource-Policy",
+            value: "same-origin",
           },
           {
             key: "Referrer-Policy",
@@ -51,7 +58,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Permissions-Policy",
-            value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
+            value: "camera=(), microphone=(), geolocation=(), browsing-topics=()",
           },
         ],
       },
