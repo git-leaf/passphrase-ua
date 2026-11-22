@@ -465,6 +465,17 @@ describe("generator page", () => {
     }
   })
 
+  it("links each charity's site in the page's language", async () => {
+    await renderApp("/uk")
+    const prytula = screen.getByRole("link", { name: uk.footer.donations.prytulafoundation })
+    expect(prytula.getAttribute("href")).toBe("https://prytulafoundation.org/")
+
+    cleanup()
+    await renderApp("/en")
+    const sternenko = screen.getByRole("link", { name: en.footer.donations.sternenkofund })
+    expect(sternenko.getAttribute("href")).toBe("https://www.sternenkofund.org/en")
+  })
+
   it("shows the personal fundraising link only when its URL is configured", async () => {
     // The page reads the URL as it loads, and renderApp reloads it
     vi.stubEnv("NEXT_PUBLIC_MONOBANK_JAR_URL", "")

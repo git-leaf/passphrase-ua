@@ -1,22 +1,39 @@
 "use client"
 
 import Image from "next/image"
-import { useI18n, type DonationId } from "@/lib/i18n"
+import { useI18n, type DonationId, type Locale } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 interface DonationLink {
   /** Also the logo file name in /public/charity, without the -dark suffix or extension */
   id: DonationId
-  href: string
+  /** The site in each language, where it has one */
+  href: Record<Locale, string>
   width: number
   height: number
 }
 
 const organizations: DonationLink[] = [
-  { id: "comebackalive", href: "https://savelife.in.ua/en/", width: 62, height: 31 },
-  { id: "prytulafoundation", href: "https://prytulafoundation.org/en", width: 261, height: 48 },
-  { id: "united24", href: "https://u24.gov.ua/", width: 422, height: 40 },
-  { id: "sternenkofund", href: "https://www.sternenkofund.org/en", width: 506, height: 200 },
+  {
+    id: "comebackalive",
+    href: { en: "https://savelife.in.ua/en/", uk: "https://savelife.in.ua/" },
+    width: 62,
+    height: 31,
+  },
+  {
+    id: "prytulafoundation",
+    href: { en: "https://prytulafoundation.org/en", uk: "https://prytulafoundation.org/" },
+    width: 261,
+    height: 48,
+  },
+  // Picks the visitor's language itself
+  { id: "united24", href: { en: "https://u24.gov.ua/", uk: "https://u24.gov.ua/" }, width: 422, height: 40 },
+  {
+    id: "sternenkofund",
+    href: { en: "https://www.sternenkofund.org/en", uk: "https://www.sternenkofund.org/" },
+    width: 506,
+    height: 200,
+  },
 ]
 
 /** Left out when unset, as in forks, so the footer never shows a link that goes nowhere */
@@ -50,7 +67,7 @@ export function DonationSection() {
         <div className="flex flex-col items-center gap-3 pt-2">
           <p className="text-xs text-muted-foreground">{t.footer.supportFundraising}</p>
           <DonationLogoLink
-            link={{ id: "monobank", href: personalJarUrl, width: 109, height: 24 }}
+            link={{ id: "monobank", href: { en: personalJarUrl, uk: personalJarUrl }, width: 109, height: 24 }}
             className="px-6 py-3 max-w-xs"
             logoClassName="h-8 w-auto"
           />
@@ -72,12 +89,12 @@ function DonationLogoLink({
   className: string
   logoClassName: string
 }) {
-  const { t } = useI18n()
+  const { locale, t } = useI18n()
   const name = t.footer.donations[link.id]
 
   return (
     <a
-      href={link.href}
+      href={link.href[locale]}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
