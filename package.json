@@ -1,6 +1,8 @@
 {
   "name": "passphrase-ua",
   "version": "0.1.0",
+  "description": "Client-side password and passphrase generator with Ukrainian and English Wordlists that explains how strong each result is.",
+  "homepage": "https://movapass.net",
   "private": true,
   "license": "MIT",
   "scripts": {
