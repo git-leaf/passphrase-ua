@@ -33,13 +33,13 @@ export const DEFAULT_ATTACKER_SETTINGS: AttackerSettings = {
  */
 export function attackerModelOf(settings: AttackerSettings): AttackerModel {
   return {
-    guessesPerSecond: valueOf(settings.guessRate, settings.customGuessRate, DEFAULT_ATTACKER.guessesPerSecond),
-    costPer2pow32: valueOf(settings.costPer2pow32, settings.customCostPer2pow32, DEFAULT_ATTACKER.costPer2pow32),
+    guessesPerSecond: chosenValue(settings.guessRate, settings.customGuessRate, DEFAULT_ATTACKER.guessesPerSecond),
+    costPer2pow32: chosenValue(settings.costPer2pow32, settings.customCostPer2pow32, DEFAULT_ATTACKER.costPer2pow32),
   }
 }
 
 /** A preset value, or the custom text unless it's empty */
-function valueOf(selected: string, custom: string, fallback: number): number {
+function chosenValue(selected: string, custom: string, fallback: number): number {
   if (selected !== CUSTOM_ATTACKER_VALUE) return Number(selected)
   return custom.trim() === "" ? fallback : Number(custom)
 }

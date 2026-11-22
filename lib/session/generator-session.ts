@@ -51,7 +51,7 @@ export interface GeneratorSession {
   ): Promise<void>
   /** Switches the passphrase to the language's default Wordlist */
   setWordlistLanguage(language: WordlistLanguage): Promise<void>
-  /** Changes the Attacker model; no Secret is regenerated */
+  /** Changes the Attacker settings; no Secret is regenerated */
   updateAttackerSettings(patch: Partial<AttackerSettings>): void
 }
 
