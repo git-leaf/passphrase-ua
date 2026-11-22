@@ -236,6 +236,20 @@ describe("generator page", () => {
     await waitFor(() => expect(shownSecret()).toMatch(/^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{}|;:,.<>?]{20}$/))
   })
 
+  it("names every ambiguous character the Password option excludes, in each language", async () => {
+    for (const locale of locales) {
+      const t = translations[locale]
+      cleanup()
+      const user = await renderApp(`/${locale}/password`)
+
+      await user.click(screen.getByRole("button", { name: t.password.advancedOptions }))
+
+      expect(
+        screen.getByRole("switch", { name: `${t.password.excludeAmbiguous} (i, l, L, I, 1, |, o, O, 0)` }),
+      ).toBeTruthy()
+    }
+  })
+
   it("shows the options that differ from the defaults in the URL, without adding history entries", async () => {
     const user = await renderApp("/en/password")
     await untilDefaultPasswordShown()

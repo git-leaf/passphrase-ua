@@ -54,10 +54,20 @@ describe("generatePassword", () => {
   })
 
   it.each([
+    ["lowercase", { includeLowercase: true }, "abcdefghjkmnpqrstuvwxyz"],
     ["uppercase", { includeUppercase: true }, "ABCDEFGHJKMNPQRSTUVWXYZ"],
+    ["numbers", { includeNumbers: true }, "23456789"],
     ["symbols", { includeSymbols: true }, "!@#$%^&*()_+-=[]{};:,.<>?"],
-  ])("drops the look-alikes from the %s when ambiguous characters are excluded", (_, classes, expected) => {
-    const options = { ...onlyNumbers, includeNumbers: false, excludeAmbiguous: true, ...classes }
+  ])("drops the ambiguous characters from the %s when they are excluded", (_, classes, expected) => {
+    const options: PasswordOptions = {
+      ...DEFAULT_PASSWORD_OPTIONS,
+      includeLowercase: false,
+      includeUppercase: false,
+      includeNumbers: false,
+      includeSymbols: false,
+      excludeAmbiguous: true,
+      ...classes,
+    }
 
     // Bytes 0, 1, 2, … pick the Character set in order
     const { secret } = generatePassword({ ...options, length: expected.length }, countingBytes())
