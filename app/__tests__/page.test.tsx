@@ -452,24 +452,31 @@ describe("generator page", () => {
   })
 
   it("names the donation links and logos in the page's language", async () => {
-    await renderApp("/uk")
+    vi.stubEnv("NEXT_PUBLIC_MONOBANK_JAR_URL", "https://send.monobank.ua/jar/test")
 
-    const link = screen.getByRole("link", { name: "Фонд «Повернись живим»" })
-    expect(within(link).getAllByRole("img", { name: "Повернись живим" })).toHaveLength(2)
-    expect(screen.queryByRole("link", { name: "Come Back Alive Foundation" })).toBeNull()
+    for (const locale of locales) {
+      cleanup()
+      await renderApp(`/${locale}`)
+
+      for (const name of Object.values(translations[locale].footer.donations)) {
+        const link = screen.getByRole("link", { name })
+        expect(within(link).getAllByRole("img", { name })).toHaveLength(2)
+      }
+    }
   })
 
   it("shows the personal fundraising link only when its URL is configured", async () => {
+    // The page reads the URL as it loads, and renderApp reloads it
     vi.stubEnv("NEXT_PUBLIC_MONOBANK_JAR_URL", "")
     await renderApp("/en")
     expect(screen.queryByText(en.footer.supportFundraising)).toBeNull()
-    expect(screen.queryByRole("link", { name: en.footer.donations.monobank.link })).toBeNull()
+    expect(screen.queryByRole("link", { name: en.footer.donations.monobank })).toBeNull()
 
     cleanup()
     vi.stubEnv("NEXT_PUBLIC_MONOBANK_JAR_URL", "https://send.monobank.ua/jar/test")
     await renderApp("/en")
     expect(screen.getByText(en.footer.supportFundraising)).toBeTruthy()
-    expect(screen.getByRole("link", { name: en.footer.donations.monobank.link }).getAttribute("href")).toBe(
+    expect(screen.getByRole("link", { name: en.footer.donations.monobank }).getAttribute("href")).toBe(
       "https://send.monobank.ua/jar/test",
     )
   })

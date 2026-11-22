@@ -6,7 +6,7 @@ import type { GeneratorErrorCode } from "@/lib/generators/errors"
 import type { WordlistId } from "@/lib/wordlists/catalogue"
 import type { Page } from "./routes"
 
-/** The charities and fundraisers the footer links to, by logo file name */
+/** The charities and fundraisers the footer links to */
 export type DonationId = "comebackalive" | "prytulafoundation" | "united24" | "sternenkofund" | "monobank"
 
 export const locales = ["en", "uk"] as const
@@ -155,8 +155,8 @@ export interface Translations {
     supportUkraine: string
     supportDescription: string
     supportFundraising: string
-    /** Each donation link's name, and its logo's alt text */
-    donations: Record<DonationId, { link: string; logo: string }>
+    /** Each donation link's name, also its logo's alt text */
+    donations: Record<DonationId, string>
     aboutProject: string
     sourceCode: string
     reportIssue: string
@@ -550,11 +550,11 @@ export const translations: Record<Locale, Translations> = {
         "Consider supporting Ukrainian humanitarian and defense efforts through trusted organizations:",
       supportFundraising: "Or support our current fundraising:",
       donations: {
-        comebackalive: { link: "Come Back Alive Foundation", logo: "Come Back Alive" },
-        prytulafoundation: { link: "Serhiy Prytula Charity Foundation", logo: "Serhiy Prytula Foundation" },
-        united24: { link: "United24 - Official fundraising platform", logo: "United24" },
-        sternenkofund: { link: "Sternenko Community Foundation", logo: "Sternenko Fund" },
-        monobank: { link: "Personal charity account via Monobank", logo: "Monobank Charity Jar" },
+        comebackalive: "Come Back Alive Foundation",
+        prytulafoundation: "Serhiy Prytula Charity Foundation",
+        united24: "United24 - Official fundraising platform",
+        sternenkofund: "Sternenko Community Foundation",
+        monobank: "Personal charity account via Monobank",
       },
       aboutProject: "About Project",
       sourceCode: "Source Code",
@@ -1023,11 +1023,11 @@ export const translations: Record<Locale, Translations> = {
       supportDescription: "Розгляньте можливість підтримки українських гуманітарних та оборонних організацій:",
       supportFundraising: "Або підтримайте наш поточний збір:",
       donations: {
-        comebackalive: { link: "Фонд «Повернись живим»", logo: "Повернись живим" },
-        prytulafoundation: { link: "Благодійний фонд Сергія Притули", logo: "Фонд Сергія Притули" },
-        united24: { link: "United24 — офіційна платформа збору коштів", logo: "United24" },
-        sternenkofund: { link: "Фонд «Спільнота Стерненка»", logo: "Спільнота Стерненка" },
-        monobank: { link: "Особистий збір через банку Monobank", logo: "Банка Monobank" },
+        comebackalive: "Фонд «Повернись живим»",
+        prytulafoundation: "Благодійний фонд Сергія Притули",
+        united24: "United24 — офіційна платформа збору коштів",
+        sternenkofund: "Фонд «Спільнота Стерненка»",
+        monobank: "Особистий збір через банку Monobank",
       },
       aboutProject: "Про проєкт",
       sourceCode: "Вихідний код",

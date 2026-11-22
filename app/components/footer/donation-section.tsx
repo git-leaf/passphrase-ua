@@ -19,7 +19,7 @@ const organizations: DonationLink[] = [
   { id: "sternenkofund", href: "https://www.sternenkofund.org/en", width: 506, height: 200 },
 ]
 
-/** Unset in forks and previews, where the section leaves it out */
+/** Left out when unset, as in forks, so the footer never shows a link that goes nowhere */
 const personalJarUrl = process.env.NEXT_PUBLIC_MONOBANK_JAR_URL
 
 /**
@@ -73,7 +73,7 @@ function DonationLogoLink({
   logoClassName: string
 }) {
   const { t } = useI18n()
-  const { link: name, logo: alt } = t.footer.donations[link.id]
+  const name = t.footer.donations[link.id]
 
   return (
     <a
@@ -88,14 +88,14 @@ function DonationLogoLink({
     >
       <Image
         src={`/charity/${link.id}.svg`}
-        alt={alt}
+        alt={name}
         width={link.width}
         height={link.height}
         className={cn(logoClassName, "dark:hidden")}
       />
       <Image
         src={`/charity/${link.id}-dark.svg`}
-        alt={alt}
+        alt={name}
         width={link.width}
         height={link.height}
         className={cn(logoClassName, "hidden dark:block")}
