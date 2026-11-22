@@ -7,7 +7,11 @@ import { Switch } from "@/app/components/ui/switch"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
 import { useI18n } from "@/lib/i18n"
 import { RefreshCw } from "lucide-react"
-import { PASSWORD_LIMITS, type PasswordOptions as PasswordGeneratorOptions } from "@/lib/generators/password"
+import {
+  AMBIGUOUS_CHARACTERS,
+  PASSWORD_LIMITS,
+  type PasswordOptions as PasswordGeneratorOptions,
+} from "@/lib/generators/password"
 
 interface PasswordOptionsProps {
   options: PasswordGeneratorOptions
@@ -76,7 +80,7 @@ export function PasswordOptions({ options, onChange, onGenerate }: PasswordOptio
           <AccordionContent className="space-y-4 pt-4">
             <div className="flex items-center justify-between space-x-2">
               <Label htmlFor="ambiguous">
-                {t.password.excludeAmbiguous} {t.password.excludeAmbiguousDetail}
+                {t.password.excludeAmbiguous} ({[...AMBIGUOUS_CHARACTERS].join(", ")})
               </Label>
               <Switch
                 id="ambiguous"
