@@ -441,7 +441,7 @@ export const translations: Record<Locale, Translations> = {
       symbols: "Symbols (!@#$)",
       advancedOptions: "Advanced Options",
       excludeAmbiguous: "Exclude Ambiguous",
-      excludeAmbiguousDetail: "(i, l, 1, L, o, 0, O)",
+      excludeAmbiguousDetail: "(i, l, L, I, 1, |, o, O, 0)",
       generate: "Generate Password",
     },
 
@@ -915,7 +915,7 @@ export const translations: Record<Locale, Translations> = {
       symbols: "Символи (!@#$)",
       advancedOptions: "Додаткові налаштування",
       excludeAmbiguous: "Виключити неоднозначні символи",
-      excludeAmbiguousDetail: "(i, l, 1, L, o, 0, O)",
+      excludeAmbiguousDetail: "(i, l, L, I, 1, |, o, O, 0)",
       generate: "Згенерувати пароль",
     },
 

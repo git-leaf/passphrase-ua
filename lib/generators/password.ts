@@ -23,7 +23,7 @@ export interface PasswordOptions {
   includeNumbers: boolean
   /** Include symbols */
   includeSymbols: boolean
-  /** Exclude ambiguous characters (i, l, 1, L, o, 0, O) */
+  /** Exclude ambiguous characters (i, l, L, I, 1, |, o, O, 0) */
   excludeAmbiguous: boolean
 }
 
@@ -49,7 +49,7 @@ const CHARACTER_CLASSES = {
 } as const
 
 // Characters that look alike in many fonts
-const AMBIGUOUS = "il1Lo0O"
+const AMBIGUOUS = "il1LIo0O|"
 
 function buildCharacterSet(options: PasswordOptions): string {
   let characters = ""

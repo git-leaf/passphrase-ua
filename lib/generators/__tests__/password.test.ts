@@ -15,6 +15,14 @@ const constantBytes = (value: number) => (buffer: Uint8Array) => {
   buffer.fill(value)
 }
 
+/** A byte source that returns 0, 1, 2, … one byte per call. */
+const countingBytes = () => {
+  let next = 0
+  return (buffer: Uint8Array) => {
+    buffer.fill(next++)
+  }
+}
+
 describe("generatePassword", () => {
   it("produces a secret of the requested length", () => {
     const { secret } = generatePassword({ ...DEFAULT_PASSWORD_OPTIONS, length: 20 })
@@ -42,7 +50,19 @@ describe("generatePassword", () => {
       excludeAmbiguous: true,
     })
 
-    expect(secret).not.toMatch(/[il1Lo0O]/)
+    expect(secret).not.toMatch(/[il1LIo0O|]/)
+  })
+
+  it.each([
+    ["uppercase", { includeUppercase: true }, "ABCDEFGHJKMNPQRSTUVWXYZ"],
+    ["symbols", { includeSymbols: true }, "!@#$%^&*()_+-=[]{};:,.<>?"],
+  ])("drops the look-alikes from the %s when ambiguous characters are excluded", (_, classes, expected) => {
+    const options = { ...onlyNumbers, includeNumbers: false, excludeAmbiguous: true, ...classes }
+
+    // Bytes 0, 1, 2, … pick the Character set in order
+    const { secret } = generatePassword({ ...options, length: expected.length }, countingBytes())
+
+    expect(secret).toBe(expected)
   })
 
   it("reports entropy as length × log2(character set size)", () => {
@@ -53,14 +73,14 @@ describe("generatePassword", () => {
   })
 
   it("counts the smaller character set when ambiguous characters are excluded", () => {
-    // 88 minus i, l, 1, L, o, 0, O = 81 characters
+    // 88 minus i, l, 1, L, I, o, 0, O, | = 79 characters
     const { entropy } = generatePassword({
       ...DEFAULT_PASSWORD_OPTIONS,
       length: 16,
       excludeAmbiguous: true,
     })
 
-    expect(entropy).toBeCloseTo(101.44, 2)
+    expect(entropy).toBeCloseTo(100.86, 2)
   })
 
   it.each([7, 65, 12.5])("rejects length %s with invalid-length", (length) => {
