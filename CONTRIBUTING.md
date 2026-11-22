@@ -23,7 +23,7 @@ Formatting, lint (including no `any`), types, tests and PR titles are checked by
 - **pnpm only.** Commit the lockfile. pnpm refuses versions published less than 7 days ago, and Dependabot keeps dependencies current ([ADR-0003](docs/adr/0003-automatic-dependency-updates.md)).
 - **Pin GitHub Actions to a full commit SHA**, with the version in a comment. CI fails otherwise.
 - **Domain logic lives in `lib/`** as deep modules (secure random, generators, wordlists, strength analysis, generator session) with small interfaces. `app/` holds UI only, so the code that decides how strong a Secret is stays easy to test and audit.
-- **Tests sit next to the code** in a `__tests__` folder and use Vitest.
+- **Tests sit next to the code** in a `__tests__` folder and use Vitest. Domain logic is tested directly; UI flows are tested through the rendered page with Testing Library, in files that start with `// @vitest-environment jsdom`. Fake only what the browser provides (network, clipboard), never the app's own modules. `pnpm check` fails when line coverage of `lib/` drops below 90%.
 - **Use the words in [GLOSSARY.md](GLOSSARY.md)** for names in code, tests, issues and PRs. A missing term is a gap worth adding.
 - **Record decisions in [docs/adr/](docs/adr/)** when they are hard to reverse, surprising without context and the result of a real trade-off.
 - **Files and folders are kebab-case.** Use named exports, except where Next.js requires a default export (`page`, `layout` and other route files).
