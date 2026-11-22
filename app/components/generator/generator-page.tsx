@@ -83,6 +83,7 @@ export function GeneratorPage({ page }: { page: GeneratorView }) {
               {page === "passphrase" && (
                 <PassphraseOptions
                   options={state.passphrase.options}
+                  wordPoolSize={state.passphrase.pending ? null : (state.passphrase.secret?.wordPoolSize ?? null)}
                   pending={state.passphrase.pending}
                   onChange={session.updatePassphraseOptions}
                   onLanguageChange={session.setWordlistLanguage}

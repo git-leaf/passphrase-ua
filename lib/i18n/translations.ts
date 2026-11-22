@@ -69,6 +69,8 @@ export interface Translations {
     separatorUnderscore: string
     separatorPeriod: string
     separatorNone: string
+    /** Why "None" can't be chosen for the current Wordlist */
+    separatorNoneUnavailable: string
     separatorCustom: string
     customSeparator: string
     customSeparatorPlaceholder: string
@@ -461,6 +463,7 @@ export const translations: Record<Locale, Translations> = {
       separatorUnderscore: "Underscore",
       separatorPeriod: "Period",
       separatorNone: "None",
+      separatorNoneUnavailable: "“None” works only with wordlists where no word begins another, such as the EFF ones.",
       separatorCustom: "Custom",
       customSeparator: "Custom Separator",
       customSeparatorPlaceholder: "Enter custom separator",
@@ -585,7 +588,8 @@ export const translations: Record<Locale, Translations> = {
         "invalid-length": "Password length must be between 8 and 64 characters.",
         "no-character-classes": "Select at least one character type.",
         "invalid-word-count": "Choose between 3 and 12 words.",
-        "invalid-separator": "The separator can be at most 3 characters.",
+        "invalid-separator": "Choose another separator, of at most 3 characters.",
+        "separator-required": "This wordlist needs a separator between words.",
         "wordlist-unavailable": "The wordlist could not be loaded. Check your connection and try again.",
         unexpected: "Something went wrong while generating. Please try again.",
       },
@@ -944,6 +948,7 @@ export const translations: Record<Locale, Translations> = {
       separatorUnderscore: "Підкреслення",
       separatorPeriod: "Крапка",
       separatorNone: "Немає",
+      separatorNoneUnavailable: "«Немає» доступне лише для словників, де жодне слово не є початком іншого, як-от EFF.",
       separatorCustom: "Свій роздільник",
       customSeparator: "Свій роздільник",
       customSeparatorPlaceholder: "Введіть свій роздільник",
@@ -1067,7 +1072,8 @@ export const translations: Record<Locale, Translations> = {
         "invalid-length": "Довжина пароля має бути від 8 до 64 символів.",
         "no-character-classes": "Виберіть хоча б один тип символів.",
         "invalid-word-count": "Виберіть від 3 до 12 слів.",
-        "invalid-separator": "Роздільник може містити не більше 3 символів.",
+        "invalid-separator": "Виберіть інший роздільник, не довший за 3 символи.",
+        "separator-required": "Для цього словника потрібен роздільник між словами.",
         "wordlist-unavailable": "Не вдалося завантажити словник. Перевірте з'єднання та спробуйте ще раз.",
         unexpected: "Під час генерації сталася помилка. Спробуйте ще раз.",
       },

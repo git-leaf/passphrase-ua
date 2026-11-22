@@ -64,8 +64,17 @@ describe("options query", () => {
     ["a line break as Separator", "sep=%0A"],
     ["a non-breaking space as Separator", "sep=%C2%A0"],
     ["an option given twice, the first time invalid", "words=two&words=5"],
+    ["no Separator for a Wordlist where one word begins another", "sep="],
   ])("reads %s as the default Passphrase options", (_, query) => {
     expect(optionsFromQuery("passphrase", query)).toEqual(PASSPHRASE_DEFAULTS)
+  })
+
+  it("goes without a Separator for a Wordlist where no word begins another", () => {
+    expect(optionsFromQuery("passphrase", "lang=en&sep=")).toEqual({
+      ...PASSPHRASE_DEFAULTS,
+      wordlist: { language: "en", id: "eff-large" },
+      separator: "",
+    })
   })
 
   it("keeps the valid Passphrase options of a query with invalid ones", () => {

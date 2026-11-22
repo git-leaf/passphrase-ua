@@ -15,6 +15,8 @@ import { wordlistIds, wordlistInfo, type WordlistChoice, type WordlistLanguage }
 
 interface PassphraseOptionsProps {
   options: PassphraseSettings
+  /** How many words the shown Passphrase was drawn from, once known */
+  wordPoolSize: number | null
   pending: boolean
   onChange: (patch: Partial<PassphraseSettings>) => void
   onLanguageChange: (language: WordlistLanguage) => void
@@ -48,6 +50,7 @@ const SEPARATOR_BUTTONS = ([...SEPARATOR_PRESETS, CUSTOM_SEPARATOR] as const).ma
  */
 export function PassphraseOptions({
   options,
+  wordPoolSize,
   pending,
   onChange,
   onLanguageChange,
@@ -56,6 +59,7 @@ export function PassphraseOptions({
   const { t, locale } = useI18n()
   const { language, id: wordlistId } = options.wordlist
   const wordlistNames = t.wordlists[language] as Record<string, string>
+  const { prefixFree } = wordlistInfo(options.wordlist)
 
   return (
     <div className="space-y-6">
@@ -100,17 +104,19 @@ export function PassphraseOptions({
               onValueChange={(id) => onChange({ wordlist: { language, id } as WordlistChoice })}
             >
               <SelectTrigger id="wordlist">
-                <SelectValue />
+                {/* Only the chosen Wordlist's count is known: it depends on the options and the loaded words */}
+                <SelectValue>
+                  {wordPoolSize === null
+                    ? wordlistNames[wordlistId]
+                    : t.wordlists.withSize
+                        .replace("{name}", wordlistNames[wordlistId])
+                        .replace("{count}", new Intl.NumberFormat(locale).format(wordPoolSize))}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {wordlistIds(language).map((id) => (
                   <SelectItem key={id} value={id}>
-                    {t.wordlists.withSize
-                      .replace("{name}", wordlistNames[id])
-                      .replace(
-                        "{count}",
-                        new Intl.NumberFormat(locale).format(wordlistInfo({ language, id } as WordlistChoice).size),
-                      )}
+                    {wordlistNames[id]}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -140,12 +146,19 @@ export function PassphraseOptions({
                 variant={options.separator === sep.value ? "default" : "outline"}
                 size="sm"
                 onClick={() => onChange({ separator: sep.value })}
+                disabled={sep.value === "" && !prefixFree}
+                aria-describedby={sep.value === "" && !prefixFree ? "separator-none-unavailable" : undefined}
                 className="w-full"
               >
                 {t.passphrase[sep.labelKey]} <span className="ml-1">{sep.symbol}</span>
               </Button>
             ))}
           </div>
+          {!prefixFree && (
+            <p id="separator-none-unavailable" className="text-xs text-muted-foreground">
+              {t.passphrase.separatorNoneUnavailable}
+            </p>
+          )}
           {options.separator === CUSTOM_SEPARATOR && (
             <Input
               placeholder={t.passphrase.customSeparatorPlaceholder}

@@ -89,6 +89,34 @@ describe("generator session", () => {
     expect(secretOf(session, "passphrase")!.split("+")).toHaveLength(6)
   })
 
+  it("uses the default separator while the custom separator is empty", async () => {
+    const { session } = setup()
+
+    await session.updatePassphraseOptions({ separator: "custom", customSeparator: "" })
+
+    expect(secretOf(session, "passphrase")!.split("-")).toHaveLength(6)
+  })
+
+  it("tells how many words the passphrase was drawn from", async () => {
+    const { session } = setup()
+
+    await session.generate("passphrase")
+
+    expect(session.getState().passphrase.secret?.wordPoolSize).toBe(UK_WORDS.length)
+  })
+
+  it("goes without a separator only on a wordlist where no word begins another", async () => {
+    const { session } = setup()
+    await session.setWordlistLanguage("en")
+
+    await session.updatePassphraseOptions({ separator: "" })
+    expect(secretOf(session, "passphrase")).toMatch(/^[a-z]+$/)
+
+    await session.setWordlistLanguage("uk")
+    expect(session.getState().passphrase.options.separator).toBe("-")
+    expect(secretOf(session, "passphrase")!.split("-")).toHaveLength(6)
+  })
+
   it("switches to the default wordlist of a newly chosen language", async () => {
     const { session } = setup()
 

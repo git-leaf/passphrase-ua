@@ -222,6 +222,31 @@ describe("generator page", () => {
     await waitFor(() => expect(shownSecret()).toMatch(sixWordsWithUnderscores))
   })
 
+  it("shows how many words the chosen Wordlist draws from under the chosen Separator", async () => {
+    const user = await renderApp("/en")
+    const wordlist = () => screen.getByRole("combobox", { name: en.passphrase.wordlist })
+
+    // 28 words of the default Ukrainian Wordlist contain "-", the default Separator
+    await waitFor(() => expect(wordlist().textContent).toBe("Wordlist (10,842 words)"))
+
+    await chooseUnderscoreSeparator(user)
+    await waitFor(() => expect(wordlist().textContent).toBe("Wordlist (10,870 words)"))
+  })
+
+  it("offers no Separator only for a Wordlist where no word begins another", async () => {
+    const noSeparator = () => screen.getByRole("button", { name: `${en.passphrase.separatorNone} ∅` })
+    await renderApp("/en")
+    await untilPassphraseSettled()
+
+    expect(noSeparator()).toHaveProperty("disabled", true)
+
+    cleanup()
+    await renderApp("/en?lang=en")
+    await untilPassphraseSettled()
+
+    expect(noSeparator()).toHaveProperty("disabled", false)
+  })
+
   it("opens on the options in the URL", async () => {
     await renderApp("/en?words=5&sep=_")
     const fiveWordsWithUnderscores = await ukrainianPassphrase(5, "_")

@@ -100,6 +100,86 @@ describe("generatePassphrase", () => {
     expect(entropy).toBeCloseTo(3 * Math.log2(3))
   })
 
+  it("leaves out words that contain the Separator", () => {
+    const hyphenated: Wordlist = { entries: [{ word: "чат-бот" }, { word: "кіт" }, { word: "пес" }] }
+
+    // Every byte picks index 0, which is "кіт" once "чат-бот" is gone
+    const generated = generatePassphrase(hyphenated, options, fixedBytes(0, 0, 0))
+
+    expect(generated.secret).toBe("кіт-кіт-кіт")
+    expect(generated.wordPoolSize).toBe(2)
+    expect(generated.entropy).toBeCloseTo(3)
+  })
+
+  it("keeps words that contain a Separator other than the chosen one", () => {
+    const hyphenated: Wordlist = { entries: [{ word: "чат-бот" }, { word: "кіт" }, { word: "пес" }] }
+
+    expect(generatePassphrase(hyphenated, { ...options, separator: "_" }).wordPoolSize).toBe(3)
+  })
+
+  it("leaves out words the Separator could be found across, so every Passphrase splits one way", () => {
+    // Next to "aa", a word that starts or ends with "a" makes "aaa", which splits two ways
+    const overlapping: Wordlist = { entries: [{ word: "a" }, { word: "ab" }, { word: "ba" }, { word: "bb" }] }
+
+    expect(generatePassphrase(overlapping, { ...options, separator: "aa" }).wordPoolSize).toBe(1)
+  })
+
+  it.each(["first", "all", "random", "random-word"] as const)(
+    "counts words that differ only in case once with style %s",
+    (capitalization) => {
+      const caseVariants: Wordlist = { entries: [{ word: "Київ" }, { word: "київ" }, { word: "пес" }] }
+
+      expect(generatePassphrase(caseVariants, { ...options, capitalization }).wordPoolSize).toBe(2)
+    },
+  )
+
+  it("keeps words that differ only in case when capitalization leaves them as they are", () => {
+    const caseVariants: Wordlist = { entries: [{ word: "Київ" }, { word: "київ" }, { word: "пес" }] }
+
+    expect(generatePassphrase(caseVariants, options).wordPoolSize).toBe(3)
+  })
+
+  it("leaves out words that contain the Separator in another case once capitalization changes case", () => {
+    const words: Wordlist = { entries: [{ word: "cat" }, { word: "dog" }, { word: "owl" }] }
+
+    expect(generatePassphrase(words, { ...options, separator: "A", capitalization: "all" }).wordPoolSize).toBe(2)
+    expect(generatePassphrase(words, { ...options, separator: "A" }).wordPoolSize).toBe(3)
+  })
+
+  it("allows no Separator when no word begins another", () => {
+    const generated = generatePassphrase(fourWords, { ...options, separator: "" }, fixedBytes(0, 1, 2))
+
+    expect(generated.secret).toBe("кітпессова")
+    expect(generated.wordPoolSize).toBe(4)
+  })
+
+  it.each<[string, Wordlist, boolean]>([
+    ["one word begins another", { entries: [{ word: "кіт" }, { word: "кітель" }, { word: "пес" }] }, false],
+    [
+      "one Transliteration begins another",
+      {
+        entries: [
+          { word: "кіт", transliteration: "kit" },
+          { word: "кітель", transliteration: "kitel" },
+        ],
+      },
+      true,
+    ],
+    ["one word begins another but for case", { entries: [{ word: "Ab" }, { word: "abc" }] }, false],
+  ])("rejects no Separator with separator-required when %s", (_, wordlist, useTransliteration) => {
+    expect(() =>
+      generatePassphrase(wordlist, { ...options, separator: "", useTransliteration, capitalization: "first" }),
+    ).toThrow(expect.objectContaining({ code: "separator-required" }))
+  })
+
+  it("rejects a Separator that every word contains with invalid-separator", () => {
+    const allHaveA: Wordlist = { entries: [{ word: "cat" }, { word: "bat" }] }
+
+    expect(() => generatePassphrase(allHaveA, { ...options, separator: "a" })).toThrow(
+      expect.objectContaining({ code: "invalid-separator" }),
+    )
+  })
+
   it.each([2, 13, 4.5])("rejects %s words with invalid-word-count", (wordCount) => {
     expect(() => generatePassphrase(fourWords, { ...options, wordCount })).toThrow(
       expect.objectContaining({ code: "invalid-word-count" }),
