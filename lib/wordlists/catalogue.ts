@@ -47,6 +47,13 @@ export function wordlistInfo(choice: WordlistChoice): WordlistInfo {
   return (WORDLIST_CATALOGUE[choice.language] as Record<string, WordlistInfo>)[choice.id]
 }
 
+/** The file paths of every Wordlist in the catalogue */
+export function wordlistPaths(): string[] {
+  return Object.values(WORDLIST_CATALOGUE).flatMap((wordlists) =>
+    Object.values(wordlists).map((info: WordlistInfo) => info.path),
+  )
+}
+
 /** The language's Wordlists in display order */
 export function wordlistIds<L extends WordlistLanguage>(language: L): WordlistId<L>[] {
   return Object.keys(WORDLIST_CATALOGUE[language]) as WordlistId<L>[]

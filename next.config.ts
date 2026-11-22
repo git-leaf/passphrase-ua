@@ -17,6 +17,7 @@ const nextConfig: NextConfig = {
               "img-src 'self' data: blob:",
               "font-src 'self' data:",
               "connect-src 'self'",
+              "worker-src 'self'", // the offline service worker, public/sw.js
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
@@ -48,6 +49,11 @@ const nextConfig: NextConfig = {
             value: "camera=(), microphone=(), geolocation=(), interest-cohort=()",
           },
         ],
+      },
+      {
+        // Browsers check for a new service worker on every visit; never serve a stale one
+        source: "/sw.js",
+        headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }],
       },
     ]
   },

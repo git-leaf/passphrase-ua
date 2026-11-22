@@ -42,7 +42,7 @@ Support the developer's personal charity efforts through [**Monobank Charity Jar
 - ✅ **100% Client-side** — All generation happens in your browser, nothing sent to servers
 - ✅ **Cryptographically Secure** — Uses `crypto.getRandomValues()` Web Crypto API
 - ✅ **No Tracking** — Zero analytics, no data collection, complete privacy
-- ✅ **Offline Support** — Works without internet connection after first load (in progress: [#23](https://github.com/git-leaf/passphrase-ua/issues/23))
+- ✅ **Offline Support** — Works without internet connection after first load: a service worker keeps the app and every Wordlist
 - ✅ **Open Source** — Fully auditable code
 
 ### User Experience
