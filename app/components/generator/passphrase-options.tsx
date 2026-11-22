@@ -9,8 +9,8 @@ import { Input } from "@/app/components/ui/input"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
 import { useI18n } from "@/lib/i18n"
 import { RefreshCw } from "lucide-react"
-import { PASSPHRASE_LIMITS, type CapitalizationStyle } from "@/lib/generators/passphrase"
-import { CUSTOM_SEPARATOR, type PassphraseSettings } from "@/lib/session/generator-session"
+import { CAPITALIZATION_STYLES, PASSPHRASE_LIMITS, type CapitalizationStyle } from "@/lib/generators/passphrase"
+import { CUSTOM_SEPARATOR, SEPARATOR_PRESETS, type PassphraseSettings } from "@/lib/session/generator-session"
 import { wordlistIds, wordlistInfo, type WordlistChoice, type WordlistLanguage } from "@/lib/wordlists/catalogue"
 
 interface PassphraseOptionsProps {
@@ -21,14 +21,27 @@ interface PassphraseOptionsProps {
   onGenerate: () => void
 }
 
-const SEPARATOR_PRESETS = [
-  { value: "-", labelKey: "separatorDash", symbol: "-" },
-  { value: "_", labelKey: "separatorUnderscore", symbol: "_" },
-  { value: " ", labelKey: "separatorSpace", symbol: "␣" },
-  { value: ".", labelKey: "separatorPeriod", symbol: "." },
-  { value: "", labelKey: "separatorNone", symbol: "∅" },
-  { value: CUSTOM_SEPARATOR, labelKey: "separatorCustom", symbol: "..." },
-] as const
+const SEPARATOR_LABELS = {
+  "-": { labelKey: "separatorDash", symbol: "-" },
+  _: { labelKey: "separatorUnderscore", symbol: "_" },
+  " ": { labelKey: "separatorSpace", symbol: "␣" },
+  ".": { labelKey: "separatorPeriod", symbol: "." },
+  "": { labelKey: "separatorNone", symbol: "∅" },
+  [CUSTOM_SEPARATOR]: { labelKey: "separatorCustom", symbol: "..." },
+} as const satisfies Record<(typeof SEPARATOR_PRESETS)[number] | typeof CUSTOM_SEPARATOR, unknown>
+
+const CAPITALIZATION_LABELS = {
+  none: "capNone",
+  first: "capFirst",
+  random: "capRandom",
+  all: "capAll",
+  "random-word": "capRandomWord",
+} as const satisfies Record<CapitalizationStyle, string>
+
+const SEPARATOR_BUTTONS = ([...SEPARATOR_PRESETS, CUSTOM_SEPARATOR] as const).map((value) => ({
+  value,
+  ...SEPARATOR_LABELS[value],
+}))
 
 /**
  * Passphrase generation configuration panel with Diceware options
@@ -121,7 +134,7 @@ export function PassphraseOptions({
         <div className="space-y-2">
           <Label>{t.passphrase.separator}</Label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {SEPARATOR_PRESETS.map((sep) => (
+            {SEPARATOR_BUTTONS.map((sep) => (
               <Button
                 key={sep.value}
                 variant={options.separator === sep.value ? "default" : "outline"}
@@ -162,11 +175,11 @@ export function PassphraseOptions({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">{t.passphrase.capNone}</SelectItem>
-                  <SelectItem value="first">{t.passphrase.capFirst}</SelectItem>
-                  <SelectItem value="random">{t.passphrase.capRandom}</SelectItem>
-                  <SelectItem value="all">{t.passphrase.capAll}</SelectItem>
-                  <SelectItem value="random-word">{t.passphrase.capRandomWord}</SelectItem>
+                  {CAPITALIZATION_STYLES.map((style) => (
+                    <SelectItem key={style} value={style}>
+                      {t.passphrase[CAPITALIZATION_LABELS[style]]}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

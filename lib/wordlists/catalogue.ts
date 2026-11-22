@@ -54,6 +54,11 @@ export function wordlistPaths(): string[] {
   )
 }
 
+/** The languages with Wordlists */
+export function wordlistLanguages(): WordlistLanguage[] {
+  return Object.keys(WORDLIST_CATALOGUE) as WordlistLanguage[]
+}
+
 /** The language's Wordlists in display order */
 export function wordlistIds<L extends WordlistLanguage>(language: L): WordlistId<L>[] {
   return Object.keys(WORDLIST_CATALOGUE[language]) as WordlistId<L>[]

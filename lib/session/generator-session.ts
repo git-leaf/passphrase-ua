@@ -14,6 +14,9 @@ import type { RandomBytes } from "@/lib/random/secure-random"
 import { DEFAULT_WORDLIST, type WordlistChoice, type WordlistLanguage } from "@/lib/wordlists/catalogue"
 import type { WordlistSource } from "@/lib/wordlists/wordlist-source"
 
+/** The preset separators */
+export const SEPARATOR_PRESETS = ["-", "_", " ", ".", ""] as const
+
 /** Chooses the custom separator instead of a preset */
 export const CUSTOM_SEPARATOR = "custom"
 
@@ -48,6 +51,11 @@ export interface GeneratorSessionDeps {
   onError: (code: GeneratorErrorCode) => void
   /** Byte source; defaults to the platform CSPRNG */
   bytes?: RandomBytes
+}
+
+/** The separator the passphrase actually uses: the preset, or the custom one */
+export function separatorOf(settings: PassphraseSettings): string {
+  return settings.separator === CUSTOM_SEPARATOR ? settings.customSeparator : settings.separator
 }
 
 export const INITIAL_SESSION_STATE: GeneratorSessionState = {
@@ -93,8 +101,7 @@ export function createGeneratorSession({ wordlists, onError, bytes }: GeneratorS
     let failure: GeneratorErrorCode | null = null
     try {
       const wordlist = await wordlists.load(settings.wordlist)
-      const separator = settings.separator === CUSTOM_SEPARATOR ? settings.customSeparator : settings.separator
-      output = generatePassphrase(wordlist, { ...settings, separator }, bytes)
+      output = generatePassphrase(wordlist, { ...settings, separator: separatorOf(settings) }, bytes)
     } catch (error) {
       failure = errorCodeOf(error)
     }

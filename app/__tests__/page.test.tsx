@@ -52,6 +52,7 @@ afterEach(() => {
   vi.restoreAllMocks()
   // jsdom has no service worker; a test may add one
   Reflect.deleteProperty(navigator, "serviceWorker")
+  history.replaceState(null, "", "/")
   document.removeEventListener("click", preventNavigation)
 })
 
@@ -93,12 +94,14 @@ async function followLink(user: UserEvent, link: HTMLElement) {
 }
 
 async function renderPage(path: string) {
-  const [, locale, rest = ""] = /^\/(en|uk)(\/.*)?$/.exec(path) ?? []
+  const [, locale, rest = ""] = /^\/(en|uk)(\/[^?#]*)?(?:[?#].*)?$/.exec(path) ?? []
   if (!locale) {
     const { default: Page } = await LANGUAGE_PICKERS[path]()
     render(<Page />)
     return
   }
+  // The browser is at the page's URL, query included
+  history.replaceState(null, "", path)
   const [{ default: Page }, { I18nProvider }, { ThemeProvider }, { Toaster }, { OfflineSupport }] = await Promise.all([
     LOCALIZED_PAGES[rest](),
     import("@/lib/i18n"),
@@ -218,6 +221,61 @@ describe("generator page", () => {
     await waitFor(() => expect(shownSecret()).toMatch(sixWordsWithUnderscores))
   })
 
+  it("opens on the options in the URL", async () => {
+    await renderApp("/en?words=5&sep=_")
+    const fiveWordsWithUnderscores = await ukrainianPassphrase(5, "_")
+
+    await waitFor(() => expect(shownSecret()).toMatch(fiveWordsWithUnderscores))
+    expect(screen.getByText(`5 ${en.passphrase.words}`)).toBeTruthy()
+  })
+
+  it("opens on the default for each invalid option in the URL", async () => {
+    await renderApp("/en/password?length=20&symbols=maybe&lower=0&upper=0&numbers=0")
+
+    await waitFor(() => expect(shownSecret()).toMatch(/^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{}|;:,.<>?]{20}$/))
+  })
+
+  it("shows the options that differ from the defaults in the URL, without adding history entries", async () => {
+    const user = await renderApp("/en/password")
+    await untilDefaultPasswordShown()
+    const entries = history.length
+
+    await lengthenPassword(user)
+    await waitFor(() => expect(location.search).toBe("?length=17"))
+
+    screen.getByRole("slider").focus()
+    await user.keyboard("{ArrowLeft}")
+    await waitFor(() => expect(location.search).toBe(""))
+    expect(location.pathname).toBe("/en/password")
+    expect(history.length).toBe(entries)
+  })
+
+  it("writes the URL once the options settle, never while the page first renders", async () => {
+    const replaceState = vi.spyOn(history, "replaceState")
+    const user = await renderApp("/en/password?length=20&symbols=maybe")
+    // Next.js takes over history only after the page's own effects have run; the one call so far opened the page
+    expect(replaceState.mock.calls.map(([, , url]) => url)).toEqual(["/en/password?length=20&symbols=maybe"])
+    await waitFor(() => expect(location.search).toBe("?length=20"))
+
+    screen.getByRole("slider").focus()
+    replaceState.mockClear()
+    await user.keyboard("{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}")
+    await waitFor(() => expect(location.search).toBe("?length=24"))
+    expect(replaceState).toHaveBeenCalledTimes(1)
+  })
+
+  it("keeps each Generation method's options in the URL of its own page", async () => {
+    const user = await renderApp("/en/password?length=20")
+    await waitFor(() => expect(shownSecret()).toHaveLength(20))
+
+    await followLink(user, screen.getByRole("link", { name: en.tabs.passphrase }))
+    await chooseUnderscoreSeparator(user)
+    await waitFor(() => expect(location.search).toBe("?sep=_"))
+
+    await followLink(user, screen.getByRole("link", { name: en.tabs.password }))
+    await waitFor(() => expect(location.search).toBe("?length=20"))
+  })
+
   it("copies the shown Secret to the clipboard and confirms it", async () => {
     const user = await renderApp("/en/password")
     await untilDefaultPasswordShown()
@@ -306,13 +364,11 @@ describe("generator page", () => {
   })
 
   it("keeps the Learn section when switching language", async () => {
-    location.hash = "#faq"
-    const user = await renderApp("/en/learn")
+    const user = await renderApp("/en/learn#faq")
 
     await user.click(screen.getByRole("button", { name: en.header.toggleLanguage }))
 
     expect((await screen.findByRole("menuitem", { name: /Українська/ })).getAttribute("href")).toBe("/uk/learn#faq")
-    location.hash = ""
   })
 
   it("generates nothing on Learn, so no Wordlist is downloaded", async () => {
@@ -351,9 +407,10 @@ describe("generator page", () => {
   })
 
   it("never puts the Secret in a URL", async () => {
-    for (const path of ["/en", "/en/password"]) {
+    for (const path of ["/en", "/en/password", "/en?words=4&sep=.", "/en/password?length=12"]) {
       cleanup()
       const user = await renderApp(path)
+      await waitFor(() => expect(location.search).toBe(path.replace(/^[^?]*/, "")))
       await waitFor(() => expect(shownSecret()).not.toBe(""))
       const secret = shownSecret()
       await user.click(screen.getByRole("button", { name: en.header.toggleLanguage }))

@@ -20,6 +20,14 @@ export type CapitalizationStyle =
   | "all" // ALL UPPERCASE
   | "random-word" // One random WORD in UPPERCASE
 
+export const CAPITALIZATION_STYLES = Object.keys({
+  none: true,
+  first: true,
+  random: true,
+  all: true,
+  "random-word": true,
+} satisfies Record<CapitalizationStyle, true>) as CapitalizationStyle[]
+
 /**
  * Options for passphrase generation
  */
