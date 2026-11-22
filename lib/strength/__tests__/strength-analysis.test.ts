@@ -121,6 +121,11 @@ describe("analyzeStrength", () => {
       expect(analyzeStrength(400, attacker, "uk").costToCrack).toBe("понад $10^308")
     })
 
+    it.each([0, -0])("is free for a cost of %s", (costPer2pow32) => {
+      const attacker = { ...trillionPerSecond, costPer2pow32 }
+      expect(analyzeStrength(60, attacker, "en").costToCrack).toBe("$0.00")
+    })
+
     it.each([-1, Number.NaN])("is invalid for a cost of %s", (costPer2pow32) => {
       const attacker = { ...trillionPerSecond, costPer2pow32 }
       expect(analyzeStrength(60, attacker, "en").costToCrack).toBe("Invalid")

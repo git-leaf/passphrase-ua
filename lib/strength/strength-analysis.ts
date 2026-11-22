@@ -79,9 +79,14 @@ export function analyzeStrength(entropy: number, attacker: AttackerModel, locale
         : output.timeUnits.invalid,
     costToCrack:
       Number.isFinite(attacker.costPer2pow32) && attacker.costPer2pow32 >= 0
-        ? formatCost((halfCombinations / 2 ** 32) * attacker.costPer2pow32, locale)
+        ? formatCost(costOf(halfCombinations, attacker.costPer2pow32), locale)
         : output.costUnits.invalid,
   }
+}
+
+/** Dollars to try the guesses; free guesses cost exactly $0, never -0 or 0 × Infinity. */
+function costOf(guesses: number, costPer2pow32: number): number {
+  return costPer2pow32 === 0 ? 0 : (guesses / 2 ** 32) * costPer2pow32
 }
 
 function levelOf(entropy: number): StrengthLevel {
@@ -126,6 +131,10 @@ function formatCombinations(entropy: number, locale: Locale): string {
 
 const SECONDS_PER_YEAR = 365.25 * 86400
 
+// A time or cost past the largest number reads as more than these powers of ten
+const MAX_YEARS_EXP = Math.floor(Math.log10(Number.MAX_VALUE / SECONDS_PER_YEAR))
+const MAX_USD_EXP = Math.floor(Math.log10(Number.MAX_VALUE))
+
 /** Units of time, smallest first; the last starts scientific notation. */
 const TIME_STEPS = [
   { unit: "milliseconds", size: 1e-3 },
@@ -161,7 +170,7 @@ function formatTime(seconds: number, locale: Locale): string {
   const units = translations[locale].output.timeUnits
 
   if (!Number.isFinite(seconds)) {
-    return units.moreThan.replace("{exp}", String(Math.floor(Math.log10(Number.MAX_VALUE / SECONDS_PER_YEAR))))
+    return units.moreThan.replace("{exp}", String(MAX_YEARS_EXP))
   }
 
   if (seconds < 1e-3) {
@@ -190,7 +199,7 @@ function formatCost(usd: number, locale: Locale): string {
   const units = translations[locale].output.costUnits
 
   if (!Number.isFinite(usd)) {
-    return units.moreThan.replace("{exp}", String(Math.floor(Math.log10(Number.MAX_VALUE))))
+    return units.moreThan.replace("{amount}", `$10^${MAX_USD_EXP}`)
   }
 
   const step = stepFor(usd, COST_STEPS)

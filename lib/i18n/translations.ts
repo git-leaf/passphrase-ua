@@ -150,7 +150,7 @@ export interface Translations {
       suffixBillions: string
       suffixTrillions: string
       scientific: string
-      /** A cost past the largest number, as more than a power of ten in dollars */
+      /** A cost past the largest number, as more than a power of ten in dollars: {amount} is "$10^308" */
       moreThan: string
     }
   }
@@ -554,7 +554,7 @@ export const translations: Record<Locale, Translations> = {
         suffixBillions: "B",
         suffixTrillions: "T",
         scientific: "{mantissa} × 10^{exp}",
-        moreThan: "more than $10^{exp}",
+        moreThan: "more than {amount}",
       },
     },
 
@@ -1043,7 +1043,7 @@ export const translations: Record<Locale, Translations> = {
         suffixBillions: " млрд.",
         suffixTrillions: " трлн.",
         scientific: "{mantissa} × 10^{exp}",
-        moreThan: "понад $10^{exp}",
+        moreThan: "понад {amount}",
       },
     },
 
