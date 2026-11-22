@@ -2,8 +2,9 @@
 minimumReleaseAge: 10080
 
 # Exact versions trusted before they turned 7 days old. Entries stop mattering
-# once their version matures; this list was already in the lockfile when the
-# policy arrived, and all of it is mature on 2026-11-26.
+# once their version matures. Most were already in the lockfile when the policy
+# arrived; @vitest/coverage-v8 matches the trusted vitest release. All of it is
+# mature on 2026-11-26.
 minimumReleaseAgeExclude:
   - "axe-core@4.14.1"
   - "baseline-browser-mapping@2.11.38"
@@ -30,5 +31,6 @@ minimumReleaseAgeExclude:
   - "@typescript-eslint/visitor-keys@8.73.0"
   - "update-browserslist-db@1.4.0"
   - "vitest@5.1.1"
+  - "@vitest/coverage-v8@5.1.1"
   - "@vitest/mocker@5.1.1"
   - "@vitest/spy@5.1.1"
