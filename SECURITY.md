@@ -44,11 +44,12 @@ Mova Pass implements multiple security measures to protect user privacy and pass
 - No passwords stored (even temporarily)
 - No user accounts or authentication
 - No analytics or tracking
-- No cookies (except functional localStorage for settings)
+- No cookies; the theme and language settings stay in the browser's localStorage
+- Vercel, which hosts the site, records the requests browsers make to it, including IP addresses and page addresses with their [Options query](GLOSSARY.md), as any web host does ([Vercel's privacy policy](https://vercel.com/legal/privacy-policy)). Those requests fetch pages and Wordlists and never carry a Secret
 
 ### 4. Security Headers
 
-- Content Security Policy (CSP) to prevent XSS
+- Content Security Policy (CSP) that blocks scripts, styles and fonts from other sites; it allows inline scripts, so it limits injected scripts rather than preventing them ([ADR-0014](docs/adr/0014-the-csp-allows-inline-scripts.md))
 - HTTP Strict Transport Security (HSTS)
 - X-Frame-Options to prevent clickjacking
 - X-Content-Type-Options to prevent MIME sniffing
