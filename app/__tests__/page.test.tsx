@@ -250,6 +250,20 @@ describe("generator page", () => {
     expect(history.length).toBe(entries)
   })
 
+  it("writes the URL once the options settle, never while the page first renders", async () => {
+    const replaceState = vi.spyOn(history, "replaceState")
+    const user = await renderApp("/en/password?length=20&symbols=maybe")
+    // Next.js takes over history only after the page's own effects have run; the one call so far opened the page
+    expect(replaceState.mock.calls.map(([, , url]) => url)).toEqual(["/en/password?length=20&symbols=maybe"])
+    await waitFor(() => expect(location.search).toBe("?length=20"))
+
+    screen.getByRole("slider").focus()
+    replaceState.mockClear()
+    await user.keyboard("{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}")
+    await waitFor(() => expect(location.search).toBe("?length=24"))
+    expect(replaceState).toHaveBeenCalledTimes(1)
+  })
+
   it("keeps each Generation method's options in the URL of its own page", async () => {
     const user = await renderApp("/en/password?length=20")
     await waitFor(() => expect(shownSecret()).toHaveLength(20))
@@ -393,10 +407,10 @@ describe("generator page", () => {
   })
 
   it("never puts the Secret in a URL", async () => {
-    for (const path of ["/en?words=4&sep=.", "/en/password?length=12"]) {
+    for (const path of ["/en", "/en/password", "/en?words=4&sep=.", "/en/password?length=12"]) {
       cleanup()
       const user = await renderApp(path)
-      await waitFor(() => expect(location.search).not.toBe(""))
+      await waitFor(() => expect(location.search).toBe(path.replace(/^[^?]*/, "")))
       await waitFor(() => expect(shownSecret()).not.toBe(""))
       const secret = shownSecret()
       await user.click(screen.getByRole("button", { name: en.header.toggleLanguage }))

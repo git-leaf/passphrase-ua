@@ -59,6 +59,10 @@ describe("options query", () => {
     ["an unknown Capitalization style", "caps=shout"],
     ["a switch that is neither 1 nor 0", "number=true&translit=yes"],
     ["a Separator of four characters", "sep=----"],
+    ["an invisible Separator", "sep=%E2%80%8B"],
+    ["a Separator that reverses the text after it", "sep=%E2%80%AE"],
+    ["a line break as Separator", "sep=%0A"],
+    ["a non-breaking space as Separator", "sep=%C2%A0"],
     ["an option given twice, the first time invalid", "words=two&words=5"],
   ])("reads %s as the default Passphrase options", (_, query) => {
     expect(optionsFromQuery("passphrase", query)).toEqual(PASSPHRASE_DEFAULTS)

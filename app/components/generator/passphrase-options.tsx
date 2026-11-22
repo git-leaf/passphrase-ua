@@ -9,7 +9,7 @@ import { Input } from "@/app/components/ui/input"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
 import { useI18n } from "@/lib/i18n"
 import { RefreshCw } from "lucide-react"
-import { PASSPHRASE_LIMITS, type CapitalizationStyle } from "@/lib/generators/passphrase"
+import { CAPITALIZATION_STYLES, PASSPHRASE_LIMITS, type CapitalizationStyle } from "@/lib/generators/passphrase"
 import { CUSTOM_SEPARATOR, SEPARATOR_PRESETS, type PassphraseSettings } from "@/lib/session/generator-session"
 import { wordlistIds, wordlistInfo, type WordlistChoice, type WordlistLanguage } from "@/lib/wordlists/catalogue"
 
@@ -29,6 +29,14 @@ const SEPARATOR_LABELS = {
   "": { labelKey: "separatorNone", symbol: "∅" },
   [CUSTOM_SEPARATOR]: { labelKey: "separatorCustom", symbol: "..." },
 } as const satisfies Record<(typeof SEPARATOR_PRESETS)[number] | typeof CUSTOM_SEPARATOR, unknown>
+
+const CAPITALIZATION_LABELS = {
+  none: "capNone",
+  first: "capFirst",
+  random: "capRandom",
+  all: "capAll",
+  "random-word": "capRandomWord",
+} as const satisfies Record<CapitalizationStyle, string>
 
 const SEPARATOR_BUTTONS = ([...SEPARATOR_PRESETS, CUSTOM_SEPARATOR] as const).map((value) => ({
   value,
@@ -167,11 +175,11 @@ export function PassphraseOptions({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">{t.passphrase.capNone}</SelectItem>
-                  <SelectItem value="first">{t.passphrase.capFirst}</SelectItem>
-                  <SelectItem value="random">{t.passphrase.capRandom}</SelectItem>
-                  <SelectItem value="all">{t.passphrase.capAll}</SelectItem>
-                  <SelectItem value="random-word">{t.passphrase.capRandomWord}</SelectItem>
+                  {CAPITALIZATION_STYLES.map((style) => (
+                    <SelectItem key={style} value={style}>
+                      {t.passphrase[CAPITALIZATION_LABELS[style]]}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
