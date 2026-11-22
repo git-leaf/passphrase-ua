@@ -1,62 +1,26 @@
 "use client"
 
 import Image from "next/image"
-import { useI18n } from "@/lib/i18n"
+import { useI18n, type DonationId } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 interface DonationLink {
-  href: string | undefined
-  ariaLabel: string
-  logoAlt: string
-  /** Logo file name in /public/charity, without the -dark suffix or extension */
-  logo: string
+  /** Also the logo file name in /public/charity, without the -dark suffix or extension */
+  id: DonationId
+  href: string
   width: number
   height: number
 }
 
 const organizations: DonationLink[] = [
-  {
-    href: "https://savelife.in.ua/en/",
-    ariaLabel: "Come Back Alive Foundation",
-    logoAlt: "Come Back Alive",
-    logo: "comebackalive",
-    width: 62,
-    height: 31,
-  },
-  {
-    href: "https://prytulafoundation.org/en",
-    ariaLabel: "Serhiy Prytula Charity Foundation",
-    logoAlt: "Serhiy Prytula Foundation",
-    logo: "prytulafoundation",
-    width: 261,
-    height: 48,
-  },
-  {
-    href: "https://u24.gov.ua/",
-    ariaLabel: "United24 - Official fundraising platform",
-    logoAlt: "United24",
-    logo: "united24",
-    width: 422,
-    height: 40,
-  },
-  {
-    href: "https://www.sternenkofund.org/en",
-    ariaLabel: "Sternenko Community Foundation",
-    logoAlt: "Sternenko Fund",
-    logo: "sternenkofund",
-    width: 506,
-    height: 200,
-  },
+  { id: "comebackalive", href: "https://savelife.in.ua/en/", width: 62, height: 31 },
+  { id: "prytulafoundation", href: "https://prytulafoundation.org/en", width: 261, height: 48 },
+  { id: "united24", href: "https://u24.gov.ua/", width: 422, height: 40 },
+  { id: "sternenkofund", href: "https://www.sternenkofund.org/en", width: 506, height: 200 },
 ]
 
-const personalJar: DonationLink = {
-  href: process.env.NEXT_PUBLIC_MONOBANK_JAR_URL,
-  ariaLabel: "Personal charity account via Monobank",
-  logoAlt: "Monobank Charity Jar",
-  logo: "monobank",
-  width: 109,
-  height: 24,
-}
+/** Unset in forks and previews, where the section leaves it out */
+const personalJarUrl = process.env.NEXT_PUBLIC_MONOBANK_JAR_URL
 
 /**
  * Ukrainian charity donation section with trusted organizations and personal fundraising
@@ -73,7 +37,7 @@ export function DonationSection() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
         {organizations.map((organization) => (
           <DonationLogoLink
-            key={organization.logo}
+            key={organization.id}
             link={organization}
             className="p-4 h-20"
             logoClassName="max-h-12 w-auto"
@@ -82,10 +46,16 @@ export function DonationSection() {
       </div>
 
       {/* Personal fundraising */}
-      <div className="flex flex-col items-center gap-3 pt-2">
-        <p className="text-xs text-muted-foreground">{t.footer.supportFundraising}</p>
-        <DonationLogoLink link={personalJar} className="px-6 py-3 max-w-xs" logoClassName="h-8 w-auto" />
-      </div>
+      {personalJarUrl && (
+        <div className="flex flex-col items-center gap-3 pt-2">
+          <p className="text-xs text-muted-foreground">{t.footer.supportFundraising}</p>
+          <DonationLogoLink
+            link={{ id: "monobank", href: personalJarUrl, width: 109, height: 24 }}
+            className="px-6 py-3 max-w-xs"
+            logoClassName="h-8 w-auto"
+          />
+        </div>
+      )}
     </div>
   )
 }
@@ -102,6 +72,9 @@ function DonationLogoLink({
   className: string
   logoClassName: string
 }) {
+  const { t } = useI18n()
+  const { link: name, logo: alt } = t.footer.donations[link.id]
+
   return (
     <a
       href={link.href}
@@ -111,18 +84,18 @@ function DonationLogoLink({
         "flex items-center justify-center rounded-lg border bg-card hover:bg-accent transition-colors",
         className,
       )}
-      aria-label={link.ariaLabel}
+      aria-label={name}
     >
       <Image
-        src={`/charity/${link.logo}.svg`}
-        alt={link.logoAlt}
+        src={`/charity/${link.id}.svg`}
+        alt={alt}
         width={link.width}
         height={link.height}
         className={cn(logoClassName, "dark:hidden")}
       />
       <Image
-        src={`/charity/${link.logo}-dark.svg`}
-        alt={link.logoAlt}
+        src={`/charity/${link.id}-dark.svg`}
+        alt={alt}
         width={link.width}
         height={link.height}
         className={cn(logoClassName, "hidden dark:block")}

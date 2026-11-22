@@ -49,6 +49,7 @@ afterEach(() => {
   cleanup()
   localStorage.clear()
   vi.unstubAllGlobals()
+  vi.unstubAllEnvs()
   vi.restoreAllMocks()
   // jsdom has no service worker; a test may add one
   Reflect.deleteProperty(navigator, "serviceWorker")
@@ -448,6 +449,29 @@ describe("generator page", () => {
     expect(type).toBe("cache-for-offline")
     expect(pages).toEqual(expect.arrayContaining(["/", "/uk/privacy", "/en/learn"]))
     expect(urls).toEqual(expect.arrayContaining([...pages, ...wordlists.flat()]))
+  })
+
+  it("names the donation links and logos in the page's language", async () => {
+    await renderApp("/uk")
+
+    const link = screen.getByRole("link", { name: "Фонд «Повернись живим»" })
+    expect(within(link).getAllByRole("img", { name: "Повернись живим" })).toHaveLength(2)
+    expect(screen.queryByRole("link", { name: "Come Back Alive Foundation" })).toBeNull()
+  })
+
+  it("shows the personal fundraising link only when its URL is configured", async () => {
+    vi.stubEnv("NEXT_PUBLIC_MONOBANK_JAR_URL", "")
+    await renderApp("/en")
+    expect(screen.queryByText(en.footer.supportFundraising)).toBeNull()
+    expect(screen.queryByRole("link", { name: en.footer.donations.monobank.link })).toBeNull()
+
+    cleanup()
+    vi.stubEnv("NEXT_PUBLIC_MONOBANK_JAR_URL", "https://send.monobank.ua/jar/test")
+    await renderApp("/en")
+    expect(screen.getByText(en.footer.supportFundraising)).toBeTruthy()
+    expect(screen.getByRole("link", { name: en.footer.donations.monobank.link }).getAttribute("href")).toBe(
+      "https://send.monobank.ua/jar/test",
+    )
   })
 
   it("shows when the app is offline", async () => {
