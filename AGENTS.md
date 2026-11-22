@@ -6,6 +6,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) before changing anything: it holds the w
 - Push, open a PR or merge only when the user asks. "Merge when green" means enable auto-merge: `gh pr merge --squash --auto`.
 - Before opening a PR: `pnpm check` passes, then the independent review below, then fixes.
 - Write the PR body with the `mattpocock-skills:pr` skill, including `Closes #<n>`.
+- One ticket per session: once its PR merges, the next step is `/clear`, then the next ticket.
 
 ## Independent review
 
