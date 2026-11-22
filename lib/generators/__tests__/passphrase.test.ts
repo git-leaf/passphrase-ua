@@ -121,7 +121,13 @@ describe("generatePassphrase", () => {
     // Next to "aa", a word that starts or ends with "a" makes "aaa", which splits two ways
     const overlapping: Wordlist = { entries: [{ word: "a" }, { word: "ab" }, { word: "ba" }, { word: "bb" }] }
 
-    expect(generatePassphrase(overlapping, { ...options, separator: "aa" }).wordPoolSize).toBe(1)
+    expect(
+      generatePassphrase({ entries: [...overlapping.entries, { word: "bab" }] }, { ...options, separator: "aa" })
+        .wordPoolSize,
+    ).toBe(2)
+    expect(() => generatePassphrase(overlapping, { ...options, separator: "aa" })).toThrow(
+      expect.objectContaining({ code: "separator-in-words" }),
+    )
   })
 
   it.each(["first", "all", "random", "random-word"] as const)(
@@ -172,11 +178,11 @@ describe("generatePassphrase", () => {
     ).toThrow(expect.objectContaining({ code: "separator-required" }))
   })
 
-  it("rejects a Separator that every word contains with invalid-separator", () => {
-    const allHaveA: Wordlist = { entries: [{ word: "cat" }, { word: "bat" }] }
+  it("rejects a Separator that leaves fewer than two words with separator-in-words", () => {
+    const mostHaveA: Wordlist = { entries: [{ word: "cat" }, { word: "bat" }, { word: "dog" }] }
 
-    expect(() => generatePassphrase(allHaveA, { ...options, separator: "a" })).toThrow(
-      expect.objectContaining({ code: "invalid-separator" }),
+    expect(() => generatePassphrase(mostHaveA, { ...options, separator: "a" })).toThrow(
+      expect.objectContaining({ code: "separator-in-words" }),
     )
   })
 

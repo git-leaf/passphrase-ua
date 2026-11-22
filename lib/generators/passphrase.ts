@@ -89,7 +89,7 @@ function capitalize(word: string, style: CapitalizationStyle, bytes: RandomBytes
  * needs a Wordlist where no word begins another, so every Passphrase splits back
  * into its words one way only.
  *
- * @throws GeneratorError `separator-required` or `invalid-separator`
+ * @throws GeneratorError `separator-required` or `separator-in-words`
  */
 function wordPool(wordlist: Wordlist, { separator, capitalization, useTransliteration }: PassphraseOptions): string[] {
   // Every style but "none" can uppercase any letter, so words that differ only in case may come out the same
@@ -99,19 +99,28 @@ function wordPool(wordlist: Wordlist, { separator, capitalization, useTransliter
   const pool = new Map<string, string>()
   for (const entry of wordlist.entries) {
     const word = useTransliteration && entry.transliteration ? entry.transliteration : entry.word
-    const key = fold(word)
-    const between = foldedSeparator + key + foldedSeparator
-    if (separator && between.indexOf(foldedSeparator, 1) !== foldedSeparator.length + key.length) continue
-    if (!pool.has(key)) pool.set(key, word)
+    const foldedWord = fold(word)
+    if (separator && separatorOverlaps(foldedWord, foldedSeparator)) continue
+    if (!pool.has(foldedWord)) pool.set(foldedWord, word)
   }
 
   if (!separator && !isPrefixFree([...pool.keys()])) {
     throw new GeneratorError("separator-required", "This Wordlist has words that begin others, so it needs a Separator")
   }
-  if (pool.size === 0) {
-    throw new GeneratorError("invalid-separator", "Every word contains the Separator")
+  // One word or none leaves nothing to choose
+  if (pool.size < 2) {
+    throw new GeneratorError("separator-in-words", "The Separator leaves fewer than two words")
   }
   return [...pool.values()]
+}
+
+/**
+ * Whether the Separator could be found in the word, or across its edges with the
+ * Separators on either side, anywhere but where those Separators stand
+ */
+function separatorOverlaps(word: string, separator: string): boolean {
+  const between = separator + word + separator
+  return between.indexOf(separator, 1) !== separator.length + word.length
 }
 
 /** Whether no word begins another; sorted, a word that begins others comes right before one of them */
@@ -129,7 +138,7 @@ function isPrefixFree(words: string[]): boolean {
  * @param wordlist - Loaded Wordlist to draw from
  * @param options - Passphrase options
  * @param bytes - Byte source; defaults to the platform CSPRNG
- * @throws GeneratorError `invalid-word-count`, `invalid-separator` or `separator-required`
+ * @throws GeneratorError `invalid-word-count`, `invalid-separator`, `separator-required` or `separator-in-words`
  */
 export function generatePassphrase(
   wordlist: Wordlist,

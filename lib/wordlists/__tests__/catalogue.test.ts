@@ -43,3 +43,13 @@ describe("wordlist catalogue", () => {
     expect(prefixFree).toEqual(["eff-large", "eff-short", "eff-short-2"])
   })
 })
+
+describe("Word pool of a real Wordlist", () => {
+  it("counts the long Ukrainian Diceware list's 7,776 words as their 7,764 distinct Transliterations", async () => {
+    const wordlist = await wordlists.load({ language: "uk", id: "long" })
+    const options = { ...DEFAULT_PASSPHRASE_OPTIONS, separator: "_" }
+
+    expect(generatePassphrase(wordlist, options).wordPoolSize).toBe(7776)
+    expect(generatePassphrase(wordlist, { ...options, useTransliteration: true }).wordPoolSize).toBe(7764)
+  })
+})

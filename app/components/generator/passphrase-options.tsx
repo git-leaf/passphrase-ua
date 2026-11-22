@@ -59,7 +59,8 @@ export function PassphraseOptions({
   const { t, locale } = useI18n()
   const { language, id: wordlistId } = options.wordlist
   const wordlistNames = t.wordlists[language] as Record<string, string>
-  const { prefixFree } = wordlistInfo(options.wordlist)
+  // No Separator is offered only where no word begins another
+  const noneUnavailable = !wordlistInfo(options.wordlist).prefixFree
 
   return (
     <div className="space-y-6">
@@ -146,15 +147,15 @@ export function PassphraseOptions({
                 variant={options.separator === sep.value ? "default" : "outline"}
                 size="sm"
                 onClick={() => onChange({ separator: sep.value })}
-                disabled={sep.value === "" && !prefixFree}
-                aria-describedby={sep.value === "" && !prefixFree ? "separator-none-unavailable" : undefined}
+                disabled={sep.value === "" && noneUnavailable}
+                aria-describedby={sep.value === "" && noneUnavailable ? "separator-none-unavailable" : undefined}
                 className="w-full"
               >
                 {t.passphrase[sep.labelKey]} <span className="ml-1">{sep.symbol}</span>
               </Button>
             ))}
           </div>
-          {!prefixFree && (
+          {noneUnavailable && (
             <p id="separator-none-unavailable" className="text-xs text-muted-foreground">
               {t.passphrase.separatorNoneUnavailable}
             </p>
