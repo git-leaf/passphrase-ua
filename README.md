@@ -49,7 +49,7 @@ Support the developer's personal charity efforts through [**Monobank Charity Jar
 
 - 📊 **Strength Meter** — Real-time entropy calculation and time-to-crack estimates
 - 🎨 **Dark/Light Modes** — System preference detection with manual toggle
-- ♿ **Accessible** — WCAG 2.1 AA compliant, keyboard navigation, screen reader support (being verified: [#24](https://github.com/git-leaf/passphrase-ua/issues/24), [#25](https://github.com/git-leaf/passphrase-ua/issues/25))
+- ♿ **Accessible** — WCAG 2.1 AA compliant, keyboard navigation, screen reader support (checked automatically in the tests; manual audit: [#25](https://github.com/git-leaf/passphrase-ua/issues/25))
 - 📱 **Responsive** — Mobile-first design, works on all screen sizes
 
 ---

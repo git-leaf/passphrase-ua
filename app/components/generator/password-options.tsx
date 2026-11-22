@@ -38,10 +38,11 @@ export function PasswordOptions({ options, onChange, onGenerate }: PasswordOptio
       <div className="space-y-4">
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label>{t.password.length}</Label>
+            <Label id="password-length">{t.password.length}</Label>
             <span className="text-sm font-medium">{options.length}</span>
           </div>
           <Slider
+            aria-labelledby="password-length"
             value={[options.length]}
             onValueChange={([length]) => onChange({ length })}
             min={PASSWORD_LIMITS.minLength}
@@ -69,7 +70,7 @@ export function PasswordOptions({ options, onChange, onGenerate }: PasswordOptio
       {/* Advanced Options */}
       <Accordion type="single" collapsible className="border-t pt-2">
         <AccordionItem value="advanced" className="border-none">
-          <AccordionTrigger className="text-sm text-muted-foreground hover:no-underline">
+          <AccordionTrigger level={2} className="text-sm text-muted-foreground hover:no-underline">
             {t.password.advancedOptions}
           </AccordionTrigger>
           <AccordionContent className="space-y-4 pt-4">
