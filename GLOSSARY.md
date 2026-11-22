@@ -36,6 +36,9 @@ _Avoid_: dictionary
 **Diceware**:
 A Wordlist sized to a power of six (1,296 or 7,776 words) so each word maps to a roll of four or five dice.
 
+**Dice index**:
+The digits 1–6 before each word in a Diceware Wordlist file, giving the dice roll that selects the word (e.g. `11111`). The app reads past it; it draws words with secure random numbers, not dice.
+
 **Wordlist catalogue**:
 The set of Wordlists the app offers, per language, including which one is the default for each language.
 _Avoid_: available wordlists, wordlist config

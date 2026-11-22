@@ -1,4 +1,4 @@
-# Mova Pass 🔐 (formerly Passphrase UA)
+# Mova Pass 🔐
 
 **Client-side password and passphrase generator with first-class Ukrainian language support**
 
@@ -34,22 +34,22 @@ Support the developer's personal charity efforts through [**Monobank Charity Jar
 
 ### Ukrainian Support (First Implementation!)
 
-- 🇺🇦 **Ukrainian Wordlists**: Small (1,296 words), Normal (7,776 words), Large (46,656 words)
-- 🔤 **Transliteration**: Type Ukrainian words using Latin characters (e.g., "собака" → "sobaka")
+- 🇺🇦 **Ukrainian Wordlists**: two Diceware lists and a larger general Wordlist (see [Supported Languages](#-supported-languages))
+- 🔤 **Transliteration**: Ukrainian words in Latin letters (e.g., "собака" → "sobaka"), for sites and keyboards without Cyrillic
 
 ### Security & Privacy
 
 - ✅ **100% Client-side** — All generation happens in your browser, nothing sent to servers
 - ✅ **Cryptographically Secure** — Uses `crypto.getRandomValues()` Web Crypto API
 - ✅ **No Tracking** — Zero analytics, no data collection, complete privacy
-- ✅ **Offline Support** — Works without internet connection after first load
+- ✅ **Offline Support** — Works without internet connection after first load (in progress: [#23](https://github.com/git-leaf/passphrase-ua/issues/23))
 - ✅ **Open Source** — Fully auditable code
 
 ### User Experience
 
 - 📊 **Strength Meter** — Real-time entropy calculation and time-to-crack estimates
 - 🎨 **Dark/Light Modes** — System preference detection with manual toggle
-- ♿ **Accessible** — WCAG 2.1 AA compliant, keyboard navigation, screen reader support
+- ♿ **Accessible** — WCAG 2.1 AA compliant, keyboard navigation, screen reader support (being verified: [#24](https://github.com/git-leaf/passphrase-ua/issues/24), [#25](https://github.com/git-leaf/passphrase-ua/issues/25))
 - 📱 **Responsive** — Mobile-first design, works on all screen sizes
 
 ---
@@ -95,7 +95,8 @@ pnpm start    # Start production server
 
 - **[CONTRIBUTING.md](CONTRIBUTING.md)**: workflow and conventions
 - **[GLOSSARY.md](GLOSSARY.md)**: the domain vocabulary
-- **[docs/adr/](docs/adr/)**: architecture decisions and why they were made
+- **[docs/adr/](docs/adr/)**: decisions and why they were made, including the [product principles](docs/adr/0010-product-principles.md)
+- **[SECURITY.md](SECURITY.md)**: how to report a vulnerability, and the threat model
 
 ---
 
@@ -112,10 +113,9 @@ pnpm start    # Start production server
 
 ### Ukrainian
 
-- Wordlist (10,000 words)
-- Small Diceware (1,296 words, 4 dice)
-- Normal Diceware (7,776 words, 5 dice)
-- Large Diceware (46,656 words, 6 dice)
+- Wordlist (10,870 words)
+- Short Diceware (1,296 words, 4 dice)
+- Long Diceware (7,776 words, 5 dice)
 
 _All with English transliteration support_
 
@@ -123,10 +123,11 @@ The Ukrainian dictionaries and Diceware wordlists were developed by the same aut
 
 ### English
 
+- EFF Large (7,776 words)
+- EFF Short (1,296 words)
+- EFF Short 2 (1,296 words, every word with a unique three-letter prefix)
 - Original Diceware (7,776 words)
-- EFF Short List (1,296 words)
-- EFF Large List (7,776 words)
-- Beale List (7,776 words)
+- Beale (7,776 words)
 
 ---
 
