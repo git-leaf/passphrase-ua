@@ -128,6 +128,7 @@ export interface Translations {
     guessRateCustom: string
     timeUnits: {
       invalid: string
+      lessThanMillisecond: string
       milliseconds: string
       seconds: string
       minutes: string
@@ -139,6 +140,8 @@ export interface Translations {
       billionYears: string
       trillionYears: string
       scientificYears: string
+      /** A time past the largest number, as more than a power of ten in years */
+      moreThan: string
     }
     costUnits: {
       invalid: string
@@ -147,6 +150,8 @@ export interface Translations {
       suffixBillions: string
       suffixTrillions: string
       scientific: string
+      /** A cost past the largest number, as more than a power of ten in dollars */
+      moreThan: string
     }
   }
 
@@ -528,6 +533,7 @@ export const translations: Record<Locale, Translations> = {
       guessRateCustom: "Custom",
       timeUnits: {
         invalid: "Invalid",
+        lessThanMillisecond: "less than a millisecond",
         milliseconds: "milliseconds",
         seconds: "seconds",
         minutes: "minutes",
@@ -539,6 +545,7 @@ export const translations: Record<Locale, Translations> = {
         billionYears: "billion years",
         trillionYears: "trillion years",
         scientificYears: "{mantissa} × 10^{exp} years",
+        moreThan: "more than 10^{exp} years",
       },
       costUnits: {
         invalid: "Invalid",
@@ -547,6 +554,7 @@ export const translations: Record<Locale, Translations> = {
         suffixBillions: "B",
         suffixTrillions: "T",
         scientific: "{mantissa} × 10^{exp}",
+        moreThan: "more than $10^{exp}",
       },
     },
 
@@ -1014,6 +1022,7 @@ export const translations: Record<Locale, Translations> = {
       guessRateCustom: "Свій",
       timeUnits: {
         invalid: "Некоректно",
+        lessThanMillisecond: "менше мілісекунди",
         milliseconds: "мілісекунд",
         seconds: "секунд",
         minutes: "хвилин",
@@ -1025,6 +1034,7 @@ export const translations: Record<Locale, Translations> = {
         billionYears: "млрд. років",
         trillionYears: "трлн. років",
         scientificYears: "{mantissa} × 10^{exp} років",
+        moreThan: "понад 10^{exp} років",
       },
       costUnits: {
         invalid: "Некоректно",
@@ -1033,6 +1043,7 @@ export const translations: Record<Locale, Translations> = {
         suffixBillions: " млрд.",
         suffixTrillions: " трлн.",
         scientific: "{mantissa} × 10^{exp}",
+        moreThan: "понад $10^{exp}",
       },
     },
 

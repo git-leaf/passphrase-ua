@@ -56,7 +56,9 @@ const EXACT_LIMIT = 1e15
  *
  * Time and cost are averages: the attacker finds the Secret after trying
  * half the Combinations. Non-finite or non-positive guess rates, and
- * non-finite or negative costs, give the locale's "invalid" text.
+ * non-finite or negative costs, give the locale's "invalid" text. A time or
+ * cost too large for a number reads as more than the largest power of ten
+ * it can hold, and a time under a millisecond as less than a millisecond.
  *
  * @param entropy - Entropy in bits
  * @param attacker - Attacker model
@@ -122,64 +124,79 @@ function formatCombinations(entropy: number, locale: Locale): string {
   return `~${mantissa} × 10^${exp}`
 }
 
-const TIME_STEPS = [
-  { unit: "seconds", seconds: 1 },
-  { unit: "minutes", seconds: 60 },
-  { unit: "hours", seconds: 3600 },
-  { unit: "days", seconds: 86400 },
-] as const
-
 const SECONDS_PER_YEAR = 365.25 * 86400
 
-const YEAR_STEPS = [
-  { unit: "years", years: 1 },
-  { unit: "thousandYears", years: 1e3 },
-  { unit: "millionYears", years: 1e6 },
-  { unit: "billionYears", years: 1e9 },
-  { unit: "trillionYears", years: 1e12 },
+/** Units of time, smallest first; the last starts scientific notation. */
+const TIME_STEPS = [
+  { unit: "milliseconds", size: 1e-3 },
+  { unit: "seconds", size: 1 },
+  { unit: "minutes", size: 60 },
+  { unit: "hours", size: 3600 },
+  { unit: "days", size: 86400 },
+  { unit: "years", size: SECONDS_PER_YEAR },
+  { unit: "thousandYears", size: 1e3 * SECONDS_PER_YEAR },
+  { unit: "millionYears", size: 1e6 * SECONDS_PER_YEAR },
+  { unit: "billionYears", size: 1e9 * SECONDS_PER_YEAR },
+  { unit: "trillionYears", size: 1e12 * SECONDS_PER_YEAR },
+  { unit: "scientificYears", size: 1e15 * SECONDS_PER_YEAR },
 ] as const
+
+/**
+ * The largest step a value reaches, or the step above it when the value,
+ * rounded to two decimals, already reaches that one: 59.996 seconds reads
+ * "1.00 minutes", not "60.00 seconds". Values below the first step use it.
+ */
+function stepFor<Step extends { size: number }>(value: number, steps: readonly Step[]): Step {
+  const index = Math.max(
+    0,
+    steps.findLastIndex((step) => value >= step.size),
+  )
+  const step = steps[index]
+  const next = steps[index + 1]
+  const rounded = Math.round((value / step.size) * 100) / 100
+  return next && rounded * step.size >= next.size ? next : step
+}
 
 function formatTime(seconds: number, locale: Locale): string {
   const units = translations[locale].output.timeUnits
 
-  if (seconds < 1) {
-    return `${fixed(seconds * 1000, locale)} ${units.milliseconds}`
+  if (!Number.isFinite(seconds)) {
+    return units.moreThan.replace("{exp}", String(Math.floor(Math.log10(Number.MAX_VALUE / SECONDS_PER_YEAR))))
   }
 
-  const years = seconds / SECONDS_PER_YEAR
-  if (years < 1) {
-    const step = [...TIME_STEPS].reverse().find((s) => seconds >= s.seconds)!
-    return `${fixed(seconds / step.seconds, locale)} ${units[step.unit]}`
+  if (seconds < 1e-3) {
+    return units.lessThanMillisecond
   }
 
-  if (years < 1e15) {
-    const step = [...YEAR_STEPS].reverse().find((s) => years >= s.years)!
-    return `${fixed(years / step.years, locale)} ${units[step.unit]}`
+  const step = stepFor(seconds, TIME_STEPS)
+  if (step.unit === "scientificYears") {
+    const { mantissa, exp } = scientific(seconds / SECONDS_PER_YEAR, locale)
+    return units.scientificYears.replace("{mantissa}", mantissa).replace("{exp}", String(exp))
   }
-
-  const { mantissa, exp } = scientific(years, locale)
-  return units.scientificYears.replace("{mantissa}", mantissa).replace("{exp}", String(exp))
+  return `${fixed(seconds / step.size, locale)} ${units[step.unit]}`
 }
 
+/** Units of US dollars, smallest first; the last starts scientific notation. */
 const COST_STEPS = [
-  { suffix: "suffixThousands", usd: 1e3 },
-  { suffix: "suffixMillions", usd: 1e6 },
-  { suffix: "suffixBillions", usd: 1e9 },
-  { suffix: "suffixTrillions", usd: 1e12 },
+  { suffix: null, size: 1 },
+  { suffix: "suffixThousands", size: 1e3 },
+  { suffix: "suffixMillions", size: 1e6 },
+  { suffix: "suffixBillions", size: 1e9 },
+  { suffix: "suffixTrillions", size: 1e12 },
+  { suffix: "scientific", size: 1e15 },
 ] as const
 
 function formatCost(usd: number, locale: Locale): string {
   const units = translations[locale].output.costUnits
 
-  if (usd < 1e3) {
-    return `$${fixed(usd, locale)}`
+  if (!Number.isFinite(usd)) {
+    return units.moreThan.replace("{exp}", String(Math.floor(Math.log10(Number.MAX_VALUE))))
   }
 
-  if (usd < 1e15) {
-    const step = [...COST_STEPS].reverse().find((s) => usd >= s.usd)!
-    return `$${fixed(usd / step.usd, locale)}${units[step.suffix]}`
+  const step = stepFor(usd, COST_STEPS)
+  if (step.suffix === "scientific") {
+    const { mantissa, exp } = scientific(usd, locale)
+    return units.scientific.replace("{mantissa}", `$${mantissa}`).replace("{exp}", String(exp))
   }
-
-  const { mantissa, exp } = scientific(usd, locale)
-  return units.scientific.replace("{mantissa}", `$${mantissa}`).replace("{exp}", String(exp))
+  return `$${fixed(usd / step.size, locale)}${step.suffix ? units[step.suffix] : ""}`
 }
