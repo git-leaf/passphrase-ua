@@ -64,6 +64,13 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // The theme script blocks the first paint (docs/adr/0015), so browsers keep it for a day
+        // instead of asking the server on every page load. A stale copy can only flash the
+        // wrong theme until the page hydrates, when the theme provider applies it again.
+        source: "/theme.js",
+        headers: [{ key: "Cache-Control", value: "public, max-age=86400" }],
+      },
+      {
         // Browsers check for a new service worker on every visit; never serve a stale one
         source: "/sw.js",
         headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }],
