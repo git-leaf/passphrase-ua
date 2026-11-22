@@ -104,7 +104,7 @@ export function PrivacyPolicy() {
                 >
                   {t.privacy.hosting.policyLink}
                 </a>
-                .
+                {t.privacy.hosting.policyLinkAfter}
               </p>
             </CardContent>
           </Card>
@@ -204,9 +204,9 @@ export function PrivacyPolicy() {
             <CardContent className="space-y-4 text-muted-foreground">
               <p>{t.privacy.yourData.description}</p>
               <ul className="space-y-2 ml-6 list-disc">
-                <li>{t.privacy.yourData.noPersonalData}</li>
-                <li>{t.privacy.yourData.noUserIdentifyingInfo}</li>
-                <li>{t.privacy.yourData.noTrackingCookies}</li>
+                <li>{t.privacy.yourData.noAccounts}</li>
+                <li>{t.privacy.yourData.noAnalytics}</li>
+                <li>{t.privacy.yourData.noCookies}</li>
                 <li>{t.privacy.yourData.userControl}</li>
               </ul>
               <p>{t.privacy.yourData.noDataToManage}</p>

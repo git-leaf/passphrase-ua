@@ -41,7 +41,7 @@ Support the developer's personal charity efforts through [**Monobank Charity Jar
 
 - ✅ **100% Client-side** — All generation happens in your browser, nothing sent to servers
 - ✅ **Cryptographically Secure** — Uses `crypto.getRandomValues()` Web Crypto API
-- ✅ **No Tracking** — Zero analytics, no data collection, complete privacy
+- ✅ **No Tracking** — Zero analytics, no accounts, no cookies; no Secret ever leaves your browser
 - ✅ **Offline Support** — Works without internet connection after first load: a service worker keeps the app and every Wordlist
 - ✅ **Open Source** — Fully auditable code
 
@@ -154,7 +154,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔒 Security Notice
 
-All password generation occurs entirely in your browser using cryptographically secure random number generation. No passwords are ever stored, logged, or transmitted to any server. For maximum security, you can verify this by inspecting the network activity in your browser's developer tools.
+All password generation occurs entirely in your browser using cryptographically secure random number generation. No password is ever stored, logged, or sent to any server: the only network requests download the pages and wordlists, which Vercel, the host, records in its request logs (see [SECURITY.md](SECURITY.md)). You can verify this by inspecting the network activity in your browser's developer tools.
 
 ---
 
