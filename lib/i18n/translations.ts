@@ -1222,7 +1222,7 @@ export const translations: Record<Locale, Translations> = {
         lengthDiceware: "30-50 символів",
         entropyPerChar: "Ентропія на символ",
         entropyRandom: "Висока (~{bits} бітів)",
-        entropyDiceware: "Нижча (~2.6 бітів)",
+        entropyDiceware: "Нижча (~2,6 бітів)",
         totalSecurity: "Загальна безпека (подібна)",
         securityRandom: "{length} символів ≈ {bits} бітів",
         securityDiceware: "6 слів ≈ 77 бітів",

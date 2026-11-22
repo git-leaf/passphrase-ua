@@ -14,6 +14,9 @@ function bandRange(level: StrengthLevel): string {
   return Number.isFinite(maxBits) ? `${min}–${maxBits}` : `${min}+`
 }
 
+// The comparison describes the default Password, so its figures follow the default Character set
+const DEFAULT_PASSWORD_ENTROPY = passwordEntropy(DEFAULT_PASSWORD_OPTIONS)
+
 /**
  * Educational content about password security, Diceware method, and FAQs
  * Organized from most important/general topics to more advanced concepts.
@@ -21,11 +24,11 @@ function bandRange(level: StrengthLevel): string {
  */
 export function LearnContent() {
   const { t, locale } = useI18n()
-  // The comparison describes the default Password, so its figures follow the default Character set
   const { length } = DEFAULT_PASSWORD_OPTIONS
-  const passwordBits = passwordEntropy(DEFAULT_PASSWORD_OPTIONS)
-  const bitsPerCharacter = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(passwordBits / length)
-  const totalBits = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(passwordBits)
+  const bitsPerCharacter = new Intl.NumberFormat(locale, { maximumFractionDigits: 1 }).format(
+    DEFAULT_PASSWORD_ENTROPY / length,
+  )
+  const totalBits = new Intl.NumberFormat(locale, { maximumFractionDigits: 0 }).format(DEFAULT_PASSWORD_ENTROPY)
   const levelGuidelines: Record<StrengthLevel, string> = {
     weak: t.learn.strength.weak,
     moderate: t.learn.strength.moderate,

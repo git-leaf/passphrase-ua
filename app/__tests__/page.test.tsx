@@ -465,7 +465,7 @@ describe("generator page", () => {
     expect((await screen.findByRole("menuitem", { name: /Українська/ })).getAttribute("href")).toBe("/uk/learn#faq")
   })
 
-  it("compares the Methods on Learn with the figures of the default Character set", async () => {
+  it("compares the Generation methods on Learn with the figures of the default Character set", async () => {
     // 26 + 26 + 10 + 26 = 88 characters: log2(88) ≈ 6.46 bits each, 16 × 6.46 ≈ 103 bits
     const expected = { en: { perCharacter: "~6.5", total: "≈ 103" }, uk: { perCharacter: "~6,5", total: "≈ 103" } }
 

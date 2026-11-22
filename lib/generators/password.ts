@@ -65,21 +65,8 @@ function buildCharacterSet(options: PasswordOptions): string {
   return characters
 }
 
-/**
- * The Entropy of any Password these options produce
- */
-export function passwordEntropy(options: PasswordOptions): number {
-  return options.length * Math.log2(buildCharacterSet(options).length)
-}
-
-/**
- * Generates a password
- *
- * @param options - Password options
- * @param bytes - Byte source; defaults to the platform CSPRNG
- * @throws GeneratorError `invalid-length` or `no-character-classes`
- */
-export function generatePassword(options: PasswordOptions, bytes: RandomBytes = cryptoRandomBytes): GeneratedSecret {
+/** The Character set of valid options; throws for options generatePassword refuses */
+function checkedCharacterSet(options: PasswordOptions): string {
   const { length } = options
   if (!Number.isInteger(length) || length < PASSWORD_LIMITS.minLength || length > PASSWORD_LIMITS.maxLength) {
     throw new GeneratorError(
@@ -92,8 +79,29 @@ export function generatePassword(options: PasswordOptions, bytes: RandomBytes = 
   if (characters.length === 0) {
     throw new GeneratorError("no-character-classes", "At least one character class must be enabled")
   }
+  return characters
+}
 
-  const secret = randomInts(length, characters.length, bytes)
+/**
+ * The Entropy of any Password these options produce
+ *
+ * @throws GeneratorError `invalid-length` or `no-character-classes`
+ */
+export function passwordEntropy(options: PasswordOptions): number {
+  return options.length * Math.log2(checkedCharacterSet(options).length)
+}
+
+/**
+ * Generates a password
+ *
+ * @param options - Password options
+ * @param bytes - Byte source; defaults to the platform CSPRNG
+ * @throws GeneratorError `invalid-length` or `no-character-classes`
+ */
+export function generatePassword(options: PasswordOptions, bytes: RandomBytes = cryptoRandomBytes): GeneratedSecret {
+  const characters = checkedCharacterSet(options)
+
+  const secret = randomInts(options.length, characters.length, bytes)
     .map((index) => characters[index])
     .join("")
 
