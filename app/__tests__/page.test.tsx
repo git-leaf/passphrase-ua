@@ -1,11 +1,12 @@
 // @vitest-environment jsdom
 import { readdir, readFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
+import type { ReactNode } from "react"
 import { act, cleanup, render, screen, waitFor, within } from "@testing-library/react"
 import userEvent, { type UserEvent } from "@testing-library/user-event"
 import axe from "axe-core"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
-import { translations } from "@/lib/i18n/translations"
+import { locales, translations, type Locale } from "@/lib/i18n/translations"
 import { createWordlistSource } from "@/lib/wordlists/wordlist-source"
 
 const en = translations.en
@@ -40,6 +41,8 @@ beforeEach(() => {
       return new Response(null, { status: 404 })
     }
   })
+  // jsdom can't load another page; tests follow a link by rendering the page it points to
+  document.addEventListener("click", preventNavigation)
 })
 
 afterEach(() => {
@@ -49,24 +52,62 @@ afterEach(() => {
   vi.restoreAllMocks()
   // jsdom has no service worker; a test may add one
   Reflect.deleteProperty(navigator, "serviceWorker")
+  document.removeEventListener("click", preventNavigation)
 })
 
+function preventNavigation(event: MouseEvent) {
+  if (event.target instanceof Element && event.target.closest("a[href]")) event.preventDefault()
+}
+
+type PageModule = Promise<{ default: () => ReactNode }>
+
+/** The page of each path after the language, e.g. /uk/password */
+const LOCALIZED_PAGES: Record<string, () => PageModule> = {
+  "": () => import("@/app/[locale]/page"),
+  "/password": () => import("@/app/[locale]/password/page"),
+  "/learn": () => import("@/app/[locale]/learn/page"),
+  "/privacy": () => import("@/app/[locale]/privacy/page"),
+}
+
+/** The paths without a language, which send the visitor to one */
+const LANGUAGE_PICKERS: Record<string, () => PageModule> = {
+  "/": () => import("@/app/(language-picker)/page"),
+  "/privacy": () => import("@/app/(language-picker)/privacy/page"),
+}
+
 /**
- * Renders the page as the root layout does. Modules are reloaded so every test
- * starts with fresh Secrets and default options.
+ * Renders the page at a path as its root layout does. Modules are reloaded so every
+ * test starts with fresh Secrets and default options.
  */
-async function renderApp(page: "/" | "/privacy" = "/") {
+async function renderApp(path: string) {
   vi.resetModules()
+  await renderPage(path)
+  return userEvent.setup()
+}
+
+/** Follows a link the way client-side navigation does: the app's state stays */
+async function followLink(user: UserEvent, link: HTMLElement) {
+  await user.click(link)
+  cleanup()
+  await renderPage(link.getAttribute("href") ?? "")
+}
+
+async function renderPage(path: string) {
+  const [, locale, rest = ""] = /^\/(en|uk)(\/.*)?$/.exec(path) ?? []
+  if (!locale) {
+    const { default: Page } = await LANGUAGE_PICKERS[path]()
+    render(<Page />)
+    return
+  }
   const [{ default: Page }, { I18nProvider }, { ThemeProvider }, { Toaster }, { OfflineSupport }] = await Promise.all([
-    page === "/" ? import("@/app/page") : import("@/app/privacy/page"),
+    LOCALIZED_PAGES[rest](),
     import("@/lib/i18n"),
     import("@/app/components/theme-provider"),
     import("@/app/components/ui/toaster"),
     import("@/app/components/offline-support"),
   ])
-  const user = userEvent.setup()
   render(
-    <I18nProvider defaultLocale="en">
+    <I18nProvider locale={locale as Locale}>
       <ThemeProvider defaultTheme="system">
         <Page />
         <Toaster />
@@ -74,13 +115,18 @@ async function renderApp(page: "/" | "/privacy" = "/") {
       </ThemeProvider>
     </I18nProvider>,
   )
-  return user
+}
+
+/** Where the page sent the browser with location.replace, if anywhere; `at` is the current URL's query and anchor */
+function stubRedirect(at: { search?: string; hash?: string } = {}) {
+  const replace = vi.fn()
+  vi.stubGlobal("location", { ...location, search: "", hash: "", ...at, replace })
+  return replace
 }
 
 /**
  * Every axe violation on the rendered page, one line per element so a failure names the rule and shows the element.
- * The root layout's <html lang> and <title> are rendered by Next.js on the server, not here;
- * #20 makes <html lang> follow the language.
+ * The root layout's <html lang> and <title> are rendered by Next.js on the server, not here.
  */
 async function accessibilityViolations() {
   const { violations } = await axe.run(document, {
@@ -142,22 +188,20 @@ async function ukrainianPassphrase(count: number, separator: string) {
 
 describe("generator page", () => {
   it("shows a Password of the default length and Character set on load", async () => {
-    await renderApp()
+    await renderApp("/en/password")
 
     await untilDefaultPasswordShown()
   })
 
-  it("shows a Passphrase of six words from the default Ukrainian Wordlist", async () => {
-    const user = await renderApp()
+  it("opens on a Passphrase of six words from the default Ukrainian Wordlist", async () => {
+    await renderApp("/en")
     const sixWords = await ukrainianPassphrase(6, "-")
-
-    await user.click(screen.getByRole("tab", { name: en.tabs.passphrase }))
 
     await waitFor(() => expect(shownSecret()).toMatch(sixWords))
   })
 
   it("regenerates the Password when its length changes", async () => {
-    const user = await renderApp()
+    const user = await renderApp("/en/password")
     await untilDefaultPasswordShown()
 
     await lengthenPassword(user)
@@ -166,9 +210,8 @@ describe("generator page", () => {
   })
 
   it("regenerates the Passphrase when its Separator changes", async () => {
-    const user = await renderApp()
+    const user = await renderApp("/en")
     const sixWordsWithUnderscores = await ukrainianPassphrase(6, "_")
-    await user.click(screen.getByRole("tab", { name: en.tabs.passphrase }))
 
     await chooseUnderscoreSeparator(user)
 
@@ -176,7 +219,7 @@ describe("generator page", () => {
   })
 
   it("copies the shown Secret to the clipboard and confirms it", async () => {
-    const user = await renderApp()
+    const user = await renderApp("/en/password")
     await untilDefaultPasswordShown()
 
     await user.click(screen.getByRole("button", { name: en.output.copy }))
@@ -185,23 +228,23 @@ describe("generator page", () => {
     expect(await screen.findByText(en.toast.copied)).toBeTruthy()
   })
 
-  it("keeps each Generation method's options and latest Secret when switching between them", async () => {
-    const user = await renderApp()
+  it("keeps each Generation method's options and latest Secret when moving between their pages", async () => {
+    const user = await renderApp("/en/password")
     const sixWordsWithUnderscores = await ukrainianPassphrase(6, "_")
     await untilDefaultPasswordShown()
     await lengthenPassword(user)
     await waitFor(() => expect(shownSecret()).toHaveLength(17))
     const password = shownSecret()
 
-    await user.click(screen.getByRole("tab", { name: en.tabs.passphrase }))
+    await followLink(user, screen.getByRole("link", { name: en.tabs.passphrase }))
     await chooseUnderscoreSeparator(user)
     await waitFor(() => expect(shownSecret()).toMatch(sixWordsWithUnderscores))
     const passphrase = shownSecret()
 
-    await user.click(screen.getByRole("tab", { name: en.tabs.password }))
+    await followLink(user, screen.getByRole("link", { name: en.tabs.password }))
     expect(shownSecret()).toBe(password)
 
-    await user.click(screen.getByRole("tab", { name: en.tabs.passphrase }))
+    await followLink(user, screen.getByRole("link", { name: en.tabs.passphrase }))
     await untilPassphraseSettled()
     expect(shownSecret()).toBe(passphrase)
 
@@ -209,25 +252,116 @@ describe("generator page", () => {
     await user.click(screen.getByRole("button", { name: en.passphrase.generate }))
     await untilPassphraseSettled()
     expect(shownSecret()).toMatch(sixWordsWithUnderscores)
-    await user.click(screen.getByRole("tab", { name: en.tabs.password }))
+    await followLink(user, screen.getByRole("link", { name: en.tabs.password }))
     await user.click(screen.getByRole("button", { name: en.password.generate }))
     expect(shownSecret()).toHaveLength(17)
   })
 
-  it("switches the interface to Ukrainian and remembers the choice", async () => {
-    const user = await renderApp()
-    await untilDefaultPasswordShown()
+  it("serves each page in each language at its own URL, marking the current page", async () => {
+    const pages = [
+      { path: "", view: "passphrase", shows: (t: typeof en) => t.passphrase.generate },
+      { path: "/password", view: "password", shows: (t: typeof en) => t.password.generate },
+      { path: "/learn", view: "learn", shows: (t: typeof en) => t.learn.title },
+    ] as const
+
+    for (const locale of locales) {
+      const t = translations[locale]
+      for (const { path, view, shows } of pages) {
+        cleanup()
+        await renderApp(`/${locale}${path}`)
+
+        expect(screen.getByText(t.header.subtitle)).toBeTruthy()
+        expect(await screen.findByText(shows(t))).toBeTruthy()
+        expect(screen.getByRole("link", { current: "page" }).textContent).toBe(t.tabs[view])
+      }
+
+      cleanup()
+      await renderApp(`/${locale}/privacy`)
+      expect(screen.getByRole("heading", { level: 1, name: t.privacy.title })).toBeTruthy()
+    }
+  })
+
+  it("links every Learn section by an anchor", async () => {
+    await renderApp("/en/learn")
+
+    const faq = document.getElementById("faq")
+    expect(faq && within(faq).getByRole("heading", { name: en.learn.faq.title })).toBeTruthy()
+  })
+
+  it("moves to the same page in Ukrainian and sends the visitor there from the root next time", async () => {
+    const user = await renderApp("/en/learn")
 
     await user.click(screen.getByRole("button", { name: en.header.toggleLanguage }))
-    await user.click(await screen.findByRole("menuitem", { name: /Українська/ }))
+    await followLink(user, await screen.findByRole("menuitem", { name: /Українська/ }))
 
-    expect(screen.getByRole("tab", { name: uk.tabs.passphrase })).toBeTruthy()
-    expect(screen.getByText(uk.header.subtitle)).toBeTruthy()
+    expect(screen.getByRole("link", { current: "page" }).textContent).toBe(uk.tabs.learn)
+    expect(screen.getByRole("heading", { name: uk.learn.title })).toBeTruthy()
     expect(screen.getByRole("button", { name: uk.header.toggleLanguage })).toBeTruthy()
 
     cleanup()
-    await renderApp()
-    expect(screen.getByRole("tab", { name: uk.tabs.passphrase })).toBeTruthy()
+    const redirect = stubRedirect()
+    vi.spyOn(navigator, "languages", "get").mockReturnValue(["en-US"])
+    await renderApp("/")
+    await waitFor(() => expect(redirect).toHaveBeenCalledWith("/uk"))
+  })
+
+  it("keeps the Learn section when switching language", async () => {
+    location.hash = "#faq"
+    const user = await renderApp("/en/learn")
+
+    await user.click(screen.getByRole("button", { name: en.header.toggleLanguage }))
+
+    expect((await screen.findByRole("menuitem", { name: /Українська/ })).getAttribute("href")).toBe("/uk/learn#faq")
+    location.hash = ""
+  })
+
+  it("generates nothing on Learn, so no Wordlist is downloaded", async () => {
+    const fetchSpy = vi.spyOn(globalThis, "fetch")
+    await renderApp("/en/learn")
+
+    await new Promise((resolve) => setTimeout(resolve, 50))
+
+    expect(fetchSpy.mock.calls.map(([url]) => String(url)).filter((url) => url.includes("/wordlists/"))).toEqual([])
+  })
+
+  it("sends the root and the old privacy URL to the browser's language, else English", async () => {
+    const languages = vi.spyOn(navigator, "languages", "get")
+    const cases = [
+      { path: "/", browser: ["uk-UA", "en"], to: "/uk" },
+      { path: "/", browser: ["de-DE"], to: "/en" },
+      { path: "/privacy", browser: ["uk"], to: "/uk/privacy" },
+      { path: "/privacy", browser: ["en-GB"], to: "/en/privacy" },
+      {
+        path: "/privacy",
+        browser: ["uk"],
+        at: { search: "?ref=x", hash: "#contact" },
+        to: "/uk/privacy?ref=x#contact",
+      },
+    ]
+
+    for (const { path, browser, at, to } of cases) {
+      cleanup()
+      const redirect = stubRedirect(at)
+      languages.mockReturnValue(browser)
+
+      await renderApp(path)
+
+      await waitFor(() => expect(redirect).toHaveBeenCalledWith(to))
+    }
+  })
+
+  it("never puts the Secret in a URL", async () => {
+    for (const path of ["/en", "/en/password"]) {
+      cleanup()
+      const user = await renderApp(path)
+      await waitFor(() => expect(shownSecret()).not.toBe(""))
+      const secret = shownSecret()
+      await user.click(screen.getByRole("button", { name: en.header.toggleLanguage }))
+      await screen.findAllByRole("menuitem")
+
+      const urls = [location.href, ...document.querySelectorAll("a[href]")].map(String)
+      expect(urls.filter((url) => url.includes(secret) || url.includes(encodeURIComponent(secret)))).toEqual([])
+    }
   })
 
   it("hands every page and Wordlist to the service worker for offline use", async () => {
@@ -243,22 +377,24 @@ describe("generator page", () => {
       ),
     )
 
-    // Every route in app/, e.g. app/privacy/page.tsx is /privacy
+    // Every route in app/ in every language, e.g. app/[locale]/learn/page.tsx is /en/learn and /uk/learn
     const pages = (await readdir("app", { recursive: true }))
       .filter((file) => /(^|\/)page\.tsx$/.test(file))
-      .map((file) => "/" + dirname(file).replace(/^\.$/, ""))
+      .map((file) => ("/" + dirname(file).replace(/^\.$/, "")).replace(/\/\([^)]+\)/g, "").replace(/^$/, "/"))
+      .flatMap((page) => (page.includes("[locale]") ? locales.map((locale) => page.replace("[locale]", locale)) : page))
+      .map((page) => page.replace(/(.)\/$/, "$1"))
 
-    await renderApp()
+    await renderApp("/en")
 
     await waitFor(() => expect(postMessage).toHaveBeenCalled())
     const { type, urls } = postMessage.mock.calls[0][0]
     expect(type).toBe("cache-for-offline")
-    expect(pages).toContain("/privacy")
+    expect(pages).toEqual(expect.arrayContaining(["/", "/uk/privacy", "/en/learn"]))
     expect(urls).toEqual(expect.arrayContaining([...pages, ...wordlists.flat()]))
   })
 
   it("shows when the app is offline", async () => {
-    await renderApp()
+    await renderApp("/en/password")
     await untilDefaultPasswordShown()
 
     vi.spyOn(navigator, "onLine", "get").mockReturnValue(false)
@@ -272,34 +408,35 @@ describe("generator page", () => {
 })
 
 describe("accessibility", () => {
-  const views: Record<string, (t: typeof en) => Promise<UserEvent>> = {
-    "the Password generator": async () => {
-      const user = await renderApp()
-      await untilDefaultPasswordShown()
-      return user
-    },
-    "the Passphrase generator": async (t) => {
-      const user = await renderApp()
-      await user.click(screen.getByRole("tab", { name: t.tabs.passphrase }))
+  const views: Record<string, (locale: Locale) => Promise<UserEvent>> = {
+    "the Passphrase generator": async (locale) => {
+      const user = await renderApp(`/${locale}`)
       await waitFor(() => expect(shownSecret()).not.toBe(""))
       return user
     },
-    Learn: async (t) => {
-      const user = await renderApp()
-      await user.click(screen.getByRole("tab", { name: t.tabs.learn }))
+    "the Password generator": async (locale) => {
+      const user = await renderApp(`/${locale}/password`)
+      await untilDefaultPasswordShown()
       return user
     },
-    Privacy: () => renderApp("/privacy"),
+    Learn: (locale) => renderApp(`/${locale}/learn`),
+    Privacy: (locale) => renderApp(`/${locale}/privacy`),
   }
 
-  for (const locale of ["en", "uk"] as const) {
+  for (const locale of locales) {
     for (const [view, openView] of Object.entries(views)) {
       it(`finds no violations on ${view} in ${locale === "en" ? "English" : "Ukrainian"}`, async () => {
-        localStorage.setItem("locale", locale)
-        const user = await openView(translations[locale])
+        const user = await openView(locale)
 
         expect(await violationsWithEverySectionOpen(user)).toEqual([])
       })
     }
   }
+
+  it("finds no violations on the page that picks a language", async () => {
+    stubRedirect()
+    const user = await renderApp("/")
+
+    expect(await violationsWithEverySectionOpen(user)).toEqual([])
+  })
 })

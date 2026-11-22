@@ -2,6 +2,7 @@
 
 import { useEffect, useSyncExternalStore } from "react"
 import type { GeneratorErrorCode } from "@/lib/generators/errors"
+import type { GenerationMethod } from "@/lib/generators/types"
 import { createGeneratorSession, INITIAL_SESSION_STATE } from "@/lib/session/generator-session"
 import { createWordlistSource } from "@/lib/wordlists/wordlist-source"
 
@@ -16,9 +17,10 @@ const session = createGeneratorSession({
 })
 
 /**
- * The app's Generator session, generating both Secrets on first mount
+ * The app's Generator session, generating the Secret of the page's Generation method
+ * the first time it's shown; a page without one, like Learn, generates nothing
  */
-export function useGeneratorSession(onError: ErrorListener) {
+export function useGeneratorSession(method: GenerationMethod | null, onError: ErrorListener) {
   const state = useSyncExternalStore(session.subscribe, session.getState, () => INITIAL_SESSION_STATE)
 
   useEffect(() => {
@@ -29,9 +31,8 @@ export function useGeneratorSession(onError: ErrorListener) {
   }, [onError])
 
   useEffect(() => {
-    if (!session.getState().password.output) session.generate("password")
-    if (!session.getState().passphrase.output) session.generate("passphrase")
-  }, [])
+    if (method && !session.getState()[method].output) session.generate(method)
+  }, [method])
 
   return { state, session }
 }

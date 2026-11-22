@@ -5,10 +5,13 @@ import { Shield, Lock, Eye, Database, Code, Cookie } from "lucide-react"
 import Link from "next/link"
 import { ThemeToggle } from "@/app/components/theme-toggle"
 import { LanguageToggle } from "@/app/components/language-toggle"
-import { useI18n } from "@/lib/i18n"
+import { pagePath, useI18n } from "@/lib/i18n"
 
-export default function PrivacyPage() {
-  const { t } = useI18n()
+/**
+ * The privacy policy, in the page's language
+ */
+export function PrivacyPolicy() {
+  const { locale, t } = useI18n()
 
   return (
     <main className="min-h-screen bg-background py-12 px-4">
@@ -16,7 +19,7 @@ export default function PrivacyPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="mb-4 flex items-center justify-end gap-2">
-            <LanguageToggle />
+            <LanguageToggle page="privacy" />
             <ThemeToggle />
           </div>
           <div className="mb-2 flex items-center gap-2">
@@ -245,7 +248,10 @@ export default function PrivacyPage() {
 
         {/* Back to Home */}
         <div className="mt-8 text-center">
-          <Link href="/" className="text-primary hover:underline inline-flex items-center gap-2">
+          <Link
+            href={pagePath("passphrase", locale)}
+            className="text-primary hover:underline inline-flex items-center gap-2"
+          >
             ← {t.privacy.backToGenerator}
           </Link>
         </div>

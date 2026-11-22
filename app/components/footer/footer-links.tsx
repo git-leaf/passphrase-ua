@@ -2,13 +2,13 @@
 
 import { Github, Mail, Shield } from "lucide-react"
 import Link from "next/link"
-import { useI18n } from "@/lib/i18n"
+import { pagePath, useI18n } from "@/lib/i18n"
 
 /**
  * Footer links for GitHub, contact information, and privacy policy
  */
 export function FooterLinks() {
-  const { t } = useI18n()
+  const { locale, t } = useI18n()
 
   return (
     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-muted-foreground border-t pt-6">
@@ -22,7 +22,10 @@ export function FooterLinks() {
         {t.footer.sourceCode}
       </a>
       <span className="hidden sm:inline">•</span>
-      <Link href="/privacy" className="flex items-center gap-2 hover:text-foreground transition-colors">
+      <Link
+        href={pagePath("privacy", locale)}
+        className="flex items-center gap-2 hover:text-foreground transition-colors"
+      >
         <Shield className="h-4 w-4" />
         {t.footer.privacy}
       </Link>

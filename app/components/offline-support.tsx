@@ -1,10 +1,17 @@
 "use client"
 
 import { useEffect } from "react"
+import { localizedPaths } from "@/lib/i18n"
 import { wordlistPaths } from "@/lib/wordlists/catalogue"
 
-/** Pages that open offline once the service worker holds them */
-const OFFLINE_PAGES = ["/", "/privacy"]
+/**
+ * Pages that open offline once the service worker holds them: every page in every
+ * language, and the root and old /privacy URL, which pick the visitor's language
+ */
+const OFFLINE_PAGES = ["/", "/privacy", ...localizedPaths()]
+
+// Switching language remounts the layout; the worker needs the list once per page load
+let handedOver = false
 
 /**
  * Registers the service worker that keeps the app working offline (public/sw.js)
@@ -14,6 +21,8 @@ export function OfflineSupport() {
   useEffect(() => {
     // In development a worker would serve stale code and fight hot reloading
     if (process.env.NODE_ENV === "development" || !("serviceWorker" in navigator)) return
+    if (handedOver) return
+    handedOver = true
     const { serviceWorker } = navigator
     serviceWorker
       .register("/sw.js")

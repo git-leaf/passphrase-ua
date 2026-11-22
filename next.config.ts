@@ -1,6 +1,11 @@
 import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // One 404 page for the whole app, which has a root layout per language (docs/adr/0012)
+    // https://nextjs.org/docs/app/api-reference/file-conventions/not-found#global-not-foundjs-experimental
+    globalNotFound: true,
+  },
   // Security headers
   async headers() {
     return [
