@@ -8,6 +8,9 @@ const EIGHT_DIGITS = 8 * Math.log2(10)
 
 const trillionPerSecond: AttackerModel = { guessesPerSecond: 1e12, costPer2pow32: 0.01 }
 
+// A Julian year, the year the app counts in
+const SECONDS_PER_YEAR = 365.25 * 86_400
+
 describe("analyzeStrength", () => {
   describe("strength level", () => {
     it.each([
@@ -50,10 +53,38 @@ describe("analyzeStrength", () => {
       expect(analyzeStrength(40, trillionPerSecond, "en").timeToCrack).toBe("549.76 milliseconds")
     })
 
+    it("reads sub-millisecond times as less than a millisecond", () => {
+      // 2^19 / 10^12 s ≈ 0.0005 ms
+      expect(analyzeStrength(20, trillionPerSecond, "en").timeToCrack).toBe("less than a millisecond")
+      expect(analyzeStrength(20, trillionPerSecond, "uk").timeToCrack).toBe("менше мілісекунди")
+    })
+
     it("formats long times in localized large units", () => {
       // 7776^6 / 2 / 10^12 s ≈ 3,502.7 years
       expect(analyzeStrength(SIX_DICEWARE_WORDS, trillionPerSecond, "en").timeToCrack).toBe("3.50 thousand years")
       expect(analyzeStrength(SIX_DICEWARE_WORDS, trillionPerSecond, "uk").timeToCrack).toBe("3,50 тис. років")
+    })
+
+    // 1 bit: half the Combinations is exactly one guess, so the time is 1 / Guess rate
+    it.each([
+      [0.999_996, "1.00 seconds"],
+      [59.8, "59.80 seconds"],
+      [59.996, "1.00 minutes"],
+      [3_599.9, "1.00 hours"],
+      [86_399.9, "1.00 days"],
+      [365.249 * 86_400, "1.00 years"],
+      [999.996 * SECONDS_PER_YEAR, "1.00 thousand years"],
+      [999.996e12 * SECONDS_PER_YEAR, "1.00 × 10^15 years"],
+    ])("rolls %s seconds over to the next unit once rounded: %s", (seconds, expected) => {
+      const attacker = { ...trillionPerSecond, guessesPerSecond: 1 / seconds }
+      expect(analyzeStrength(1, attacker, "en").timeToCrack).toBe(expected)
+    })
+
+    it("reads a time too long for a number as more than the largest it can count", () => {
+      // 2^399 / 10^-300 s ≈ 10^420 s, past the largest number, about 5.7 × 10^300 years
+      const attacker = { ...trillionPerSecond, guessesPerSecond: 1e-300 }
+      expect(analyzeStrength(400, attacker, "en").timeToCrack).toBe("more than 10^300 years")
+      expect(analyzeStrength(400, attacker, "uk").timeToCrack).toBe("понад 10^300 років")
     })
 
     it.each([0, -5, Number.NaN])("is invalid for a guess rate of %s", (guessesPerSecond) => {
@@ -68,6 +99,31 @@ describe("analyzeStrength", () => {
       // 7776^6 / 2 / 2^32 × $0.01 ≈ $257.36 billion
       expect(analyzeStrength(SIX_DICEWARE_WORDS, trillionPerSecond, "en").costToCrack).toBe("$257.36B")
       expect(analyzeStrength(SIX_DICEWARE_WORDS, trillionPerSecond, "uk").costToCrack).toBe("$257,36 млрд.")
+    })
+
+    // 33 bits: half the Combinations is exactly 2^32 guesses, so the cost is the Cost per 2^32 guesses
+    it.each([
+      [995, "$995.00"],
+      [999.996, "$1.00K"],
+      [999_996, "$1.00M"],
+      [999.996e6, "$1.00B"],
+      [999.996e9, "$1.00T"],
+      [999.996e12, "$1.00 × 10^15"],
+    ])("rolls $%s over to the next unit once rounded: %s", (costPer2pow32, expected) => {
+      const attacker = { ...trillionPerSecond, costPer2pow32 }
+      expect(analyzeStrength(33, attacker, "en").costToCrack).toBe(expected)
+    })
+
+    it("reads a cost too large for a number as more than the largest it can count", () => {
+      // 2^399 / 2^32 × $10^300 ≈ $10^410, past the largest number, about 1.8 × 10^308
+      const attacker = { ...trillionPerSecond, costPer2pow32: 1e300 }
+      expect(analyzeStrength(400, attacker, "en").costToCrack).toBe("more than $10^308")
+      expect(analyzeStrength(400, attacker, "uk").costToCrack).toBe("понад $10^308")
+    })
+
+    it.each([0, -0])("is free for a cost of %s", (costPer2pow32) => {
+      const attacker = { ...trillionPerSecond, costPer2pow32 }
+      expect(analyzeStrength(60, attacker, "en").costToCrack).toBe("$0.00")
     })
 
     it.each([-1, Number.NaN])("is invalid for a cost of %s", (costPer2pow32) => {
