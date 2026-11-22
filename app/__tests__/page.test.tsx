@@ -602,8 +602,13 @@ describe("theme", () => {
     await chooseTheme(user, en.theme.dark)
     expect(appliedTheme()).toEqual(["dark"])
 
+    // A new page load starts without a theme class
     cleanup()
+    document.documentElement.className = ""
     await renderApp("/en/password")
+    expect(appliedTheme()).toEqual(["dark"])
+
+    setOsTheme(true)
     setOsTheme(false)
     expect(appliedTheme()).toEqual(["dark"])
   })

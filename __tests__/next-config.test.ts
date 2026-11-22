@@ -37,6 +37,15 @@ describe("security headers", () => {
     expect(headers.get("Permissions-Policy")).toBe("camera=(), microphone=(), geolocation=(), browsing-topics=()")
   })
 
+  it("lets browsers keep the theme script, which blocks the first paint, for a day", async () => {
+    const rules = (await nextConfig.headers?.()) ?? []
+    const rule = rules.find(({ source }) => source === "/theme.js")
+
+    expect(new Headers(rule?.headers.map(({ key, value }) => [key, value])).get("Cache-Control")).toBe(
+      "public, max-age=86400",
+    )
+  })
+
   it("asks to be preloaded as HTTPS-only, subdomains included", async () => {
     expect((await headersOfEveryRoute("production")).get("Strict-Transport-Security")).toBe(
       "max-age=31536000; includeSubDomains; preload",

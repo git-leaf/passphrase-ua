@@ -2,7 +2,8 @@
 
 import * as React from "react"
 
-// The storage key and the themes are shared with public/theme.js, which applies the theme before the first paint
+// Where the visitor's theme choice is kept; the privacy page lists it.
+// The storage key and the themes are shared with public/theme.js, which applies the theme before the first paint.
 const STORAGE_KEY = "theme"
 const THEMES = ["dark", "light", "system"] as const
 
