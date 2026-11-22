@@ -377,6 +377,7 @@ describe("generator page", () => {
     const user = await renderApp("/en/password")
     await untilDefaultPasswordShown()
     const atDefaultAttacker = crackFigures()
+    expect(screen.getByRole("button", { name: en.output.configureMetrics }).getAttribute("aria-expanded")).toBe("false")
 
     await user.click(screen.getByRole("button", { name: en.output.configureMetrics }))
     await chooseCustom(user, en.output.guessRate)
@@ -391,7 +392,8 @@ describe("generator page", () => {
     await followLink(user, screen.getByRole("link", { name: en.tabs.password }))
 
     expect(crackFigures()).toEqual(atCustomAttacker)
-    await user.click(screen.getByRole("button", { name: en.output.configureMetrics }))
+    // Open already, so the figures never rest on an Attacker model the page hides
+    expect(screen.getByRole("button", { name: en.output.configureMetrics }).getAttribute("aria-expanded")).toBe("true")
     expect(screen.getByRole("combobox", { name: en.output.guessRate }).textContent).toBe(en.output.guessRateCustom)
     expect(screen.getByPlaceholderText(en.output.enterGuessRate)).toHaveProperty("value", "1000")
     expect(screen.getByPlaceholderText(en.output.enterCost)).toHaveProperty("value", "5")

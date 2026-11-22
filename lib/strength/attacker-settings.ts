@@ -38,6 +38,14 @@ export function attackerModelOf(settings: AttackerSettings): AttackerModel {
   }
 }
 
+/** Whether both values are the default presets; custom text left behind doesn't count */
+export function choosesDefaultAttacker(settings: AttackerSettings): boolean {
+  return (
+    settings.guessRate === DEFAULT_ATTACKER_SETTINGS.guessRate &&
+    settings.costPer2pow32 === DEFAULT_ATTACKER_SETTINGS.costPer2pow32
+  )
+}
+
 /** A preset value, or the custom text unless it's empty */
 function chosenValue(selected: string, custom: string, fallback: number): number {
   if (selected !== CUSTOM_ATTACKER_VALUE) return Number(selected)

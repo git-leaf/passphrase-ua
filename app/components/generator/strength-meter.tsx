@@ -6,7 +6,12 @@ import { Input } from "@/app/components/ui/input"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
 import { useI18n } from "@/app/components/i18n-provider"
 import { analyzeStrength, ATTACKER_PRESETS, type StrengthLevel } from "@/lib/strength/strength-analysis"
-import { attackerModelOf, CUSTOM_ATTACKER_VALUE, type AttackerSettings } from "@/lib/strength/attacker-settings"
+import {
+  attackerModelOf,
+  choosesDefaultAttacker,
+  CUSTOM_ATTACKER_VALUE,
+  type AttackerSettings,
+} from "@/lib/strength/attacker-settings"
 
 interface StrengthMeterProps {
   entropy: number
@@ -83,8 +88,13 @@ export function StrengthMeter({ entropy, attacker, onAttackerChange }: StrengthM
         </div>
       </div>
 
-      {/* Configurable Metrics */}
-      <Accordion type="single" collapsible className="border-t pt-2">
+      {/* Configurable Metrics, open from the start when they aren't the defaults so the figures never rest on hidden values */}
+      <Accordion
+        type="single"
+        collapsible
+        defaultValue={choosesDefaultAttacker(attacker) ? undefined : "metrics-config"}
+        className="border-t pt-2"
+      >
         <AccordionItem value="metrics-config" className="border-none">
           <AccordionTrigger level={2} className="text-sm text-muted-foreground hover:no-underline">
             {t.output.configureMetrics}

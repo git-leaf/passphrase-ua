@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest"
-import { attackerModelOf, CUSTOM_ATTACKER_VALUE, DEFAULT_ATTACKER_SETTINGS } from "../attacker-settings"
+import {
+  attackerModelOf,
+  choosesDefaultAttacker,
+  CUSTOM_ATTACKER_VALUE,
+  DEFAULT_ATTACKER_SETTINGS,
+} from "../attacker-settings"
 
 describe("attackerModelOf", () => {
   it("starts at a trillion guesses a second for a cent per 2^32 guesses", () => {
@@ -52,5 +57,17 @@ describe("attackerModelOf", () => {
     const model = attackerModelOf(settings)
     expect(model.guessesPerSecond).toBeNaN()
     expect(model.costPer2pow32).toBeNaN()
+  })
+})
+
+describe("choosesDefaultAttacker", () => {
+  it("is true for the default presets, whatever custom text is left over", () => {
+    expect(choosesDefaultAttacker(DEFAULT_ATTACKER_SETTINGS)).toBe(true)
+    expect(choosesDefaultAttacker({ ...DEFAULT_ATTACKER_SETTINGS, customGuessRate: "1000" })).toBe(true)
+  })
+
+  it("is false once either value is another preset or custom", () => {
+    expect(choosesDefaultAttacker({ ...DEFAULT_ATTACKER_SETTINGS, guessRate: "1000000" })).toBe(false)
+    expect(choosesDefaultAttacker({ ...DEFAULT_ATTACKER_SETTINGS, costPer2pow32: CUSTOM_ATTACKER_VALUE })).toBe(false)
   })
 })
