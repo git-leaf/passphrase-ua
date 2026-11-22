@@ -3,11 +3,14 @@
 import { Button } from "@/app/components/ui/button"
 import { Copy, RefreshCw } from "lucide-react"
 import { useI18n } from "@/app/components/i18n-provider"
+import type { AttackerSettings } from "@/lib/strength/attacker-settings"
 import { StrengthMeter } from "./strength-meter"
 
 interface SecretDisplayProps {
   secret: string
   entropy: number
+  attacker: AttackerSettings
+  onAttackerChange: (patch: Partial<AttackerSettings>) => void
   onCopy: () => void
   onRegenerate: () => void
   isRegenerating?: boolean
@@ -16,7 +19,15 @@ interface SecretDisplayProps {
 /**
  * Displays the latest Secret with copy and regenerate actions, plus strength metrics
  */
-export function SecretDisplay({ secret, entropy, onCopy, onRegenerate, isRegenerating = false }: SecretDisplayProps) {
+export function SecretDisplay({
+  secret,
+  entropy,
+  attacker,
+  onAttackerChange,
+  onCopy,
+  onRegenerate,
+  isRegenerating = false,
+}: SecretDisplayProps) {
   const { t } = useI18n()
 
   return (
@@ -43,7 +54,7 @@ export function SecretDisplay({ secret, entropy, onCopy, onRegenerate, isRegener
       </div>
 
       {/* Strength Meter with all metrics */}
-      <StrengthMeter entropy={entropy} />
+      <StrengthMeter entropy={entropy} attacker={attacker} onAttackerChange={onAttackerChange} />
     </div>
   )
 }

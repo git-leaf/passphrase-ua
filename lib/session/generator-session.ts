@@ -1,9 +1,10 @@
 /**
  * Generator session
  *
- * The options and latest Secret of each Generation method. Changing a
- * method's options regenerates its Secret, so what's shown always matches
- * what's selected. Framework-free: React reads it through subscribe/getState.
+ * The options and latest Secret of each Generation method, and the Attacker
+ * settings their Strength analysis assumes. Changing a method's options
+ * regenerates its Secret, so what's shown always matches what's selected.
+ * Framework-free: React reads it through subscribe/getState.
  */
 
 import { errorCodeOf, type GeneratorErrorCode } from "@/lib/generators/errors"
@@ -16,6 +17,7 @@ import {
 import { DEFAULT_PASSWORD_OPTIONS, generatePassword, type PasswordOptions } from "@/lib/generators/password"
 import type { GeneratedSecret, GenerationMethod } from "@/lib/generators/types"
 import type { RandomBytes } from "@/lib/random/secure-random"
+import { DEFAULT_ATTACKER_SETTINGS, type AttackerSettings } from "@/lib/strength/attacker-settings"
 import { DEFAULT_WORDLIST, wordlistInfo, type WordlistChoice, type WordlistLanguage } from "@/lib/wordlists/catalogue"
 import type { WordlistSource } from "@/lib/wordlists/wordlist-source"
 
@@ -35,6 +37,7 @@ export interface PassphraseSettings extends PassphraseOptions {
 export interface GeneratorSessionState {
   password: { options: PasswordOptions; secret: GeneratedSecret | null }
   passphrase: { options: PassphraseSettings; secret: PassphraseSecret | null; pending: boolean }
+  attacker: AttackerSettings
 }
 
 export interface GeneratorSession {
@@ -48,6 +51,8 @@ export interface GeneratorSession {
   ): Promise<void>
   /** Switches the passphrase to the language's default Wordlist */
   setWordlistLanguage(language: WordlistLanguage): Promise<void>
+  /** Changes the Attacker model; no Secret is regenerated */
+  updateAttackerSettings(patch: Partial<AttackerSettings>): void
 }
 
 export interface GeneratorSessionDeps {
@@ -75,6 +80,7 @@ export const INITIAL_SESSION_STATE: GeneratorSessionState = {
     secret: null,
     pending: false,
   },
+  attacker: DEFAULT_ATTACKER_SETTINGS,
 }
 
 export function createGeneratorSession({ wordlists, onError, bytes }: GeneratorSessionDeps): GeneratorSession {
@@ -149,6 +155,10 @@ export function createGeneratorSession({ wordlists, onError, bytes }: GeneratorS
       return session.updatePassphraseOptions({
         wordlist: { language, id: DEFAULT_WORDLIST[language] } as WordlistChoice,
       })
+    },
+
+    updateAttackerSettings(patch) {
+      setState({ ...state, attacker: { ...state.attacker, ...patch } })
     },
   }
 
