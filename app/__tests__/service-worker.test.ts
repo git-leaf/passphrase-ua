@@ -52,14 +52,17 @@ function fakeCacheStorage() {
 function fakeNetwork() {
   const files = new Map<string, string>()
   const requests: string[] = []
+  // Paths whose download breaks off midway
+  const failing = new Set<string>()
   let online = true
   return {
     files,
     requests,
+    failing,
     goOffline: () => (online = false),
     async fetch(input: RequestInfo | URL) {
       const url = new URL(input instanceof Request ? input.url : String(input), ORIGIN)
-      if (!online) throw new TypeError("Failed to fetch")
+      if (!online || failing.has(url.pathname)) throw new TypeError("Failed to fetch")
       requests.push(url.pathname)
       const body = files.get(url.pathname)
       if (body === undefined) return new Response("Not found", { status: 404 })
@@ -73,6 +76,7 @@ function fakeNetwork() {
 function startServiceWorker() {
   const listeners = new Map<string, Listener>()
   const network = fakeNetwork()
+  const caches = fakeCacheStorage()
   const self = {
     location: { origin: ORIGIN },
     addEventListener: (type: string, listener: Listener) => listeners.set(type, listener),
@@ -81,7 +85,7 @@ function startServiceWorker() {
   }
   runInNewContext(SCRIPT, {
     self,
-    caches: fakeCacheStorage(),
+    caches,
     fetch: network.fetch,
     Request,
     Response,
@@ -103,6 +107,7 @@ function startServiceWorker() {
 
   return {
     network,
+    caches,
     async install() {
       await dispatch("install")
       await dispatch("activate")
@@ -154,14 +159,33 @@ describe("service worker", () => {
     expect(worker.network.requests).toEqual([])
   })
 
-  it("doesn't download a Wordlist again when the page hands it over on a later visit", async () => {
+  it("updates a Wordlist it already holds when a deploy changes it", async () => {
     await worker.install()
     await worker.cacheForOffline(["/", "/wordlists/uk/wordlist.txt"])
-    worker.network.requests.length = 0
+    worker.network.files.set("/wordlists/uk/wordlist.txt", "абетка abetka")
 
     await worker.cacheForOffline(["/", "/wordlists/uk/wordlist.txt"])
+    worker.network.goOffline()
 
-    expect(worker.network.requests).not.toContain("/wordlists/uk/wordlist.txt")
+    expect(await (await worker.fetch("/wordlists/uk/wordlist.txt")).text()).toBe("абетка abetka")
+  })
+
+  it("keeps everything else when one file fails to download", async () => {
+    worker.network.failing.add("/wordlists/en/beale_diceware.txt")
+    await worker.install()
+
+    await worker.cacheForOffline(["/", "/wordlists/en/beale_diceware.txt", "/wordlists/uk/wordlist.txt"])
+    worker.network.goOffline()
+
+    expect(await (await worker.fetch("/wordlists/uk/wordlist.txt")).text()).toBe("абажур abazhur")
+  })
+
+  it("clears what an older version of the worker cached", async () => {
+    await worker.caches.open("mova-pass-old")
+
+    await worker.install()
+
+    expect(await worker.caches.keys()).not.toContain("mova-pass-old")
   })
 
   it("drops an old deploy's build files once the page of a new deploy is handed over", async () => {
@@ -175,6 +199,36 @@ describe("service worker", () => {
 
     expect(await (await worker.fetch("/_next/static/chunks/app-2.js")).text()).toBe("app2()")
     await expect(worker.fetch("/_next/static/chunks/app.js")).rejects.toThrow()
+  })
+
+  it("keeps a page's build files when that page can't be refreshed", async () => {
+    await worker.install()
+    await worker.cacheForOffline(["/"])
+    worker.network.failing.add("/")
+
+    await worker.cacheForOffline(["/"])
+    worker.network.goOffline()
+
+    expect(await (await worker.fetch("/_next/static/chunks/app.js")).text()).toBe("app()")
+  })
+
+  it("doesn't keep requests with a query string, which Next.js makes unique per navigation", async () => {
+    worker.network.files.set("/privacy", PAGE)
+    await worker.install()
+
+    await worker.cacheForOffline(["/", "/privacy?_rsc=abc"])
+    await worker.fetch("/privacy?_rsc=def")
+
+    const kept = (await (await worker.caches.open("mova-pass-v1")).keys()).map((request) => request.url)
+    expect(kept.filter((url) => url.includes("?"))).toEqual([])
+  })
+
+  it("opens the generator offline for a page it doesn't hold", async () => {
+    await worker.install()
+    await worker.cacheForOffline(["/"])
+    worker.network.goOffline()
+
+    expect(await (await worker.fetch("/privacy/", "navigate")).text()).toBe(PAGE)
   })
 
   it("shows the newest deploy to a returning visitor who is online", async () => {

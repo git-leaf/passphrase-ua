@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { readdir, readFile } from "node:fs/promises"
-import { join } from "node:path"
+import { dirname, join } from "node:path"
 import { act, cleanup, render, screen, waitFor } from "@testing-library/react"
 import userEvent, { type UserEvent } from "@testing-library/user-event"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
@@ -56,12 +56,12 @@ afterEach(() => {
  */
 async function renderApp() {
   vi.resetModules()
-  const [{ default: Home }, { I18nProvider }, { ThemeProvider }, { Toaster }, { ServiceWorker }] = await Promise.all([
+  const [{ default: Home }, { I18nProvider }, { ThemeProvider }, { Toaster }, { OfflineSupport }] = await Promise.all([
     import("@/app/page"),
     import("@/lib/i18n"),
     import("@/app/components/theme-provider"),
     import("@/app/components/ui/toaster"),
-    import("@/app/components/service-worker"),
+    import("@/app/components/offline-support"),
   ])
   const user = userEvent.setup()
   render(
@@ -69,7 +69,7 @@ async function renderApp() {
       <ThemeProvider defaultTheme="system">
         <Home />
         <Toaster />
-        <ServiceWorker />
+        <OfflineSupport />
       </ThemeProvider>
     </I18nProvider>,
   )
@@ -202,7 +202,7 @@ describe("generator page", () => {
     expect(screen.getByRole("tab", { name: uk.tabs.passphrase })).toBeTruthy()
   })
 
-  it("hands every Wordlist and page to the service worker for offline use", async () => {
+  it("hands every page and Wordlist to the service worker for offline use", async () => {
     const postMessage = vi.fn()
     const registration = { active: { postMessage } }
     Object.defineProperty(navigator, "serviceWorker", {
@@ -215,12 +215,18 @@ describe("generator page", () => {
       ),
     )
 
+    // Every route in app/, e.g. app/privacy/page.tsx is /privacy
+    const pages = (await readdir("app", { recursive: true }))
+      .filter((file) => /(^|\/)page\.tsx$/.test(file))
+      .map((file) => "/" + dirname(file).replace(/^\.$/, ""))
+
     await renderApp()
 
     await waitFor(() => expect(postMessage).toHaveBeenCalled())
     const { type, urls } = postMessage.mock.calls[0][0]
     expect(type).toBe("cache-for-offline")
-    expect(urls).toEqual(expect.arrayContaining(["/", "/privacy", ...wordlists.flat()]))
+    expect(pages).toContain("/privacy")
+    expect(urls).toEqual(expect.arrayContaining([...pages, ...wordlists.flat()]))
   })
 
   it("shows when the app is offline", async () => {

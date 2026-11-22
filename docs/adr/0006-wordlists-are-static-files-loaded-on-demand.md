@@ -10,4 +10,4 @@ Wordlists are public data, not secrets, so fetching one reveals nothing a visito
 
 ## Consequences
 
-- The first Passphrase from each Wordlist needs a network request. For offline use, the service worker (`public/sw.js`) stores every Wordlist in the background after the first visit, so the page itself still loads only the one in use.
+- The first Passphrase from each Wordlist needs a network request. [ADR-0011](0011-offline-through-a-hand-written-service-worker.md) amends this decision: a service worker stores every Wordlist in the background after the first visit, while the page itself still loads only the one in use.
