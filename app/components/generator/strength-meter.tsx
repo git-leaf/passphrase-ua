@@ -5,6 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/app/components/ui/input"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
 import { useI18n } from "@/app/components/i18n-provider"
+import { LEVEL_COLORS } from "@/app/components/strength-level-colors"
 import { analyzeStrength, ATTACKER_PRESETS, type StrengthLevel } from "@/lib/strength/strength-analysis"
 import {
   attackerModelOf,
@@ -17,14 +18,6 @@ interface StrengthMeterProps {
   entropy: number
   attacker: AttackerSettings
   onAttackerChange: (patch: Partial<AttackerSettings>) => void
-}
-
-const LEVEL_COLORS: Record<StrengthLevel, string> = {
-  weak: "bg-destructive",
-  moderate: "bg-amber-500",
-  strong: "bg-emerald-500",
-  "very-strong": "bg-emerald-600",
-  excessive: "bg-blue-500",
 }
 
 /**
