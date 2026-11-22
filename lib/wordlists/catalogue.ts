@@ -14,20 +14,27 @@ export interface WordlistInfo {
   size: number
   /** Whether entries carry a Transliteration */
   transliteration: boolean
+  /** Whether no word begins another, so a Passphrase can go without a Separator */
+  prefixFree: boolean
 }
 
 export const WORDLIST_CATALOGUE = {
   en: {
-    "eff-large": { path: "/wordlists/en/eff_large_diceware.txt", size: 7776, transliteration: false },
-    "eff-short": { path: "/wordlists/en/eff_short_diceware.txt", size: 1296, transliteration: false },
-    "eff-short-2": { path: "/wordlists/en/eff_short_diceware_2.txt", size: 1296, transliteration: false },
-    original: { path: "/wordlists/en/original_diceware.txt", size: 7776, transliteration: false },
-    beale: { path: "/wordlists/en/beale_diceware.txt", size: 7776, transliteration: false },
+    "eff-large": { path: "/wordlists/en/eff_large_diceware.txt", size: 7776, transliteration: false, prefixFree: true },
+    "eff-short": { path: "/wordlists/en/eff_short_diceware.txt", size: 1296, transliteration: false, prefixFree: true },
+    "eff-short-2": {
+      path: "/wordlists/en/eff_short_diceware_2.txt",
+      size: 1296,
+      transliteration: false,
+      prefixFree: true,
+    },
+    original: { path: "/wordlists/en/original_diceware.txt", size: 7776, transliteration: false, prefixFree: false },
+    beale: { path: "/wordlists/en/beale_diceware.txt", size: 7776, transliteration: false, prefixFree: false },
   },
   uk: {
-    wordlist: { path: "/wordlists/uk/wordlist.txt", size: 10870, transliteration: true },
-    short: { path: "/wordlists/uk/short_diceware.txt", size: 1296, transliteration: true },
-    long: { path: "/wordlists/uk/long_diceware.txt", size: 7776, transliteration: true },
+    wordlist: { path: "/wordlists/uk/wordlist.txt", size: 10870, transliteration: true, prefixFree: false },
+    short: { path: "/wordlists/uk/short_diceware.txt", size: 1296, transliteration: true, prefixFree: false },
+    long: { path: "/wordlists/uk/long_diceware.txt", size: 7776, transliteration: true, prefixFree: false },
   },
 } as const satisfies Record<WordlistLanguage, Record<string, WordlistInfo>>
 

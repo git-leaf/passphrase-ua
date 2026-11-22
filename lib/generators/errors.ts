@@ -10,6 +10,8 @@ export type GeneratorErrorCode =
   | "no-character-classes"
   | "invalid-word-count"
   | "invalid-separator"
+  | "separator-required"
+  | "separator-in-words"
   | "wordlist-unavailable"
   | "unexpected"
 

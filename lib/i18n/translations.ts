@@ -69,6 +69,8 @@ export interface Translations {
     separatorUnderscore: string
     separatorPeriod: string
     separatorNone: string
+    /** Why "None" can't be chosen for the current Wordlist */
+    separatorNoneUnavailable: string
     separatorCustom: string
     customSeparator: string
     customSeparatorPlaceholder: string
@@ -461,6 +463,7 @@ export const translations: Record<Locale, Translations> = {
       separatorUnderscore: "Underscore",
       separatorPeriod: "Period",
       separatorNone: "None",
+      separatorNoneUnavailable: "“None” works only with wordlists where no word begins another, such as the EFF ones.",
       separatorCustom: "Custom",
       customSeparator: "Custom Separator",
       customSeparatorPlaceholder: "Enter custom separator",
@@ -586,6 +589,8 @@ export const translations: Record<Locale, Translations> = {
         "no-character-classes": "Select at least one character type.",
         "invalid-word-count": "Choose between 3 and 12 words.",
         "invalid-separator": "The separator can be at most 3 characters.",
+        "separator-required": "This wordlist needs a separator between words.",
+        "separator-in-words": "Almost every word of this wordlist contains this separator. Choose another one.",
         "wordlist-unavailable": "The wordlist could not be loaded. Check your connection and try again.",
         unexpected: "Something went wrong while generating. Please try again.",
       },
@@ -944,6 +949,7 @@ export const translations: Record<Locale, Translations> = {
       separatorUnderscore: "Підкреслення",
       separatorPeriod: "Крапка",
       separatorNone: "Немає",
+      separatorNoneUnavailable: "«Немає» доступне лише для словників, де жодне слово не є початком іншого, як-от EFF.",
       separatorCustom: "Свій роздільник",
       customSeparator: "Свій роздільник",
       customSeparatorPlaceholder: "Введіть свій роздільник",
@@ -1068,6 +1074,8 @@ export const translations: Record<Locale, Translations> = {
         "no-character-classes": "Виберіть хоча б один тип символів.",
         "invalid-word-count": "Виберіть від 3 до 12 слів.",
         "invalid-separator": "Роздільник може містити не більше 3 символів.",
+        "separator-required": "Для цього словника потрібен роздільник між словами.",
+        "separator-in-words": "Майже кожне слово цього словника містить цей роздільник. Виберіть інший.",
         "wordlist-unavailable": "Не вдалося завантажити словник. Перевірте з'єднання та спробуйте ще раз.",
         unexpected: "Під час генерації сталася помилка. Спробуйте ще раз.",
       },

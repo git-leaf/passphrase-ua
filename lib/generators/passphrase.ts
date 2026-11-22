@@ -11,6 +11,13 @@ import { GeneratorError } from "./errors"
 import type { GeneratedSecret } from "./types"
 
 /**
+ * A generated Passphrase, with the size of the Word pool it was drawn from
+ */
+export interface PassphraseSecret extends GeneratedSecret {
+  wordPoolSize: number
+}
+
+/**
  * Capitalization style for passphrase words
  */
 export type CapitalizationStyle =
@@ -74,22 +81,71 @@ function capitalize(word: string, style: CapitalizationStyle, bytes: RandomBytes
 }
 
 /**
+ * The Word pool: the distinct words a Passphrase with these options draws from
+ *
+ * Words are compared as they can appear in the Passphrase: as their Transliteration
+ * when it's on, and in one case when capitalization changes case. A word is left out
+ * when the Separator could be found in it or across its edges, and no Separator
+ * needs a Wordlist where no word begins another, so every Passphrase splits back
+ * into its words one way only.
+ *
+ * @throws GeneratorError `separator-required` or `separator-in-words`
+ */
+function wordPool(wordlist: Wordlist, { separator, capitalization, useTransliteration }: PassphraseOptions): string[] {
+  // Every style but "none" can uppercase any letter, so words that differ only in case may come out the same
+  const fold = capitalization === "none" ? (text: string) => text : (text: string) => text.toUpperCase()
+  const foldedSeparator = fold(separator)
+
+  const pool = new Map<string, string>()
+  for (const entry of wordlist.entries) {
+    const word = useTransliteration && entry.transliteration ? entry.transliteration : entry.word
+    const foldedWord = fold(word)
+    if (separator && separatorOverlaps(foldedWord, foldedSeparator)) continue
+    if (!pool.has(foldedWord)) pool.set(foldedWord, word)
+  }
+
+  if (!separator && !isPrefixFree([...pool.keys()])) {
+    throw new GeneratorError("separator-required", "This Wordlist has words that begin others, so it needs a Separator")
+  }
+  // One word or none leaves nothing to choose
+  if (pool.size < 2) {
+    throw new GeneratorError("separator-in-words", "The Separator leaves fewer than two words")
+  }
+  return [...pool.values()]
+}
+
+/**
+ * Whether the Separator could be found in the word, or across its edges with the
+ * Separators on either side, anywhere but where those Separators stand
+ */
+function separatorOverlaps(word: string, separator: string): boolean {
+  const between = separator + word + separator
+  return between.indexOf(separator, 1) !== separator.length + word.length
+}
+
+/** Whether no word begins another; sorted, a word that begins others comes right before one of them */
+function isPrefixFree(words: string[]): boolean {
+  const sorted = [...words].sort()
+  return sorted.every((word, index) => index === 0 || !word.startsWith(sorted[index - 1]))
+}
+
+/**
  * Generates a passphrase
  *
- * Entropy counts only distinct words, so Transliterations that collide
+ * Entropy counts the words of the Word pool, so words that would read the same
  * don't overstate it. Capitalization randomness is not counted.
  *
  * @param wordlist - Loaded Wordlist to draw from
  * @param options - Passphrase options
  * @param bytes - Byte source; defaults to the platform CSPRNG
- * @throws GeneratorError `invalid-word-count` or `invalid-separator`
+ * @throws GeneratorError `invalid-word-count`, `invalid-separator`, `separator-required` or `separator-in-words`
  */
 export function generatePassphrase(
   wordlist: Wordlist,
   options: PassphraseOptions,
   bytes: RandomBytes = cryptoRandomBytes,
-): GeneratedSecret {
-  const { wordCount, separator, capitalization, includeNumber, useTransliteration } = options
+): PassphraseSecret {
+  const { wordCount, separator, capitalization, includeNumber } = options
 
   if (
     !Number.isInteger(wordCount) ||
@@ -108,11 +164,8 @@ export function generatePassphrase(
     )
   }
 
-  const tokens = wordlist.entries.map((entry) =>
-    useTransliteration && entry.transliteration ? entry.transliteration : entry.word,
-  )
-
-  const picked = randomInts(wordCount, tokens.length, bytes).map((index) => tokens[index])
+  const pool = wordPool(wordlist, options)
+  const picked = randomInts(wordCount, pool.length, bytes).map((index) => pool[index])
 
   let words: string[]
   if (capitalization === "random-word") {
@@ -123,7 +176,7 @@ export function generatePassphrase(
   }
 
   let secret = words.join(separator)
-  let entropy = wordCount * Math.log2(new Set(tokens).size)
+  let entropy = wordCount * Math.log2(pool.length)
 
   if (includeNumber) {
     const number = randomInts(1, NUMBER_RANGE, bytes)[0]
@@ -131,5 +184,5 @@ export function generatePassphrase(
     entropy += Math.log2(NUMBER_RANGE)
   }
 
-  return { secret, entropy }
+  return { secret, entropy, wordPoolSize: pool.length }
 }

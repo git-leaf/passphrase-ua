@@ -9,7 +9,13 @@
 import { CAPITALIZATION_STYLES, PASSPHRASE_LIMITS } from "@/lib/generators/passphrase"
 import { PASSWORD_LIMITS, type PasswordOptions } from "@/lib/generators/password"
 import type { GenerationMethod } from "@/lib/generators/types"
-import { DEFAULT_WORDLIST, wordlistIds, wordlistLanguages, type WordlistChoice } from "@/lib/wordlists/catalogue"
+import {
+  DEFAULT_WORDLIST,
+  wordlistIds,
+  wordlistInfo,
+  wordlistLanguages,
+  type WordlistChoice,
+} from "@/lib/wordlists/catalogue"
 import {
   CUSTOM_SEPARATOR,
   INITIAL_SESSION_STATE,
@@ -115,7 +121,8 @@ function passphraseFromParams(params: URLSearchParams): PassphraseSettings {
   if (
     separator !== null &&
     [...separator].length <= PASSPHRASE_LIMITS.maxSeparatorLength &&
-    !UNSEEN_CHARACTER.test(separator)
+    !UNSEEN_CHARACTER.test(separator) &&
+    (separator !== "" || wordlistInfo(options.wordlist).prefixFree)
   ) {
     if (oneOf(separator, SEPARATOR_PRESETS) !== null) options.separator = separator
     else Object.assign(options, { separator: CUSTOM_SEPARATOR, customSeparator: separator })

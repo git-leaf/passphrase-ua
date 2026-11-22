@@ -20,11 +20,11 @@ The union of the character classes (lowercase, uppercase, numbers, symbols) enab
 _Avoid_: charset, alphabet
 
 **Passphrase**:
-A Secret made of words drawn uniformly from one Wordlist, joined by a Separator, with optional capitalization and an appended number.
+A Secret made of words drawn uniformly from the Word pool of one Wordlist, joined by a Separator, with optional capitalization and an appended number.
 _Avoid_: password (for this kind), phrase
 
 **Separator**:
-The string placed between the words of a Passphrase, either a preset or a custom one of up to three characters.
+The string placed between the words of a Passphrase, either a preset or a custom one of up to three characters. "None" is offered only for Wordlists where no word begins another.
 _Avoid_: delimiter
 
 **Options query**:
@@ -47,6 +47,10 @@ The digits 1–6 before each word in a Diceware Wordlist file, giving the dice r
 The set of Wordlists the app offers, per language, including which one is the default for each language.
 _Avoid_: available wordlists, wordlist config
 
+**Word pool**:
+The distinct words a Passphrase actually draws from: the Wordlist's words after Transliteration and capitalization, counting words that would read the same once, and leaving out words the Separator could be found in or across, so every Passphrase splits back into its words one way only.
+_Avoid_: wordlist size (for this number), effective wordlist
+
 **Transliteration**:
 The Latin-alphabet rendering of a Ukrainian word, used in a Passphrase instead of the Cyrillic word when the user turns it on.
 _Avoid_: romanization, latinization
@@ -54,7 +58,7 @@ _Avoid_: romanization, latinization
 ## Strength
 
 **Entropy**:
-The number of bits of uniform randomness in a Secret, counted only over the random choices the generator actually makes (characters, distinct words, the appended number).
+The number of bits of uniform randomness in a Secret, counted only over the random choices the generator actually makes (characters, words of the Word pool, the appended number).
 _Avoid_: strength (when the number of bits is meant), score
 
 **Combinations**:

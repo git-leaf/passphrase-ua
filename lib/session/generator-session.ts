@@ -7,11 +7,16 @@
  */
 
 import { errorCodeOf, type GeneratorErrorCode } from "@/lib/generators/errors"
-import { DEFAULT_PASSPHRASE_OPTIONS, generatePassphrase, type PassphraseOptions } from "@/lib/generators/passphrase"
+import {
+  DEFAULT_PASSPHRASE_OPTIONS,
+  generatePassphrase,
+  type PassphraseOptions,
+  type PassphraseSecret,
+} from "@/lib/generators/passphrase"
 import { DEFAULT_PASSWORD_OPTIONS, generatePassword, type PasswordOptions } from "@/lib/generators/password"
 import type { GeneratedSecret, GenerationMethod } from "@/lib/generators/types"
 import type { RandomBytes } from "@/lib/random/secure-random"
-import { DEFAULT_WORDLIST, type WordlistChoice, type WordlistLanguage } from "@/lib/wordlists/catalogue"
+import { DEFAULT_WORDLIST, wordlistInfo, type WordlistChoice, type WordlistLanguage } from "@/lib/wordlists/catalogue"
 import type { WordlistSource } from "@/lib/wordlists/wordlist-source"
 
 /** The preset separators */
@@ -29,7 +34,7 @@ export interface PassphraseSettings extends PassphraseOptions {
 
 export interface GeneratorSessionState {
   password: { options: PasswordOptions; secret: GeneratedSecret | null }
-  passphrase: { options: PassphraseSettings; secret: GeneratedSecret | null; pending: boolean }
+  passphrase: { options: PassphraseSettings; secret: PassphraseSecret | null; pending: boolean }
 }
 
 export interface GeneratorSession {
@@ -53,9 +58,10 @@ export interface GeneratorSessionDeps {
   bytes?: RandomBytes
 }
 
-/** The separator the passphrase actually uses: the preset, or the custom one */
+/** The separator the passphrase actually uses: the preset, or the custom one unless it's empty */
 export function separatorOf(settings: PassphraseSettings): string {
-  return settings.separator === CUSTOM_SEPARATOR ? settings.customSeparator : settings.separator
+  if (settings.separator !== CUSTOM_SEPARATOR) return settings.separator
+  return settings.customSeparator || DEFAULT_PASSPHRASE_OPTIONS.separator
 }
 
 export const INITIAL_SESSION_STATE: GeneratorSessionState = {
@@ -97,7 +103,7 @@ export function createGeneratorSession({ wordlists, onError, bytes }: GeneratorS
     const settings = state.passphrase.options
     setState({ ...state, passphrase: { ...state.passphrase, pending: true } })
 
-    let secret: GeneratedSecret | null = null
+    let secret: PassphraseSecret | null = null
     let failure: GeneratorErrorCode | null = null
     try {
       const wordlist = await wordlists.load(settings.wordlist)
@@ -130,10 +136,12 @@ export function createGeneratorSession({ wordlists, onError, bytes }: GeneratorS
     },
 
     async updatePassphraseOptions(patch) {
-      state = {
-        ...state,
-        passphrase: { ...state.passphrase, options: { ...state.passphrase.options, ...patch } },
+      const options = { ...state.passphrase.options, ...patch }
+      // No separator is offered only where no word begins another
+      if (options.separator === "" && !wordlistInfo(options.wordlist).prefixFree) {
+        options.separator = DEFAULT_PASSPHRASE_OPTIONS.separator
       }
+      state = { ...state, passphrase: { ...state.passphrase, options } }
       await generatePassphraseNow()
     },
 
