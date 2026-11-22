@@ -13,7 +13,7 @@ import { useGeneratorSession } from "@/app/hooks/use-generator-session"
 import { MethodSelector, type GeneratorView } from "@/app/components/generator/method-selector"
 import { PasswordOptions } from "@/app/components/generator/password-options"
 import { PassphraseOptions } from "@/app/components/generator/passphrase-options"
-import { OutputDisplay } from "@/app/components/generator/output-display"
+import { SecretDisplay } from "@/app/components/generator/secret-display"
 
 // Learn components
 import { LearnContent } from "@/app/components/learn/learn-content"
@@ -39,7 +39,7 @@ export function GeneratorPage({ page }: { page: GeneratorView }) {
     })
   })
 
-  const secret = method && state[method].secret
+  const latest = method && state[method].secret
 
   const copyToClipboard = async (secret: string) => {
     try {
@@ -100,11 +100,11 @@ export function GeneratorPage({ page }: { page: GeneratorView }) {
 
               {page === "learn" && <LearnContent />}
 
-              {method && secret && (
-                <OutputDisplay
-                  secret={secret.secret}
-                  entropy={secret.entropy}
-                  onCopy={() => copyToClipboard(secret.secret)}
+              {method && latest && (
+                <SecretDisplay
+                  secret={latest.secret}
+                  entropy={latest.entropy}
+                  onCopy={() => copyToClipboard(latest.secret)}
                   onRegenerate={() => session.generate(method)}
                   isRegenerating={method === "passphrase" && state.passphrase.pending}
                 />
