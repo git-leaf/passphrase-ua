@@ -10,4 +10,4 @@ Wordlists are public data, not secrets, so fetching one reveals nothing a visito
 
 ## Consequences
 
-- The first Passphrase from each Wordlist needs a network request, so the app only works offline once that Wordlist has been cached. #23 adds a service worker that caches all of them on the first visit, which changes this decision's trade-off but not the file format.
+- The first Passphrase from each Wordlist needs a network request. [ADR-0011](0011-offline-through-a-hand-written-service-worker.md) amends this decision: a service worker stores every Wordlist in the background after the first visit, while the page itself still loads only the one in use.

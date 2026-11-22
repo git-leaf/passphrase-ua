@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
-import { readFile } from "node:fs/promises"
-import { join } from "node:path"
-import { cleanup, render, screen, waitFor } from "@testing-library/react"
+import { readdir, readFile } from "node:fs/promises"
+import { dirname, join } from "node:path"
+import { act, cleanup, render, screen, waitFor } from "@testing-library/react"
 import userEvent, { type UserEvent } from "@testing-library/user-event"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { translations } from "@/lib/i18n/translations"
@@ -45,6 +45,9 @@ afterEach(() => {
   cleanup()
   localStorage.clear()
   vi.unstubAllGlobals()
+  vi.restoreAllMocks()
+  // jsdom has no service worker; a test may add one
+  Reflect.deleteProperty(navigator, "serviceWorker")
 })
 
 /**
@@ -53,11 +56,12 @@ afterEach(() => {
  */
 async function renderApp() {
   vi.resetModules()
-  const [{ default: Home }, { I18nProvider }, { ThemeProvider }, { Toaster }] = await Promise.all([
+  const [{ default: Home }, { I18nProvider }, { ThemeProvider }, { Toaster }, { OfflineSupport }] = await Promise.all([
     import("@/app/page"),
     import("@/lib/i18n"),
     import("@/app/components/theme-provider"),
     import("@/app/components/ui/toaster"),
+    import("@/app/components/offline-support"),
   ])
   const user = userEvent.setup()
   render(
@@ -65,6 +69,7 @@ async function renderApp() {
       <ThemeProvider defaultTheme="system">
         <Home />
         <Toaster />
+        <OfflineSupport />
       </ThemeProvider>
     </I18nProvider>,
   )
@@ -195,5 +200,45 @@ describe("generator page", () => {
     cleanup()
     await renderApp()
     expect(screen.getByRole("tab", { name: uk.tabs.passphrase })).toBeTruthy()
+  })
+
+  it("hands every page and Wordlist to the service worker for offline use", async () => {
+    const postMessage = vi.fn()
+    const registration = { active: { postMessage } }
+    Object.defineProperty(navigator, "serviceWorker", {
+      configurable: true,
+      value: { register: vi.fn(async () => registration), ready: Promise.resolve(registration) },
+    })
+    const wordlists = await Promise.all(
+      ["en", "uk"].map(async (language) =>
+        (await readdir(join("public/wordlists", language))).map((file) => `/wordlists/${language}/${file}`),
+      ),
+    )
+
+    // Every route in app/, e.g. app/privacy/page.tsx is /privacy
+    const pages = (await readdir("app", { recursive: true }))
+      .filter((file) => /(^|\/)page\.tsx$/.test(file))
+      .map((file) => "/" + dirname(file).replace(/^\.$/, ""))
+
+    await renderApp()
+
+    await waitFor(() => expect(postMessage).toHaveBeenCalled())
+    const { type, urls } = postMessage.mock.calls[0][0]
+    expect(type).toBe("cache-for-offline")
+    expect(pages).toContain("/privacy")
+    expect(urls).toEqual(expect.arrayContaining([...pages, ...wordlists.flat()]))
+  })
+
+  it("shows when the app is offline", async () => {
+    await renderApp()
+    await untilDefaultPasswordShown()
+
+    vi.spyOn(navigator, "onLine", "get").mockReturnValue(false)
+    act(() => window.dispatchEvent(new Event("offline")))
+    expect(screen.getByText(en.header.offline)).toBeTruthy()
+
+    vi.spyOn(navigator, "onLine", "get").mockReturnValue(true)
+    act(() => window.dispatchEvent(new Event("online")))
+    expect(screen.queryByText(en.header.offline)).toBeNull()
   })
 })

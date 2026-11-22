@@ -7,6 +7,7 @@ import { TabsContent } from "@/app/components/ui/tabs"
 import { useToast } from "@/app/hooks/use-toast"
 import { ThemeToggle } from "@/app/components/theme-toggle"
 import { LanguageToggle } from "@/app/components/language-toggle"
+import { OfflineIndicator } from "@/app/components/offline-indicator"
 import { useI18n } from "@/lib/i18n"
 import { useGeneratorSession } from "@/app/hooks/use-generator-session"
 import type { GenerationMethod } from "@/lib/generators/types"
@@ -61,6 +62,7 @@ export default function Home() {
         {/* Header */}
         <div className="mb-8 text-center">
           <div className="mb-4 flex items-center justify-end gap-2">
+            <OfflineIndicator />
             <LanguageToggle />
             <ThemeToggle />
           </div>

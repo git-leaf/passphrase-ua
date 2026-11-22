@@ -15,6 +15,8 @@ export interface Translations {
     title: string
     subtitle: string
     toggleLanguage: string
+    /** Shown while there's no connection */
+    offline: string
   }
 
   // Tabs
@@ -378,6 +380,7 @@ export const translations: Record<Locale, Translations> = {
       title: "Mova Pass",
       subtitle: "Generate secure passwords and memorable passphrases",
       toggleLanguage: "Toggle language",
+      offline: "Offline",
     },
 
     tabs: {
@@ -821,6 +824,7 @@ export const translations: Record<Locale, Translations> = {
       title: "Mova Pass",
       subtitle: "Генерація безпечних паролів та фраз-паролів",
       toggleLanguage: "Змінити мову",
+      offline: "Офлайн",
     },
 
     tabs: {
