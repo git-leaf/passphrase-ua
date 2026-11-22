@@ -3,14 +3,17 @@ import type { Locale } from "@/lib/i18n"
 import { Geist, Geist_Mono } from "next/font/google"
 import "@/app/globals.css"
 
+// Every subset is self-hosted; `subsets` picks the ones each page preloads. Cyrillic shows
+// on every page (the default Ukrainian Passphrase, the language switcher), and preloading
+// also names the files in the page's HTML, which is where the service worker finds them
 const geistSans = Geist({
   variable: "--font-geist-sans",
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
 })
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
 })
 
 /**
@@ -25,7 +28,8 @@ export function RootDocument({ lang, children }: { lang: Locale; children: React
         {/* eslint-disable-next-line @next/next/no-sync-scripts */}
         <script src="/theme.js" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
+      {/* font-sans sets the font here: Tailwind's default on <html> can't see the font variables on <body> */}
+      <body className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}>{children}</body>
     </html>
   )
 }
