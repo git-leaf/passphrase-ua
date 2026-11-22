@@ -47,13 +47,15 @@ beforeEach(() => {
 
 afterEach(() => {
   cleanup()
-  localStorage.clear()
   vi.unstubAllGlobals()
   vi.unstubAllEnvs()
+  // Before clearing storage, which a test may have blocked
   vi.restoreAllMocks()
+  localStorage.clear()
   // jsdom has no service worker; a test may add one
   Reflect.deleteProperty(navigator, "serviceWorker")
   history.replaceState(null, "", "/")
+  document.documentElement.className = ""
   document.removeEventListener("click", preventNavigation)
 })
 
@@ -112,7 +114,7 @@ async function renderPage(path: string) {
   ])
   render(
     <I18nProvider locale={locale as Locale}>
-      <ThemeProvider defaultTheme="system">
+      <ThemeProvider>
         <Page />
         <Toaster />
         <OfflineSupport />
@@ -552,6 +554,78 @@ describe("generator page", () => {
     vi.spyOn(navigator, "onLine", "get").mockReturnValue(true)
     act(() => window.dispatchEvent(new Event("online")))
     expect(screen.queryByText(en.header.offline)).toBeNull()
+  })
+})
+
+/**
+ * Sets whether the OS theme is dark, and returns a function that changes it while the page is open
+ */
+function stubOsTheme(dark: boolean) {
+  const listeners = new Set<() => void>()
+  vi.stubGlobal("matchMedia", (query: string) => ({
+    get matches() {
+      return query === "(prefers-color-scheme: dark)" && dark
+    },
+    media: query,
+    addEventListener: (_type: string, listener: () => void) => listeners.add(listener),
+    removeEventListener: (_type: string, listener: () => void) => listeners.delete(listener),
+  }))
+  return (nowDark: boolean) => {
+    dark = nowDark
+    act(() => listeners.forEach((listener) => listener()))
+  }
+}
+
+/** The theme applied to the page: the light or dark class on <html> */
+function appliedTheme() {
+  return ["light", "dark"].filter((theme) => document.documentElement.classList.contains(theme))
+}
+
+async function chooseTheme(user: UserEvent, name: string) {
+  await user.click(screen.getByRole("button", { name: en.theme.toggleTheme }))
+  await user.click(await screen.findByRole("menuitem", { name }))
+}
+
+describe("theme", () => {
+  it("follows the OS theme while System is chosen, also when it changes", async () => {
+    const setOsTheme = stubOsTheme(true)
+    await renderApp("/en/password")
+    expect(appliedTheme()).toEqual(["dark"])
+
+    setOsTheme(false)
+    expect(appliedTheme()).toEqual(["light"])
+  })
+
+  it("keeps the chosen theme for the next visit, whatever the OS theme", async () => {
+    const setOsTheme = stubOsTheme(false)
+    const user = await renderApp("/en/password")
+    await chooseTheme(user, en.theme.dark)
+    expect(appliedTheme()).toEqual(["dark"])
+
+    cleanup()
+    await renderApp("/en/password")
+    setOsTheme(false)
+    expect(appliedTheme()).toEqual(["dark"])
+  })
+
+  it("follows the OS theme when the stored theme is invalid", async () => {
+    stubOsTheme(true)
+    localStorage.setItem("theme", "purple")
+    await renderApp("/en/password")
+
+    expect(appliedTheme()).toEqual(["dark"])
+  })
+
+  it("follows the OS theme and still switches theme when storage is blocked", async () => {
+    stubOsTheme(true)
+    vi.spyOn(window, "localStorage", "get").mockImplementation(() => {
+      throw new DOMException("The operation is insecure.", "SecurityError")
+    })
+    const user = await renderApp("/en/password")
+    expect(appliedTheme()).toEqual(["dark"])
+
+    await chooseTheme(user, en.theme.light)
+    expect(appliedTheme()).toEqual(["light"])
   })
 })
 

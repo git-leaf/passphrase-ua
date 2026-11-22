@@ -31,7 +31,7 @@ export default async function LocaleLayout({
   return (
     <RootDocument lang={locale}>
       <I18nProvider locale={locale}>
-        <ThemeProvider defaultTheme="system">
+        <ThemeProvider>
           {children}
           <Toaster />
           <OfflineSupport />

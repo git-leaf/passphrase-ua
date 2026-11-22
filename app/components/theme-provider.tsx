@@ -2,13 +2,11 @@
 
 import * as React from "react"
 
-type Theme = "dark" | "light" | "system"
+// The storage key and the themes are shared with public/theme.js, which applies the theme before the first paint
+const STORAGE_KEY = "theme"
+const THEMES = ["dark", "light", "system"] as const
 
-type ThemeProviderProps = {
-  children: React.ReactNode
-  defaultTheme?: Theme
-  storageKey?: string
-}
+type Theme = (typeof THEMES)[number]
 
 type ThemeProviderState = {
   theme: Theme
@@ -22,30 +20,46 @@ const initialState: ThemeProviderState = {
 
 const ThemeProviderContext = React.createContext<ThemeProviderState>(initialState)
 
-export function ThemeProvider({ children, defaultTheme = "system", storageKey = "theme" }: ThemeProviderProps) {
-  const [theme, setTheme] = React.useState<Theme>(
-    () => (typeof window !== "undefined" && (localStorage.getItem(storageKey) as Theme)) || defaultTheme,
-  )
+/** The stored theme, or "system" when none is stored, it isn't one of the themes or storage is blocked */
+function storedTheme(): Theme {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    return THEMES.find((theme) => theme === stored) ?? "system"
+  } catch {
+    return "system"
+  }
+}
+
+function storeTheme(theme: Theme) {
+  try {
+    localStorage.setItem(STORAGE_KEY, theme)
+  } catch {
+    // Storage is blocked (cookies off, a sandboxed frame): the choice lasts until the page closes
+  }
+}
+
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = React.useState<Theme>(() => (typeof window !== "undefined" ? storedTheme() : "system"))
 
   React.useEffect(() => {
-    const root = window.document.documentElement
-
-    root.classList.remove("light", "dark")
-
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-
-      root.classList.add(systemTheme)
-      return
+    const osTheme = window.matchMedia("(prefers-color-scheme: dark)")
+    const apply = () => {
+      const root = window.document.documentElement
+      root.classList.remove("light", "dark")
+      root.classList.add(theme === "system" ? (osTheme.matches ? "dark" : "light") : theme)
     }
 
-    root.classList.add(theme)
+    apply()
+    if (theme !== "system") return
+    // "System" follows the OS while the page is open
+    osTheme.addEventListener("change", apply)
+    return () => osTheme.removeEventListener("change", apply)
   }, [theme])
 
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
+      storeTheme(theme)
       setTheme(theme)
     },
   }
