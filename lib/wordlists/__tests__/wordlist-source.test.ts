@@ -66,6 +66,27 @@ describe("wordlist source", () => {
     await expect(source.load(choice)).resolves.toMatchObject({ entries: expect.any(Array) })
   })
 
+  it("reports a truncated file as wordlist-unavailable", async () => {
+    const source = createWordlistSource(async (path) => {
+      const lines = (await readPublicFile(path)).split("\n")
+      return lines.slice(0, lines.length / 2).join("\n")
+    })
+
+    await expect(source.load({ language: "en", id: "eff-short" })).rejects.toMatchObject({
+      code: "wordlist-unavailable",
+    })
+  })
+
+  it("reports an HTML error page served in place of the file as wordlist-unavailable", async () => {
+    const source = createWordlistSource(
+      async () => "<!DOCTYPE html>\n<html>\n<head><title>Not found</title></head>\n<body>Not found</body>\n</html>\n",
+    )
+
+    await expect(source.load({ language: "en", id: "eff-short" })).rejects.toMatchObject({
+      code: "wordlist-unavailable",
+    })
+  })
+
   it("reports a file with no words as wordlist-unavailable", async () => {
     const source = createWordlistSource(async () => "# Name: Empty\n\n")
 
