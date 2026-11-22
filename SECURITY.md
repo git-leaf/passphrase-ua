@@ -6,10 +6,7 @@ We take the security of Mova Pass (formerly Passphrase UA) seriously. If you dis
 
 ### How to Report
 
-Please report security vulnerabilities via:
-
-- **GitHub Security Advisories**: [Create a new advisory](https://github.com/git-leaf/passphrase-ua/security/advisories/new)
-- **Email**: If you prefer private disclosure, contact us via the email in the repository
+Report security vulnerabilities privately through a [GitHub security advisory](https://github.com/git-leaf/passphrase-ua/security/advisories/new). Please don't open a public issue for them.
 
 ### What to Include
 
@@ -22,8 +19,7 @@ When reporting a vulnerability, please include:
 
 ### Response Timeline
 
-- **Initial Response**: Within 48 hours
-- **Status Update**: Within 7 days
+- **Acknowledgement**: Within 7 days, best effort
 - **Fix Timeline**: Depends on severity (critical issues prioritized)
 
 ## Security Measures
@@ -63,11 +59,12 @@ Mova Pass implements multiple security measures to protect user privacy and pass
 - Transparent generation algorithms
 - Community review encouraged
 
-### 6. Regular Audits
+### 6. Automated Checks
 
-- Periodic security reviews
-- Dependency updates
-- Vulnerability scanning
+- Every pull request and every push to `main` is scanned for committed secrets (gitleaks)
+- Pull requests that add a dependency with a known vulnerability of high or critical severity fail (dependency review)
+- CodeQL scans the code on every pull request and weekly
+- Dependabot proposes dependency and GitHub Actions updates weekly, each version at least 7 days old
 
 ## Security Best Practices for Users
 
@@ -116,13 +113,6 @@ We appreciate security researchers who help keep our users safe. Contributors wi
 
 - [Privacy Policy](/privacy)
 
-## Contact
-
-For security-related questions or concerns:
-
-- GitHub Issues: [git-leaf/passphrase-ua/issues](https://github.com/git-leaf/passphrase-ua/issues)
-- Security Advisories: [git-leaf/passphrase-ua/security](https://github.com/git-leaf/passphrase-ua/security)
-
 ---
 
-**Last Updated**: November 16, 2025
+**Last Updated**: November 22, 2026
