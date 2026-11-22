@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { readdir, readFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
-import { act, cleanup, render, screen, waitFor } from "@testing-library/react"
+import { act, cleanup, render, screen, waitFor, within } from "@testing-library/react"
 import userEvent, { type UserEvent } from "@testing-library/user-event"
 import axe from "axe-core"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
@@ -79,7 +79,8 @@ async function renderApp(page: "/" | "/privacy" = "/") {
 
 /**
  * Every axe violation on the rendered page, one line per element so a failure names the rule and shows the element.
- * The root layout's <html lang> and <title> are rendered by Next.js on the server, not here.
+ * The root layout's <html lang> and <title> are rendered by Next.js on the server, not here;
+ * #20 makes <html lang> follow the language.
  */
 async function accessibilityViolations() {
   const { violations } = await axe.run(document, {
@@ -88,11 +89,19 @@ async function accessibilityViolations() {
   return violations.flatMap(({ id, nodes }) => nodes.map((node) => `${id}: ${node.html.slice(0, 120)}`))
 }
 
-/** Opens every collapsed section, such as Advanced options, so the controls inside are checked too */
-async function expandCollapsedSections(user: UserEvent) {
-  for (const section of document.querySelectorAll<HTMLElement>("[data-slot=accordion-trigger][aria-expanded=false]")) {
-    await user.click(section)
+/**
+ * Axe violations with every collapsed section open, such as Advanced options, so what is inside is checked too.
+ * Some groups keep one section open at a time, like the FAQ, so the page is checked after each one opens.
+ */
+async function violationsWithEverySectionOpen(user: UserEvent) {
+  const violations = new Set(await accessibilityViolations())
+  // A collapsible section is a button inside a heading
+  const sections = screen.queryAllByRole("heading").flatMap((heading) => within(heading).queryAllByRole("button"))
+  for (const section of sections) {
+    if (section.getAttribute("aria-expanded") === "false") await user.click(section)
+    for (const violation of await accessibilityViolations()) violations.add(violation)
   }
+  return [...violations]
 }
 
 /** The Secret currently shown */
@@ -272,7 +281,7 @@ describe("accessibility", () => {
     "the Passphrase generator": async (t) => {
       const user = await renderApp()
       await user.click(screen.getByRole("tab", { name: t.tabs.passphrase }))
-      await waitFor(() => expect(screen.getByRole("code").textContent).not.toBe(""))
+      await waitFor(() => expect(shownSecret()).not.toBe(""))
       return user
     },
     Learn: async (t) => {
@@ -284,13 +293,12 @@ describe("accessibility", () => {
   }
 
   for (const locale of ["en", "uk"] as const) {
-    for (const [view, open] of Object.entries(views)) {
+    for (const [view, openView] of Object.entries(views)) {
       it(`finds no violations on ${view} in ${locale === "en" ? "English" : "Ukrainian"}`, async () => {
         localStorage.setItem("locale", locale)
-        const user = await open(translations[locale])
-        await expandCollapsedSections(user)
+        const user = await openView(translations[locale])
 
-        expect(await accessibilityViolations()).toEqual([])
+        expect(await violationsWithEverySectionOpen(user)).toEqual([])
       })
     }
   }

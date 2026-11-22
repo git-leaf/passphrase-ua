@@ -24,9 +24,9 @@ function AccordionItem({ className, ...props }: React.ComponentProps<typeof Acco
 function AccordionTrigger({
   className,
   children,
-  level = 3,
+  level,
   ...props
-}: React.ComponentProps<typeof AccordionPrimitive.Trigger> & { level?: 2 | 3 | 4 | 5 | 6 }) {
+}: React.ComponentProps<typeof AccordionPrimitive.Trigger> & { level: 2 | 3 | 4 | 5 | 6 }) {
   const Heading = `h${level}` as const
   return (
     <AccordionPrimitive.Header asChild className="flex">

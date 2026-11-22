@@ -66,7 +66,7 @@ export function DonationSection() {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-center text-sm font-semibold text-foreground">{t.footer.supportUkraine}</h3>
+      <h2 className="text-center text-sm font-semibold text-foreground">{t.footer.supportUkraine}</h2>
       <p className="text-center text-xs text-muted-foreground max-w-2xl mx-auto">{t.footer.supportDescription}</p>
 
       {/* Main charity organizations */}
