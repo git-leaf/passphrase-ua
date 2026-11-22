@@ -21,5 +21,5 @@ Storing the Transliteration next to each word, rather than computing it in the a
 
 ## Consequences
 
-- The app's Wordlist catalogue lists each file with its size, and a test checks that every file parses to that size.
+- The app's Wordlist catalogue lists each file with its size, and a test checks that every file parses to that size. Loading a Wordlist fails as unavailable when the file parses to any other size, so a truncated file or an error page is never used.
 - A new Wordlist, in any language, uses this format.

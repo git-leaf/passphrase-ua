@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { describe, expect, it } from "vitest"
-import { WORDLIST_CATALOGUE, wordlistIds, type WordlistChoice } from "../catalogue"
+import { wordlistIds, wordlistInfo, type WordlistChoice } from "../catalogue"
 import { createWordlistSource, type ReadText } from "../wordlist-source"
 
 /** Reads the real wordlist files the app serves from public/. */
@@ -15,9 +15,8 @@ const allChoices: WordlistChoice[] = [
 describe("wordlist source", () => {
   it.each(allChoices)("loads $language/$id with as many entries as the catalogue says", async (choice) => {
     const wordlist = await createWordlistSource(readPublicFile).load(choice)
-    const { size } = (WORDLIST_CATALOGUE[choice.language] as Record<string, { size: number }>)[choice.id]
 
-    expect(wordlist.entries).toHaveLength(size)
+    expect(wordlist.entries).toHaveLength(wordlistInfo(choice).size)
   })
 
   it("reads Diceware lines as word plus Transliteration, without the dice index", async () => {
@@ -66,10 +65,24 @@ describe("wordlist source", () => {
     await expect(source.load(choice)).resolves.toMatchObject({ entries: expect.any(Array) })
   })
 
-  it("reports a file with no words as wordlist-unavailable", async () => {
-    const source = createWordlistSource(async () => "# Name: Empty\n\n")
-
-    await expect(source.load({ language: "en", id: "eff-short" })).rejects.toMatchObject({
+  // A response whose word count differs from the catalogue: a cut-off download, two files run
+  // together, or an error page served with status 200
+  it.each<[string, ReadText]>([
+    [
+      "a truncated file",
+      async (path) => {
+        const lines = (await readPublicFile(path)).split("\n")
+        return lines.slice(0, lines.length / 2).join("\n")
+      },
+    ],
+    ["a file with extra words", async (path) => `${await readPublicFile(path)}\nextra\n`],
+    [
+      "an HTML error page",
+      async () => "<!DOCTYPE html>\n<html>\n<head><title>Not found</title></head>\n<body>Not found</body>\n</html>\n",
+    ],
+    ["a file with no words", async () => "# Name: Empty\n\n"],
+  ])("reports %s as wordlist-unavailable", async (_, readText) => {
+    await expect(createWordlistSource(readText).load({ language: "en", id: "eff-short" })).rejects.toMatchObject({
       code: "wordlist-unavailable",
     })
   })

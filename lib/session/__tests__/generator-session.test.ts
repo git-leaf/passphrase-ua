@@ -1,17 +1,27 @@
 import { describe, expect, it } from "vitest"
 import type { GeneratorErrorCode } from "@/lib/generators/errors"
 import type { GenerationMethod } from "@/lib/generators/types"
+import { wordlistInfo, type WordlistChoice } from "@/lib/wordlists/catalogue"
 import { createWordlistSource, type ReadText } from "@/lib/wordlists/wordlist-source"
 import { createGeneratorSession, type GeneratorSession } from "../generator-session"
 
 const UK_WORDS = ["кіт", "пес", "сова", "лис"]
 const EN_WORDS = ["acid", "acorn", "acre", "acts"]
 
-const FILES: Record<string, string> = {
-  "/wordlists/uk/wordlist.txt": "# Size: 4\nкіт kit\nпес pes\nсова sova\nлис lys\n",
-  "/wordlists/uk/short_diceware.txt": "1111 кіт kit\n1112 пес pes\n1113 сова sova\n1114 лис lys\n",
-  "/wordlists/en/eff_large_diceware.txt": EN_WORDS.map((w, i) => `1111${i + 1} ${w}`).join("\n"),
+/** A Wordlist file as long as the catalogue says, repeating a few lines so every word is known */
+function fakeFile(choice: WordlistChoice, lines: string[]) {
+  const { path, size } = wordlistInfo(choice)
+  return [path, Array.from({ length: size }, (_, i) => lines[i % lines.length]).join("\n")]
 }
+
+const FILES: Record<string, string> = Object.fromEntries([
+  fakeFile({ language: "uk", id: "wordlist" }, ["кіт kit", "пес pes", "сова sova", "лис lys"]),
+  fakeFile({ language: "uk", id: "short" }, ["1111 кіт kit", "1112 пес pes", "1113 сова sova", "1114 лис lys"]),
+  fakeFile(
+    { language: "en", id: "eff-large" },
+    EN_WORDS.map((w, i) => `1111${i + 1} ${w}`),
+  ),
+])
 
 const readFiles: ReadText = async (path) => {
   const text = FILES[path]
