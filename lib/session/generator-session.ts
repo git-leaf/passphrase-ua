@@ -14,6 +14,9 @@ import type { RandomBytes } from "@/lib/random/secure-random"
 import { DEFAULT_WORDLIST, type WordlistChoice, type WordlistLanguage } from "@/lib/wordlists/catalogue"
 import type { WordlistSource } from "@/lib/wordlists/wordlist-source"
 
+/** The preset separators, in display order */
+export const SEPARATOR_PRESETS = ["-", "_", " ", ".", ""] as const
+
 /** Chooses the custom separator instead of a preset */
 export const CUSTOM_SEPARATOR = "custom"
 

@@ -10,7 +10,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useI18n } from "@/lib/i18n"
 import { RefreshCw } from "lucide-react"
 import { PASSPHRASE_LIMITS, type CapitalizationStyle } from "@/lib/generators/passphrase"
-import { CUSTOM_SEPARATOR, type PassphraseSettings } from "@/lib/session/generator-session"
+import { CUSTOM_SEPARATOR, SEPARATOR_PRESETS, type PassphraseSettings } from "@/lib/session/generator-session"
 import { wordlistIds, wordlistInfo, type WordlistChoice, type WordlistLanguage } from "@/lib/wordlists/catalogue"
 
 interface PassphraseOptionsProps {
@@ -21,14 +21,19 @@ interface PassphraseOptionsProps {
   onGenerate: () => void
 }
 
-const SEPARATOR_PRESETS = [
-  { value: "-", labelKey: "separatorDash", symbol: "-" },
-  { value: "_", labelKey: "separatorUnderscore", symbol: "_" },
-  { value: " ", labelKey: "separatorSpace", symbol: "␣" },
-  { value: ".", labelKey: "separatorPeriod", symbol: "." },
-  { value: "", labelKey: "separatorNone", symbol: "∅" },
-  { value: CUSTOM_SEPARATOR, labelKey: "separatorCustom", symbol: "..." },
-] as const
+const SEPARATOR_LABELS = {
+  "-": { labelKey: "separatorDash", symbol: "-" },
+  _: { labelKey: "separatorUnderscore", symbol: "_" },
+  " ": { labelKey: "separatorSpace", symbol: "␣" },
+  ".": { labelKey: "separatorPeriod", symbol: "." },
+  "": { labelKey: "separatorNone", symbol: "∅" },
+  [CUSTOM_SEPARATOR]: { labelKey: "separatorCustom", symbol: "..." },
+} as const satisfies Record<(typeof SEPARATOR_PRESETS)[number] | typeof CUSTOM_SEPARATOR, unknown>
+
+const SEPARATOR_BUTTONS = ([...SEPARATOR_PRESETS, CUSTOM_SEPARATOR] as const).map((value) => ({
+  value,
+  ...SEPARATOR_LABELS[value],
+}))
 
 /**
  * Passphrase generation configuration panel with Diceware options
@@ -121,7 +126,7 @@ export function PassphraseOptions({
         <div className="space-y-2">
           <Label>{t.passphrase.separator}</Label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {SEPARATOR_PRESETS.map((sep) => (
+            {SEPARATOR_BUTTONS.map((sep) => (
               <Button
                 key={sep.value}
                 variant={options.separator === sep.value ? "default" : "outline"}

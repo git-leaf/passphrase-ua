@@ -4,6 +4,7 @@ import { useEffect, useSyncExternalStore } from "react"
 import type { GeneratorErrorCode } from "@/lib/generators/errors"
 import type { GenerationMethod } from "@/lib/generators/types"
 import { createGeneratorSession, INITIAL_SESSION_STATE } from "@/lib/session/generator-session"
+import { optionsFromQuery, optionsQuery } from "@/lib/session/options-query"
 import { createWordlistSource } from "@/lib/wordlists/wordlist-source"
 
 type ErrorListener = (code: GeneratorErrorCode) => void
@@ -18,7 +19,8 @@ const session = createGeneratorSession({
 
 /**
  * The app's Generator session, generating the Secret of the page's Generation method
- * the first time it's shown; a page without one, like Learn, generates nothing
+ * the first time it's shown; a page without one, like Learn, generates nothing.
+ * The page's URL holds that method's Options query, replaced as options change.
  */
 export function useGeneratorSession(method: GenerationMethod | null, onError: ErrorListener) {
   const state = useSyncExternalStore(session.subscribe, session.getState, () => INITIAL_SESSION_STATE)
@@ -31,7 +33,22 @@ export function useGeneratorSession(method: GenerationMethod | null, onError: Er
   }, [onError])
 
   useEffect(() => {
-    if (method && !session.getState()[method].output) session.generate(method)
+    if (!method) return
+
+    if (!session.getState()[method].output) {
+      // The first time the page is shown, options in its URL apply; afterwards the URL follows the session
+      if (!location.search) session.generate(method)
+      else if (method === "password") session.updatePasswordOptions(optionsFromQuery(method, location.search))
+      else session.updatePassphraseOptions(optionsFromQuery(method, location.search))
+    }
+
+    const showOptionsInUrl = () => {
+      const query = optionsQuery(method, session.getState()[method].options)
+      const search = query && `?${query}`
+      if (search !== location.search) history.replaceState(null, "", location.pathname + search + location.hash)
+    }
+    showOptionsInUrl()
+    return session.subscribe(showOptionsInUrl)
   }, [method])
 
   return { state, session }

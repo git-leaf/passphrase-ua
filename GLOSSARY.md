@@ -27,6 +27,10 @@ _Avoid_: password (for this kind), phrase
 The string placed between the words of a Passphrase, either a preset or a custom one of up to three characters.
 _Avoid_: delimiter
 
+**Options query**:
+The query string of a generator page's URL, holding the options of its Generation method that differ from the defaults (e.g. `/uk?words=5&sep=_`), so a configuration can be bookmarked and shared. It never holds a Secret.
+_Avoid_: URL state, permalink
+
 ## Wordlists
 
 **Wordlist**:
