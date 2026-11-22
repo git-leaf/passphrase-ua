@@ -13,7 +13,7 @@ Every Wordlist file uses one format:
 11111	абажур	abazhur
 ```
 
-- Lines starting with `#` are metadata and are skipped by the parser. `Size` is the number of words. `Dice`, `Source` and `License` appear where they apply.
+- Lines starting with `#` are metadata and are skipped by the parser. `Size` is the number of words. `Transliteration`, `Dice`, `Source` and `License` appear where they apply.
 - Each other line is one word, optionally preceded by its Dice index and followed by its Transliteration, separated by whitespace.
 - A Diceware Wordlist has a Dice index on every line; other Wordlists have none.
 

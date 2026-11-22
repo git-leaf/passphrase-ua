@@ -12,4 +12,4 @@ A password generator asks for trust it can't prove from the outside. Running onl
 ## Consequences
 
 - Features that need a backend (sync, sharing a Secret, breach checks against a server) are off the table. Settings can live only in the browser or in the URL, never the Secret itself.
-- The host still sees ordinary request metadata such as IP addresses, and the privacy page must say so.
+- The host still sees ordinary request metadata such as IP addresses, and the privacy page must say so (#27).

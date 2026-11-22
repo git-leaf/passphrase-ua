@@ -1,8 +1,8 @@
 # Product principles: passphrase first, visit to copy in seconds, depth on demand
 
-Mova Pass is designed by these principles:
+Mova Pass is being reshaped around these principles, through #19 and #20, and new work follows them now:
 
-1. **Passphrase first.** A Passphrase is the product; a Password is a secondary feature. The home page in each language is the Passphrase generator.
+1. **Passphrase first.** A Passphrase is the product; a Password is a secondary feature. The home page in each language becomes the Passphrase generator (#20).
 2. **Visit → copy → leave.** A strong Secret is already shown when the page opens, and copying it takes one click. A visitor needs zero to two clicks and no decisions.
 3. **Design for the least technical visitor.** Assume no attention to spare and no security knowledge: plain words, no jargon on the first screen, defaults chosen per language so that the default Secret is the right one.
 4. **Depth on demand, never removed.** Every option, the Attacker model and the full Strength analysis stay available behind progressive disclosure (a "customize" or "details" step), so experienced visitors keep full control. Simplifying hides depth; it doesn't delete it.

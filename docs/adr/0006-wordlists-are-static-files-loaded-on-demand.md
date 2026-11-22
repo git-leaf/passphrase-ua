@@ -2,7 +2,7 @@
 
 Each Wordlist is a plain text file the site serves from `public/wordlists/`. The app fetches a Wordlist the first time a Passphrase needs it and keeps it in memory, instead of bundling all of them into the JavaScript.
 
-Wordlists are public data, not secrets, so fetching one reveals nothing a visitor generates. Loading only the one in use keeps the first page load small: all eight together are about 840 KB, more than the rest of the app. Plain files are also easy to read and verify against their sources.
+Wordlists are public data, not secrets, so fetching one reveals nothing a visitor generates. Loading only the one in use keeps the first page load small; all eight together are about 840 KB. Plain files are also easy to read and verify against their sources.
 
 ## Considered options
 

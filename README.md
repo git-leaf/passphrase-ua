@@ -34,7 +34,7 @@ Support the developer's personal charity efforts through [**Monobank Charity Jar
 
 ### Ukrainian Support (First Implementation!)
 
-- 🇺🇦 **Ukrainian Wordlists**: Short Diceware (1,296 words), Long Diceware (7,776 words) and a 10,870-word Wordlist
+- 🇺🇦 **Ukrainian Wordlists**: two Diceware lists and a larger general Wordlist (see [Supported Languages](#-supported-languages))
 - 🔤 **Transliteration**: Ukrainian words in Latin letters (e.g., "собака" → "sobaka"), for sites and keyboards without Cyrillic
 
 ### Security & Privacy
