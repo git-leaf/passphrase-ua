@@ -1,7 +1,8 @@
 "use client"
 
 import Image from "next/image"
-import { useI18n, type DonationId, type Locale } from "@/lib/i18n"
+import { useI18n } from "@/app/components/i18n-provider"
+import { type DonationId, type Locale } from "@/lib/i18n"
 import { cn } from "@/lib/utils"
 
 interface DonationLink {

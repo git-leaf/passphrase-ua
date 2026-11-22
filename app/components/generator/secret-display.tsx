@@ -2,10 +2,10 @@
 
 import { Button } from "@/app/components/ui/button"
 import { Copy, RefreshCw } from "lucide-react"
-import { useI18n } from "@/lib/i18n"
+import { useI18n } from "@/app/components/i18n-provider"
 import { StrengthMeter } from "./strength-meter"
 
-interface OutputDisplayProps {
+interface SecretDisplayProps {
   secret: string
   entropy: number
   onCopy: () => void
@@ -14,9 +14,9 @@ interface OutputDisplayProps {
 }
 
 /**
- * Displays generated password/passphrase with copy and regenerate actions, plus strength metrics
+ * Displays the latest Secret with copy and regenerate actions, plus strength metrics
  */
-export function OutputDisplay({ secret, entropy, onCopy, onRegenerate, isRegenerating = false }: OutputDisplayProps) {
+export function SecretDisplay({ secret, entropy, onCopy, onRegenerate, isRegenerating = false }: SecretDisplayProps) {
   const { t } = useI18n()
 
   return (

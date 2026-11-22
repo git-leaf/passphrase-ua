@@ -5,7 +5,8 @@ import { Shield, Lock, Eye, Database, Code, Cookie } from "lucide-react"
 import Link from "next/link"
 import { ThemeToggle } from "@/app/components/theme-toggle"
 import { LanguageToggle } from "@/app/components/language-toggle"
-import { pagePath, useI18n } from "@/lib/i18n"
+import { useI18n } from "@/app/components/i18n-provider"
+import { pagePath } from "@/lib/i18n"
 
 /**
  * The privacy policy, in the page's language

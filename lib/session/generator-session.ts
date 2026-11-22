@@ -28,8 +28,8 @@ export interface PassphraseSettings extends PassphraseOptions {
 }
 
 export interface GeneratorSessionState {
-  password: { options: PasswordOptions; output: GeneratedSecret | null }
-  passphrase: { options: PassphraseSettings; output: GeneratedSecret | null; pending: boolean }
+  password: { options: PasswordOptions; secret: GeneratedSecret | null }
+  passphrase: { options: PassphraseSettings; secret: GeneratedSecret | null; pending: boolean }
 }
 
 export interface GeneratorSession {
@@ -59,14 +59,14 @@ export function separatorOf(settings: PassphraseSettings): string {
 }
 
 export const INITIAL_SESSION_STATE: GeneratorSessionState = {
-  password: { options: DEFAULT_PASSWORD_OPTIONS, output: null },
+  password: { options: DEFAULT_PASSWORD_OPTIONS, secret: null },
   passphrase: {
     options: {
       ...DEFAULT_PASSPHRASE_OPTIONS,
       wordlist: { language: "uk", id: DEFAULT_WORDLIST.uk },
       customSeparator: "",
     },
-    output: null,
+    secret: null,
     pending: false,
   },
 }
@@ -83,13 +83,13 @@ export function createGeneratorSession({ wordlists, onError, bytes }: GeneratorS
   }
 
   function generatePasswordNow() {
-    let output: GeneratedSecret | null = null
+    let secret: GeneratedSecret | null = null
     try {
-      output = generatePassword(state.password.options, bytes)
+      secret = generatePassword(state.password.options, bytes)
     } catch (error) {
       onError(errorCodeOf(error))
     }
-    setState({ ...state, password: { ...state.password, output } })
+    setState({ ...state, password: { ...state.password, secret } })
   }
 
   async function generatePassphraseNow() {
@@ -97,18 +97,18 @@ export function createGeneratorSession({ wordlists, onError, bytes }: GeneratorS
     const settings = state.passphrase.options
     setState({ ...state, passphrase: { ...state.passphrase, pending: true } })
 
-    let output: GeneratedSecret | null = null
+    let secret: GeneratedSecret | null = null
     let failure: GeneratorErrorCode | null = null
     try {
       const wordlist = await wordlists.load(settings.wordlist)
-      output = generatePassphrase(wordlist, { ...settings, separator: separatorOf(settings) }, bytes)
+      secret = generatePassphrase(wordlist, { ...settings, separator: separatorOf(settings) }, bytes)
     } catch (error) {
       failure = errorCodeOf(error)
     }
 
     if (request !== latestPassphraseRequest) return
     if (failure) onError(failure)
-    setState({ ...state, passphrase: { ...state.passphrase, output, pending: false } })
+    setState({ ...state, passphrase: { ...state.passphrase, secret, pending: false } })
   }
 
   const session: GeneratorSession = {

@@ -5,7 +5,7 @@ import { Label } from "@/app/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/components/ui/select"
 import { Input } from "@/app/components/ui/input"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/app/components/ui/accordion"
-import { useI18n } from "@/lib/i18n"
+import { useI18n } from "@/app/components/i18n-provider"
 import {
   analyzeStrength,
   ATTACKER_PRESETS,
