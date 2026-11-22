@@ -18,3 +18,4 @@ A generator page's URL holds its Generation method's Options query: only the opt
 - The keys are a contract with bookmarks: renaming one needs the old key read as well.
 - Defaults that change, as #19 may make them per language, change what a URL without a key means.
 - Query parameters the page doesn't own, such as `utm_*`, are dropped when it rewrites the URL.
+- The Attacker settings are not options of a Generation method, so they stay out of the URL: the Generator session keeps them while the visitor moves between pages, and a reload or shared link starts from the default Attacker model.

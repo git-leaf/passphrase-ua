@@ -25,7 +25,7 @@ import { FooterLinks } from "@/app/components/footer/footer-links"
 /**
  * A page of the generator: the Passphrase generator, the Password generator or Learn.
  * The Generator session outlives the page, so each Generation method keeps its
- * options and latest Secret while the visitor moves between them.
+ * options and latest Secret, and the Attacker model stays, while the visitor moves between them.
  */
 export function GeneratorPage({ page }: { page: GeneratorView }) {
   const { toast } = useToast()
@@ -105,6 +105,8 @@ export function GeneratorPage({ page }: { page: GeneratorView }) {
                 <SecretDisplay
                   secret={latest.secret}
                   entropy={latest.entropy}
+                  attacker={state.attacker}
+                  onAttackerChange={session.updateAttackerSettings}
                   onCopy={() => copyToClipboard(latest.secret)}
                   onRegenerate={() => session.generate(method)}
                   isRegenerating={method === "passphrase" && state.passphrase.pending}

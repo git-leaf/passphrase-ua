@@ -27,6 +27,8 @@ beforeEach(() => {
       disconnect() {}
     },
   )
+  // Opening a select scrolls its chosen option into view
+  Element.prototype.scrollIntoView = () => {}
   vi.stubGlobal("matchMedia", (query: string) => ({
     matches: false,
     media: query,
@@ -54,6 +56,7 @@ afterEach(() => {
   localStorage.clear()
   // jsdom has no service worker; a test may add one
   Reflect.deleteProperty(navigator, "serviceWorker")
+  Reflect.deleteProperty(Element.prototype, "scrollIntoView")
   history.replaceState(null, "", "/")
   document.documentElement.className = ""
   document.removeEventListener("click", preventNavigation)
@@ -176,6 +179,19 @@ async function lengthenPassword(user: UserEvent) {
 
 async function chooseUnderscoreSeparator(user: UserEvent) {
   await user.click(screen.getByRole("button", { name: `${en.passphrase.separatorUnderscore} _` }))
+}
+
+/** The shown Time to crack and Cost to crack */
+function crackFigures() {
+  const figure = (label: string) => screen.getByText(`${label} (${en.output.avgTime})`).nextElementSibling?.textContent
+  return { time: figure(en.output.timeToCrack), cost: figure(en.output.costToCrack) }
+}
+
+/** Chooses Custom in the Attacker model select with this label */
+async function chooseCustom(user: UserEvent, label: string) {
+  screen.getByRole("combobox", { name: label }).focus()
+  await user.keyboard("{Enter}")
+  await user.click(await screen.findByRole("option", { name: en.output.guessRateCustom }))
 }
 
 /** Waits until no Passphrase is being generated */
@@ -355,6 +371,32 @@ describe("generator page", () => {
     await followLink(user, screen.getByRole("link", { name: en.tabs.password }))
     await user.click(screen.getByRole("button", { name: en.password.generate }))
     expect(shownSecret()).toHaveLength(17)
+  })
+
+  it("keeps a custom Attacker model across a visit to Learn", async () => {
+    const user = await renderApp("/en/password")
+    await untilDefaultPasswordShown()
+    const atDefaultAttacker = crackFigures()
+    expect(screen.getByRole("button", { name: en.output.configureMetrics }).getAttribute("aria-expanded")).toBe("false")
+
+    await user.click(screen.getByRole("button", { name: en.output.configureMetrics }))
+    await chooseCustom(user, en.output.guessRate)
+    await user.type(screen.getByPlaceholderText(en.output.enterGuessRate), "1000")
+    await chooseCustom(user, en.output.costPer32)
+    await user.type(screen.getByPlaceholderText(en.output.enterCost), "5")
+    const atCustomAttacker = crackFigures()
+    expect(atCustomAttacker.time).not.toBe(atDefaultAttacker.time)
+    expect(atCustomAttacker.cost).not.toBe(atDefaultAttacker.cost)
+
+    await followLink(user, screen.getByRole("link", { name: en.tabs.learn }))
+    await followLink(user, screen.getByRole("link", { name: en.tabs.password }))
+
+    expect(crackFigures()).toEqual(atCustomAttacker)
+    // Open already, so the figures never rest on an Attacker model the page hides
+    expect(screen.getByRole("button", { name: en.output.configureMetrics }).getAttribute("aria-expanded")).toBe("true")
+    expect(screen.getByRole("combobox", { name: en.output.guessRate }).textContent).toBe(en.output.guessRateCustom)
+    expect(screen.getByPlaceholderText(en.output.enterGuessRate)).toHaveProperty("value", "1000")
+    expect(screen.getByPlaceholderText(en.output.enterCost)).toHaveProperty("value", "5")
   })
 
   it("serves each page in each language at its own URL, marking the current page", async () => {
