@@ -33,9 +33,11 @@ export default function PrivacyPage() {
           {/* Overview */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Eye className="h-5 w-5" />
-                {t.privacy.overview.title}
+              <CardTitle asChild className="flex items-center gap-2">
+                <h2>
+                  <Eye className="h-5 w-5" />
+                  {t.privacy.overview.title}
+                </h2>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -47,9 +49,11 @@ export default function PrivacyPage() {
           {/* What We Don't Collect */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Database className="h-5 w-5" />
-                {t.privacy.whatWeDontCollect.title}
+              <CardTitle asChild className="flex items-center gap-2">
+                <h2>
+                  <Database className="h-5 w-5" />
+                  {t.privacy.whatWeDontCollect.title}
+                </h2>
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -85,9 +89,11 @@ export default function PrivacyPage() {
           {/* What We Store Locally */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Cookie className="h-5 w-5" />
-                {t.privacy.whatWeStoreLocally.title}
+              <CardTitle asChild className="flex items-center gap-2">
+                <h2>
+                  <Cookie className="h-5 w-5" />
+                  {t.privacy.whatWeStoreLocally.title}
+                </h2>
               </CardTitle>
               <CardDescription>{t.privacy.whatWeStoreLocally.description}</CardDescription>
             </CardHeader>
@@ -129,9 +135,11 @@ export default function PrivacyPage() {
           {/* How It Works */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Code className="h-5 w-5" />
-                {t.privacy.howItWorks.title}
+              <CardTitle asChild className="flex items-center gap-2">
+                <h2>
+                  <Code className="h-5 w-5" />
+                  {t.privacy.howItWorks.title}
+                </h2>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-muted-foreground">
@@ -155,9 +163,11 @@ export default function PrivacyPage() {
           {/* GDPR Compliance */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Lock className="h-5 w-5" />
-                {t.privacy.gdprCompliance.title}
+              <CardTitle asChild className="flex items-center gap-2">
+                <h2>
+                  <Lock className="h-5 w-5" />
+                  {t.privacy.gdprCompliance.title}
+                </h2>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-muted-foreground">
@@ -175,9 +185,11 @@ export default function PrivacyPage() {
           {/* Security */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Shield className="h-5 w-5" />
-                {t.privacy.security.title}
+              <CardTitle asChild className="flex items-center gap-2">
+                <h2>
+                  <Shield className="h-5 w-5" />
+                  {t.privacy.security.title}
+                </h2>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-muted-foreground">
@@ -195,7 +207,9 @@ export default function PrivacyPage() {
           {/* Changes to Policy */}
           <Card>
             <CardHeader>
-              <CardTitle>{t.privacy.changesToPolicy.title}</CardTitle>
+              <CardTitle asChild>
+                <h2>{t.privacy.changesToPolicy.title}</h2>
+              </CardTitle>
             </CardHeader>
             <CardContent className="text-muted-foreground">
               <p>{t.privacy.changesToPolicy.description}</p>
@@ -205,7 +219,9 @@ export default function PrivacyPage() {
           {/* Contact */}
           <Card>
             <CardHeader>
-              <CardTitle>{t.privacy.contact.title}</CardTitle>
+              <CardTitle asChild>
+                <h2>{t.privacy.contact.title}</h2>
+              </CardTitle>
             </CardHeader>
             <CardContent className="text-muted-foreground">
               <p>{t.privacy.contact.description}</p>
@@ -216,7 +232,7 @@ export default function PrivacyPage() {
                     href="https://github.com/git-leaf/passphrase-ua"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-primary hover:underline"
+                    className="text-primary underline underline-offset-4"
                   >
                     GitHub
                   </a>

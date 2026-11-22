@@ -1,8 +1,9 @@
 // @vitest-environment jsdom
 import { readdir, readFile } from "node:fs/promises"
 import { dirname, join } from "node:path"
-import { act, cleanup, render, screen, waitFor } from "@testing-library/react"
+import { act, cleanup, render, screen, waitFor, within } from "@testing-library/react"
 import userEvent, { type UserEvent } from "@testing-library/user-event"
+import axe from "axe-core"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { translations } from "@/lib/i18n/translations"
 import { createWordlistSource } from "@/lib/wordlists/wordlist-source"
@@ -54,10 +55,10 @@ afterEach(() => {
  * Renders the page as the root layout does. Modules are reloaded so every test
  * starts with fresh Secrets and default options.
  */
-async function renderApp() {
+async function renderApp(page: "/" | "/privacy" = "/") {
   vi.resetModules()
-  const [{ default: Home }, { I18nProvider }, { ThemeProvider }, { Toaster }, { OfflineSupport }] = await Promise.all([
-    import("@/app/page"),
+  const [{ default: Page }, { I18nProvider }, { ThemeProvider }, { Toaster }, { OfflineSupport }] = await Promise.all([
+    page === "/" ? import("@/app/page") : import("@/app/privacy/page"),
     import("@/lib/i18n"),
     import("@/app/components/theme-provider"),
     import("@/app/components/ui/toaster"),
@@ -67,13 +68,40 @@ async function renderApp() {
   render(
     <I18nProvider defaultLocale="en">
       <ThemeProvider defaultTheme="system">
-        <Home />
+        <Page />
         <Toaster />
         <OfflineSupport />
       </ThemeProvider>
     </I18nProvider>,
   )
   return user
+}
+
+/**
+ * Every axe violation on the rendered page, one line per element so a failure names the rule and shows the element.
+ * The root layout's <html lang> and <title> are rendered by Next.js on the server, not here;
+ * #20 makes <html lang> follow the language.
+ */
+async function accessibilityViolations() {
+  const { violations } = await axe.run(document, {
+    rules: { "html-has-lang": { enabled: false }, "document-title": { enabled: false } },
+  })
+  return violations.flatMap(({ id, nodes }) => nodes.map((node) => `${id}: ${node.html.slice(0, 120)}`))
+}
+
+/**
+ * Axe violations with every collapsed section open, such as Advanced options, so what is inside is checked too.
+ * Some groups keep one section open at a time, like the FAQ, so the page is checked after each one opens.
+ */
+async function violationsWithEverySectionOpen(user: UserEvent) {
+  const violations = new Set(await accessibilityViolations())
+  // A collapsible section is a button inside a heading
+  const sections = screen.queryAllByRole("heading").flatMap((heading) => within(heading).queryAllByRole("button"))
+  for (const section of sections) {
+    if (section.getAttribute("aria-expanded") === "false") await user.click(section)
+    for (const violation of await accessibilityViolations()) violations.add(violation)
+  }
+  return [...violations]
 }
 
 /** The Secret currently shown */
@@ -241,4 +269,37 @@ describe("generator page", () => {
     act(() => window.dispatchEvent(new Event("online")))
     expect(screen.queryByText(en.header.offline)).toBeNull()
   })
+})
+
+describe("accessibility", () => {
+  const views: Record<string, (t: typeof en) => Promise<UserEvent>> = {
+    "the Password generator": async () => {
+      const user = await renderApp()
+      await untilDefaultPasswordShown()
+      return user
+    },
+    "the Passphrase generator": async (t) => {
+      const user = await renderApp()
+      await user.click(screen.getByRole("tab", { name: t.tabs.passphrase }))
+      await waitFor(() => expect(shownSecret()).not.toBe(""))
+      return user
+    },
+    Learn: async (t) => {
+      const user = await renderApp()
+      await user.click(screen.getByRole("tab", { name: t.tabs.learn }))
+      return user
+    },
+    Privacy: () => renderApp("/privacy"),
+  }
+
+  for (const locale of ["en", "uk"] as const) {
+    for (const [view, openView] of Object.entries(views)) {
+      it(`finds no violations on ${view} in ${locale === "en" ? "English" : "Ukrainian"}`, async () => {
+        localStorage.setItem("locale", locale)
+        const user = await openView(translations[locale])
+
+        expect(await violationsWithEverySectionOpen(user)).toEqual([])
+      })
+    }
+  }
 })

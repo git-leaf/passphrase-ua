@@ -101,7 +101,9 @@ export function LearnContent() {
 
           <Accordion type="single" collapsible className="space-y-2">
             <AccordionItem value="faq-1" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q1}</AccordionTrigger>
+              <AccordionTrigger level={4} className="text-sm font-medium hover:no-underline">
+                {t.learn.faq.q1}
+              </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 {t.learn.faq.a1.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
@@ -110,7 +112,9 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-2" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q2}</AccordionTrigger>
+              <AccordionTrigger level={4} className="text-sm font-medium hover:no-underline">
+                {t.learn.faq.q2}
+              </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 <p className="font-medium">{t.learn.faq.a2Title}</p>
                 <ol className="list-decimal list-inside space-y-1 ml-2">
@@ -123,7 +127,9 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-3" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q3}</AccordionTrigger>
+              <AccordionTrigger level={4} className="text-sm font-medium hover:no-underline">
+                {t.learn.faq.q3}
+              </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 {t.learn.faq.a3.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
@@ -132,7 +138,9 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-4" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q4}</AccordionTrigger>
+              <AccordionTrigger level={4} className="text-sm font-medium hover:no-underline">
+                {t.learn.faq.q4}
+              </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 {t.learn.faq.a4.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
@@ -141,17 +149,23 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-5" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q5}</AccordionTrigger>
+              <AccordionTrigger level={4} className="text-sm font-medium hover:no-underline">
+                {t.learn.faq.q5}
+              </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground">{t.learn.faq.a5}</AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-6" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q6}</AccordionTrigger>
+              <AccordionTrigger level={4} className="text-sm font-medium hover:no-underline">
+                {t.learn.faq.q6}
+              </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground">{t.learn.faq.a6}</AccordionContent>
             </AccordionItem>
 
             <AccordionItem value="faq-7" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q7}</AccordionTrigger>
+              <AccordionTrigger level={4} className="text-sm font-medium hover:no-underline">
+                {t.learn.faq.q7}
+              </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 <p className="font-medium">{t.learn.faq.a7GoodTitle}</p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
@@ -169,7 +183,9 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-8" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q8}</AccordionTrigger>
+              <AccordionTrigger level={4} className="text-sm font-medium hover:no-underline">
+                {t.learn.faq.q8}
+              </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 {t.learn.faq.a8.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>
@@ -178,7 +194,9 @@ export function LearnContent() {
             </AccordionItem>
 
             <AccordionItem value="faq-9" className="border rounded-lg px-4">
-              <AccordionTrigger className="text-sm font-medium hover:no-underline">{t.learn.faq.q9}</AccordionTrigger>
+              <AccordionTrigger level={4} className="text-sm font-medium hover:no-underline">
+                {t.learn.faq.q9}
+              </AccordionTrigger>
               <AccordionContent className="text-sm text-muted-foreground space-y-2">
                 {t.learn.faq.a9.map((paragraph, index) => (
                   <p key={index}>{paragraph}</p>

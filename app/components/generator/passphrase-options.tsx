@@ -50,12 +50,13 @@ export function PassphraseOptions({
       <div className="space-y-4">
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <Label>{t.passphrase.wordCount}</Label>
+            <Label id="word-count">{t.passphrase.wordCount}</Label>
             <span className="text-sm font-medium">
               {options.wordCount} {t.passphrase.words}
             </span>
           </div>
           <Slider
+            aria-labelledby="word-count"
             value={[options.wordCount]}
             onValueChange={([wordCount]) => onChange({ wordCount })}
             min={PASSPHRASE_LIMITS.minWords}
@@ -67,9 +68,9 @@ export function PassphraseOptions({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label>{t.passphrase.sourceLanguage}</Label>
+            <Label htmlFor="wordlist-language">{t.passphrase.sourceLanguage}</Label>
             <Select value={language} onValueChange={(value) => onLanguageChange(value as WordlistLanguage)}>
-              <SelectTrigger>
+              <SelectTrigger id="wordlist-language">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -80,12 +81,12 @@ export function PassphraseOptions({
           </div>
 
           <div className="space-y-2">
-            <Label>{t.passphrase.wordlist}</Label>
+            <Label htmlFor="wordlist">{t.passphrase.wordlist}</Label>
             <Select
               value={wordlistId}
               onValueChange={(id) => onChange({ wordlist: { language, id } as WordlistChoice })}
             >
-              <SelectTrigger>
+              <SelectTrigger id="wordlist">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -147,17 +148,17 @@ export function PassphraseOptions({
       {/* Advanced Options */}
       <Accordion type="single" collapsible className="border-t pt-2">
         <AccordionItem value="advanced" className="border-none">
-          <AccordionTrigger className="text-sm text-muted-foreground hover:no-underline">
+          <AccordionTrigger level={2} className="text-sm text-muted-foreground hover:no-underline">
             {t.passphrase.advancedOptions}
           </AccordionTrigger>
           <AccordionContent className="space-y-4 pt-4">
             <div className="space-y-2">
-              <Label>{t.passphrase.capitalization}</Label>
+              <Label htmlFor="capitalization">{t.passphrase.capitalization}</Label>
               <Select
                 value={options.capitalization}
                 onValueChange={(value) => onChange({ capitalization: value as CapitalizationStyle })}
               >
-                <SelectTrigger>
+                <SelectTrigger id="capitalization">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

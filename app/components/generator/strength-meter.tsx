@@ -107,15 +107,15 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
       {/* Configurable Metrics */}
       <Accordion type="single" collapsible className="border-t pt-2">
         <AccordionItem value="metrics-config" className="border-none">
-          <AccordionTrigger className="text-sm text-muted-foreground hover:no-underline">
+          <AccordionTrigger level={2} className="text-sm text-muted-foreground hover:no-underline">
             {t.output.configureMetrics}
           </AccordionTrigger>
           <AccordionContent className="space-y-4 pt-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>{t.output.guessRate}</Label>
+                <Label htmlFor="guess-rate">{t.output.guessRate}</Label>
                 <Select value={guessRate} onValueChange={setGuessRate}>
-                  <SelectTrigger>
+                  <SelectTrigger id="guess-rate">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -139,9 +139,9 @@ export function StrengthMeter({ entropy }: StrengthMeterProps) {
               </div>
 
               <div className="space-y-2">
-                <Label>{t.output.costPer32}</Label>
+                <Label htmlFor="cost-per-32">{t.output.costPer32}</Label>
                 <Select value={costPer32} onValueChange={setCostPer32}>
-                  <SelectTrigger>
+                  <SelectTrigger id="cost-per-32">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>

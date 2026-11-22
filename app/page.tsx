@@ -67,7 +67,8 @@ export default function Home() {
             <ThemeToggle />
           </div>
           <div className="mb-2 flex items-center justify-center gap-2">
-            <Image src="/logo.svg" alt="Logo" width={48} height={48} className="text-primary" priority />
+            {/* Decorative: the heading beside it already names the app, in the visitor's language */}
+            <Image src="/logo.svg" alt="" width={48} height={48} className="text-primary" priority />
             <h1 className="text-4xl font-bold tracking-tight">{t.header.title}</h1>
           </div>
           <p className="text-muted-foreground">{t.header.subtitle}</p>
