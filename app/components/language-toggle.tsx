@@ -15,12 +15,12 @@ import { useI18n } from "@/lib/i18n"
  * Allows switching between English and Ukrainian
  */
 export function LanguageToggle() {
-  const { locale, setLocale } = useI18n()
+  const { locale, setLocale, t } = useI18n()
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" aria-label="Toggle language">
+        <Button variant="ghost" size="icon" aria-label={t.header.toggleLanguage}>
           <Languages className="h-[1.2rem] w-[1.2rem]" />
         </Button>
       </DropdownMenuTrigger>

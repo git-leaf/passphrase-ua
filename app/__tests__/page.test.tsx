@@ -2,13 +2,20 @@
 import { readFile } from "node:fs/promises"
 import { join } from "node:path"
 import { cleanup, render, screen, waitFor } from "@testing-library/react"
-import userEvent from "@testing-library/user-event"
+import userEvent, { type UserEvent } from "@testing-library/user-event"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { translations } from "@/lib/i18n/translations"
+import { createWordlistSource } from "@/lib/wordlists/wordlist-source"
 
 const en = translations.en
+const uk = translations.uk
 
-// Browser APIs jsdom lacks; the wordlist files are served from public/ as the app would fetch them
+/** Reads a file from public/ the way the deployed app serves it */
+async function readPublic(path: string) {
+  return readFile(join("public", path), "utf8")
+}
+
+// Browser APIs jsdom lacks; the network serves public/ like the deployed app, 404 included
 beforeEach(() => {
   vi.stubGlobal(
     "ResizeObserver",
@@ -24,7 +31,14 @@ beforeEach(() => {
     addEventListener() {},
     removeEventListener() {},
   }))
-  vi.stubGlobal("fetch", async (path: string) => new Response(await readFile(join("public", path), "utf8")))
+  vi.stubGlobal("fetch", async (input: RequestInfo | URL) => {
+    const path = input instanceof Request ? new URL(input.url).pathname : String(input)
+    try {
+      return new Response(await readPublic(path))
+    } catch {
+      return new Response(null, { status: 404 })
+    }
+  })
 })
 
 afterEach(() => {
@@ -35,7 +49,7 @@ afterEach(() => {
 
 /**
  * Renders the page as the root layout does. Modules are reloaded so every test
- * starts with a fresh Generator session.
+ * starts with fresh Secrets and default options.
  */
 async function renderApp() {
   vi.resetModules()
@@ -62,57 +76,75 @@ function shownSecret() {
   return screen.getByRole("code").textContent ?? ""
 }
 
-/** Matches a Passphrase of `count` words from the Wordlist file, joined by `separator` */
-async function passphrasePattern(wordlistPath: string, count: number, separator: string) {
-  const text = await readFile(join("public", wordlistPath), "utf8")
-  const words = text
-    .split("\n")
-    .filter((line) => line.trim() && !line.startsWith("#"))
-    .map((line) => line.trim().split(/\s+/)[0])
+// Default Password: 16 characters from lowercase, uppercase, numbers and symbols
+const DEFAULT_PASSWORD = /^[a-zA-Z0-9!@#$%^&*()_+\-=[\]{}|;:,.<>?]{16}$/
+
+async function untilDefaultPasswordShown() {
+  await waitFor(() => expect(shownSecret()).toMatch(DEFAULT_PASSWORD))
+}
+
+/** Lengthens the Password by one character with the length slider */
+async function lengthenPassword(user: UserEvent) {
+  screen.getByRole("slider").focus()
+  await user.keyboard("{ArrowRight}")
+}
+
+async function chooseUnderscoreSeparator(user: UserEvent) {
+  await user.click(screen.getByRole("button", { name: `${en.passphrase.separatorUnderscore} _` }))
+}
+
+/** Waits until no Passphrase is being generated */
+async function untilPassphraseSettled() {
+  await waitFor(() => expect(screen.getByRole("button", { name: en.passphrase.generate })).toBeTruthy())
+}
+
+/** Matches a Passphrase of `count` words from the default Ukrainian Wordlist, joined by `separator` */
+async function ukrainianPassphrase(count: number, separator: string) {
+  const wordlists = createWordlistSource(readPublic)
+  const { entries } = await wordlists.load({ language: "uk", id: "wordlist" })
   const escape = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
-  const word = `(?:${words.map(escape).join("|")})`
+  const word = `(?:${entries.map((entry) => escape(entry.word)).join("|")})`
   return new RegExp(`^${word}(?:${escape(separator)}${word}){${count - 1}}$`, "u")
 }
 
 describe("generator page", () => {
-  it("shows a Password of the default length on load", async () => {
+  it("shows a Password of the default length and Character set on load", async () => {
     await renderApp()
 
-    await waitFor(() => expect(shownSecret()).toHaveLength(16))
+    await untilDefaultPasswordShown()
   })
 
   it("shows a Passphrase of six words from the default Ukrainian Wordlist", async () => {
     const user = await renderApp()
-    const sixUkrainianWords = await passphrasePattern("/wordlists/uk/wordlist.txt", 6, "-")
+    const sixWords = await ukrainianPassphrase(6, "-")
 
     await user.click(screen.getByRole("tab", { name: en.tabs.passphrase }))
 
-    await waitFor(() => expect(shownSecret()).toMatch(sixUkrainianWords))
+    await waitFor(() => expect(shownSecret()).toMatch(sixWords))
   })
 
   it("regenerates the Password when its length changes", async () => {
     const user = await renderApp()
-    await waitFor(() => expect(shownSecret()).toHaveLength(16))
+    await untilDefaultPasswordShown()
 
-    screen.getByRole("slider").focus()
-    await user.keyboard("{ArrowRight}")
+    await lengthenPassword(user)
 
     await waitFor(() => expect(shownSecret()).toHaveLength(17))
   })
 
   it("regenerates the Passphrase when its Separator changes", async () => {
     const user = await renderApp()
-    const sixWordsWithUnderscores = await passphrasePattern("/wordlists/uk/wordlist.txt", 6, "_")
+    const sixWordsWithUnderscores = await ukrainianPassphrase(6, "_")
     await user.click(screen.getByRole("tab", { name: en.tabs.passphrase }))
 
-    await user.click(screen.getByRole("button", { name: new RegExp(`^${en.passphrase.separatorUnderscore}`) }))
+    await chooseUnderscoreSeparator(user)
 
     await waitFor(() => expect(shownSecret()).toMatch(sixWordsWithUnderscores))
   })
 
   it("copies the shown Secret to the clipboard and confirms it", async () => {
     const user = await renderApp()
-    await waitFor(() => expect(shownSecret()).toHaveLength(16))
+    await untilDefaultPasswordShown()
 
     await user.click(screen.getByRole("button", { name: en.output.copy }))
 
@@ -122,37 +154,46 @@ describe("generator page", () => {
 
   it("keeps each Generation method's options and latest Secret when switching between them", async () => {
     const user = await renderApp()
-    await waitFor(() => expect(shownSecret()).toHaveLength(16))
-    screen.getByRole("slider").focus()
-    await user.keyboard("{ArrowRight}")
+    const sixWordsWithUnderscores = await ukrainianPassphrase(6, "_")
+    await untilDefaultPasswordShown()
+    await lengthenPassword(user)
     await waitFor(() => expect(shownSecret()).toHaveLength(17))
     const password = shownSecret()
 
     await user.click(screen.getByRole("tab", { name: en.tabs.passphrase }))
-    await user.click(screen.getByRole("button", { name: new RegExp(`^${en.passphrase.separatorUnderscore}`) }))
-    await waitFor(() => expect(shownSecret()).toContain("_"))
+    await chooseUnderscoreSeparator(user)
+    await waitFor(() => expect(shownSecret()).toMatch(sixWordsWithUnderscores))
     const passphrase = shownSecret()
 
     await user.click(screen.getByRole("tab", { name: en.tabs.password }))
     expect(shownSecret()).toBe(password)
-    expect(screen.getByRole("slider").getAttribute("aria-valuenow")).toBe("17")
 
     await user.click(screen.getByRole("tab", { name: en.tabs.passphrase }))
+    await untilPassphraseSettled()
     expect(shownSecret()).toBe(passphrase)
+
+    // The options survived too: new Secrets still use them
+    await user.click(screen.getByRole("button", { name: en.passphrase.generate }))
+    await untilPassphraseSettled()
+    expect(shownSecret()).toMatch(sixWordsWithUnderscores)
+    await user.click(screen.getByRole("tab", { name: en.tabs.password }))
+    await user.click(screen.getByRole("button", { name: en.password.generate }))
+    expect(shownSecret()).toHaveLength(17)
   })
 
   it("switches the interface to Ukrainian and remembers the choice", async () => {
     const user = await renderApp()
-    await waitFor(() => expect(shownSecret()).toHaveLength(16))
+    await untilDefaultPasswordShown()
 
-    await user.click(screen.getByRole("button", { name: "Toggle language" }))
+    await user.click(screen.getByRole("button", { name: en.header.toggleLanguage }))
     await user.click(await screen.findByRole("menuitem", { name: /Українська/ }))
 
-    expect(screen.getByRole("tab", { name: translations.uk.tabs.passphrase })).toBeTruthy()
-    expect(screen.getByText(translations.uk.header.subtitle)).toBeTruthy()
+    expect(screen.getByRole("tab", { name: uk.tabs.passphrase })).toBeTruthy()
+    expect(screen.getByText(uk.header.subtitle)).toBeTruthy()
+    expect(screen.getByRole("button", { name: uk.header.toggleLanguage })).toBeTruthy()
 
     cleanup()
     await renderApp()
-    expect(screen.getByRole("tab", { name: translations.uk.tabs.passphrase })).toBeTruthy()
+    expect(screen.getByRole("tab", { name: uk.tabs.passphrase })).toBeTruthy()
   })
 })

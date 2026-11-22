@@ -34,7 +34,7 @@ export function OutputDisplay({ secret, entropy, onCopy, onRegenerate, isRegener
               onClick={onRegenerate}
               className="h-8 w-8"
               disabled={isRegenerating}
-              aria-label={isRegenerating ? t.output.regenerating : t.output.regenerate}
+              aria-label={t.output.regenerate}
             >
               <RefreshCw className={`h-4 w-4 ${isRegenerating ? "animate-spin" : ""}`} />
             </Button>

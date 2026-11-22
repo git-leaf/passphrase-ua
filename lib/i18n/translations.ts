@@ -14,6 +14,7 @@ export interface Translations {
   header: {
     title: string
     subtitle: string
+    toggleLanguage: string
   }
 
   // Tabs
@@ -376,6 +377,7 @@ export const translations: Record<Locale, Translations> = {
     header: {
       title: "Mova Pass",
       subtitle: "Generate secure passwords and memorable passphrases",
+      toggleLanguage: "Toggle language",
     },
 
     tabs: {
@@ -818,6 +820,7 @@ export const translations: Record<Locale, Translations> = {
     header: {
       title: "Mova Pass",
       subtitle: "Генерація безпечних паролів та фраз-паролів",
+      toggleLanguage: "Змінити мову",
     },
 
     tabs: {
