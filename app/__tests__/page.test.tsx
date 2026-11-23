@@ -293,6 +293,35 @@ describe("generator page", () => {
     }
   })
 
+  it("draws the Password's symbols from the symbols the visitor keeps, and holds them in the URL", async () => {
+    const user = await renderApp("/en/password?lower=0&upper=0&numbers=0")
+    await user.click(screen.getByRole("button", { name: en.password.advancedOptions }))
+    const symbols = screen.getByRole("textbox", { name: en.password.symbolSet })
+
+    // Letters and repeats are not symbols to draw from
+    await user.clear(symbols)
+    await user.type(symbols, "#a-#")
+
+    expect(symbols).toHaveProperty("value", "#-")
+    await waitFor(() => expect(shownSecret()).toMatch(/^[#-]{16}$/))
+    await waitFor(() => expect(location.search).toBe("?lower=0&upper=0&numbers=0&symbolset=%23-"))
+
+    await user.click(screen.getByRole("button", { name: en.password.resetSymbolSet }))
+
+    await waitFor(() => expect(shownSecret()).toMatch(/^[!@#$%^&*()_+\-=[\]{}|;:,.<>?]{16}$/))
+    expect(symbols).toHaveProperty("value", "!@#$%^&*()_+-=[]{}|;:,.<>?")
+  })
+
+  it("asks for more symbols when too few are left to draw from", async () => {
+    const user = await renderApp("/en/password?lower=0&upper=0&numbers=0")
+    await user.click(screen.getByRole("button", { name: en.password.advancedOptions }))
+
+    await user.clear(screen.getByRole("textbox", { name: en.password.symbolSet }))
+
+    expect(await screen.findByText(en.toast.generatorErrors["too-few-characters"])).toBeTruthy()
+    expect(screen.queryByRole("code")).toBeNull()
+  })
+
   it("shows the options that differ from the defaults in the URL, without adding history entries", async () => {
     const user = await renderApp("/en/password")
     await untilDefaultPasswordShown()

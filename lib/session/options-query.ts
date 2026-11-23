@@ -7,7 +7,7 @@
  */
 
 import { CAPITALIZATION_STYLES, PASSPHRASE_LIMITS } from "@/lib/generators/passphrase"
-import { PASSWORD_LIMITS, type PasswordOptions } from "@/lib/generators/password"
+import { PASSWORD_LIMITS, passwordCharacterSet, toSymbolSet, type PasswordOptions } from "@/lib/generators/password"
 import type { GenerationMethod } from "@/lib/generators/types"
 import {
   DEFAULT_WORDLIST,
@@ -74,6 +74,7 @@ const CHARACTER_CLASSES = [
 function passwordValues(options: PasswordOptions): Record<string, string> {
   const values: Record<string, string> = { length: String(options.length) }
   for (const [option, key] of CHARACTER_CLASSES) values[key] = switchValue(options[option])
+  values.symbolset = options.symbolSet
   values.unambiguous = switchValue(options.excludeAmbiguous)
   return values
 }
@@ -84,9 +85,11 @@ function passwordFromParams(params: URLSearchParams): PasswordOptions {
     parseInteger(params.get("length"), PASSWORD_LIMITS.minLength, PASSWORD_LIMITS.maxLength) ?? options.length
   for (const [option, key] of CHARACTER_CLASSES) options[option] = parseSwitch(params.get(key)) ?? options[option]
   options.excludeAmbiguous = parseSwitch(params.get("unambiguous")) ?? options.excludeAmbiguous
+  const symbolSet = params.get("symbolset")
+  if (symbolSet !== null && toSymbolSet(symbolSet) === symbolSet) options.symbolSet = symbolSet
 
-  // An empty Character set can't make a Password
-  if (!CHARACTER_CLASSES.some(([option]) => options[option])) {
+  // Too small a Character set can't make a Password
+  if (passwordCharacterSet(options).length < PASSWORD_LIMITS.minCharacters) {
     for (const [option] of CHARACTER_CLASSES) options[option] = PASSWORD_DEFAULTS[option]
   }
   return options

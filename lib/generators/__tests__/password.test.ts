@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 import { GeneratorError } from "../errors"
-import { DEFAULT_PASSWORD_OPTIONS, generatePassword, type PasswordOptions } from "../password"
+import { DEFAULT_PASSWORD_OPTIONS, generatePassword, passwordEntropy, type PasswordOptions } from "../password"
 
 const onlyNumbers: PasswordOptions = {
   ...DEFAULT_PASSWORD_OPTIONS,
@@ -9,6 +9,8 @@ const onlyNumbers: PasswordOptions = {
   includeNumbers: true,
   includeSymbols: false,
 }
+
+const onlySymbols: PasswordOptions = { ...onlyNumbers, includeNumbers: false, includeSymbols: true }
 
 /** A byte source that always returns the same byte. */
 const constantBytes = (value: number) => (buffer: Uint8Array) => {
@@ -91,6 +93,41 @@ describe("generatePassword", () => {
     })
 
     expect(entropy).toBeCloseTo(100.86, 2)
+  })
+
+  it("draws symbols only from an edited Symbol set", () => {
+    const options: PasswordOptions = { ...onlySymbols, symbolSet: "#-_" }
+
+    // Bytes 0, 1, 2, … pick the Character set in order
+    expect(generatePassword({ ...options, length: 9 }, countingBytes()).secret).toBe("#-_#-_#-_")
+    expect(passwordEntropy({ ...options, length: 8 })).toBeCloseTo(12.68, 2)
+  })
+
+  it("counts each symbol once and ignores anything in the Symbol set that isn't an ASCII symbol", () => {
+    // Only "#" and "-" are ASCII symbols, each counted once
+    const options: PasswordOptions = { ...onlySymbols, symbolSet: "#a-#1 -é😀\u200b€", length: 8 }
+
+    expect(generatePassword(options, countingBytes()).secret).toBe("#-#-#-#-")
+    expect(passwordEntropy(options)).toBe(8)
+  })
+
+  it("draws from the other character classes when the Symbol set is empty", () => {
+    const options: PasswordOptions = { ...onlyNumbers, includeSymbols: true, symbolSet: "", length: 64 }
+
+    expect(generatePassword(options).secret).toMatch(/^[0-9]{64}$/)
+    // 10 digits, 8 characters
+    expect(passwordEntropy({ ...options, length: 8 })).toBeCloseTo(26.58, 2)
+  })
+
+  it.each([
+    ["is empty", { symbolSet: "" }],
+    ["holds one symbol", { symbolSet: "#" }],
+    ["keeps one symbol once ambiguous characters are excluded", { symbolSet: "|#", excludeAmbiguous: true }],
+  ])("rejects a Symbol set that %s, with no other class, with too-few-characters", (_, symbols) => {
+    // One character would make the same Password every time
+    expect(() => generatePassword({ ...onlySymbols, ...symbols })).toThrow(
+      expect.objectContaining({ code: "too-few-characters" }),
+    )
   })
 
   it.each([7, 65, 12.5])("rejects length %s with invalid-length", (length) => {
