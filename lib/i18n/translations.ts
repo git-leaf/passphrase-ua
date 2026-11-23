@@ -115,6 +115,8 @@ export interface Translations {
     copy: string
     copied: string
     regenerate: string
+    /** The Regenerate button's tooltip, naming its keyboard shortcut: {keys} is "Ctrl+Enter" or "⌘+Enter" */
+    regenerateWithShortcut: string
     regenerating: string
     configureMetrics: string
     guessRate: string
@@ -520,6 +522,7 @@ export const translations: Record<Locale, Translations> = {
       copy: "Copy",
       copied: "Copied!",
       regenerate: "Regenerate",
+      regenerateWithShortcut: "Regenerate ({keys})",
       regenerating: "Regenerating...",
       configureMetrics: "Configure Metrics",
       guessRate: "Guess Rate (guesses/sec)",
@@ -1009,6 +1012,7 @@ export const translations: Record<Locale, Translations> = {
       copy: "Копіювати",
       copied: "Скопійовано!",
       regenerate: "Згенерувати знову",
+      regenerateWithShortcut: "Згенерувати знову ({keys})",
       regenerating: "Генерація...",
       configureMetrics: "Налаштувати метрики",
       guessRate: "Швидкість злому (спроб/сек)",
