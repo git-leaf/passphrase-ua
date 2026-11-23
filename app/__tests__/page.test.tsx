@@ -589,6 +589,15 @@ describe("generator page", () => {
     }
   })
 
+  it("links the source code on GitHub, with the GitHub logo beside its name", async () => {
+    await renderApp("/en")
+    const link = screen.getByRole("link", { name: en.footer.sourceCode })
+    expect(link.getAttribute("href")).toBe("https://github.com/git-leaf/passphrase-ua")
+    const logo = link.querySelector("svg")
+    expect(logo?.getAttribute("aria-hidden")).toBe("true")
+    expect(logo?.querySelectorAll("path")).toHaveLength(2)
+  })
+
   it("links each charity's site in the page's language", async () => {
     await renderApp("/uk")
     const prytula = screen.getByRole("link", { name: uk.footer.donations.prytulafoundation })
