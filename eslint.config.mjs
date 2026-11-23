@@ -4,6 +4,9 @@ import nextTs from "eslint-config-next/typescript"
 import prettier from "eslint-config-prettier/flat"
 
 const eslintConfig = defineConfig([
+  // eslint-plugin-react and eslint-plugin-import still call context APIs that
+  // ESLint 10 removed. They work only through eslint-config-next's shim
+  // (fixupPluginRules), so take them from these configs, not as direct plugins.
   ...nextVitals,
   ...nextTs,
   prettier,
