@@ -31,6 +31,8 @@ jobs:
           cache: true
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
+      # The built app in the runner's Chrome: contrast, <html lang>, offline support
+      - run: pnpm check:browser
 
   gitleaks:
     runs-on: ubuntu-latest
