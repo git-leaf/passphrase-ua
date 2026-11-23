@@ -58,10 +58,10 @@ function chromePath(): string {
   return path
 }
 
-function withTimeout<T>(promise: Promise<T>, what: string, ms = TIMEOUT_MS): Promise<T> {
+function withTimeout<T>(promise: Promise<T>, what: string): Promise<T> {
   let timer: NodeJS.Timeout | undefined
   const timeout = new Promise<never>((_, reject) => {
-    timer = setTimeout(() => reject(new Error(`Timed out after ${ms} ms: ${what}`)), ms)
+    timer = setTimeout(() => reject(new Error(`Timed out after ${TIMEOUT_MS} ms: ${what}`)), TIMEOUT_MS)
   })
   return Promise.race([promise, timeout]).finally(() => clearTimeout(timer))
 }
@@ -122,18 +122,16 @@ class Connection {
 
   /** Resolves with the first matching event; listen before sending what triggers it */
   once(description: string, method: string, sessionId: string, matches: (params: Params) => boolean): Promise<Params> {
-    return withTimeout(
-      new Promise((resolve) => {
-        const listener = (message: Message) => {
-          if (message.method === method && message.sessionId === sessionId && matches(message.params ?? {})) {
-            this.listeners.delete(listener)
-            resolve(message.params ?? {})
-          }
+    let listener: (message: Message) => void = () => {}
+    const event = new Promise<Params>((resolve) => {
+      listener = (message) => {
+        if (message.method === method && message.sessionId === sessionId && matches(message.params ?? {})) {
+          resolve(message.params ?? {})
         }
-        this.listeners.add(listener)
-      }),
-      `waiting for ${description}`,
-    )
+      }
+      this.listeners.add(listener)
+    })
+    return withTimeout(event, `waiting for ${description}`).finally(() => this.listeners.delete(listener))
   }
 
   close() {
@@ -152,7 +150,8 @@ async function evaluateIn(connection: Connection, sessionId: string, expression:
   return result.value
 }
 
-function call(fn: (...args: never[]) => unknown, args: unknown[]): string {
+/** The source of an expression that calls the function with the arguments */
+function callExpression(fn: (...args: never[]) => unknown, args: unknown[]): string {
   return `(${fn.toString()})(...${JSON.stringify(args)})`
 }
 
@@ -186,14 +185,14 @@ async function openTab(connection: Connection, browserContextId?: string): Promi
     emulateColorScheme: async (scheme) => {
       await send("Emulation.setEmulatedMedia", { features: [{ name: "prefers-color-scheme", value: scheme }] })
     },
-    evaluate: async (fn, ...args) => (await evaluateIn(connection, sessionId, call(fn, args))) as never,
+    evaluate: async (fn, ...args) => (await evaluateIn(connection, sessionId, callExpression(fn, args))) as never,
     addScript: async (source) => {
       await evaluateIn(connection, sessionId, `${source}\n;undefined`)
     },
     waitFor: async (description, fn, ...args) => {
       const deadline = Date.now() + TIMEOUT_MS
       for (;;) {
-        const result = await evaluateIn(connection, sessionId, call(fn, args))
+        const result = await evaluateIn(connection, sessionId, callExpression(fn, args))
         if (result) return result as never
         if (Date.now() > deadline) throw new Error(`Timed out after ${TIMEOUT_MS} ms waiting for ${description}`)
         await new Promise((resolve) => setTimeout(resolve, 100))
@@ -219,8 +218,16 @@ export async function launchChrome(): Promise<Chrome> {
     ],
     { stdio: ["ignore", "ignore", "pipe"] },
   )
-  const exited = new Promise((resolve) => chrome.once("exit", resolve))
+  // "error" instead of "exit" when Chrome couldn't start at all
+  const exited = new Promise((resolve) => {
+    chrome.once("exit", resolve)
+    chrome.once("error", resolve)
+  })
+  // If the test runner dies first, Chrome mustn't outlive it
+  const killChrome = () => chrome.kill()
+  process.once("exit", killChrome)
   const close = async () => {
+    process.off("exit", killChrome)
     chrome.kill()
     await exited
     await rm(profile, { recursive: true, force: true, maxRetries: 5 })

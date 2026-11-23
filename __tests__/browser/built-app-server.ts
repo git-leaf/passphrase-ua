@@ -34,7 +34,11 @@ export async function startBuiltApp(): Promise<BuiltAppServer> {
   })
   let errors = ""
   server.stderr.on("data", (chunk: Buffer) => (errors += chunk.toString()))
-  const exited = new Promise<void>((resolve) => server.once("exit", () => resolve()))
+  // "error" instead of "exit" when the server couldn't start at all
+  const exited = new Promise<void>((resolve) => {
+    server.once("exit", () => resolve())
+    server.once("error", () => resolve())
+  })
   // If the test runner dies first, the server mustn't outlive it
   const killServer = () => server.kill()
   process.once("exit", killServer)

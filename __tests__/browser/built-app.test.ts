@@ -7,9 +7,9 @@
 import { readFile } from "node:fs/promises"
 import { createRequire } from "node:module"
 import type { AxeResults } from "axe-core"
-import { afterAll, beforeAll, describe, expect, it } from "vitest"
+import { afterAll, beforeAll, describe, expect, it, onTestFinished } from "vitest"
 import { DEFAULT_PASSPHRASE_OPTIONS } from "@/lib/generators/passphrase"
-import { locales, pagePath, pages } from "@/lib/i18n"
+import { localizedPaths, locales, pagePath, pages, translations } from "@/lib/i18n"
 import { wordlistPaths } from "@/lib/wordlists/catalogue"
 import { startBuiltApp, type BuiltAppServer } from "./built-app-server"
 import { launchChrome, type Chrome } from "./chrome"
@@ -45,8 +45,9 @@ function shownSecret() {
 
 /**
  * Every axe violation on the page, one line per element, first as loaded, then after each
- * collapsed section (a button inside a heading) opens, because some groups keep only one
- * section open at a time, like the FAQ.
+ * collapsed section opens, because some groups keep only one section open at a time, like the FAQ.
+ * A collapsed section is found by its trigger, a button inside a heading, as every accordion in
+ * the app renders it; a collapsible built another way would go unchecked.
  */
 async function violationsWithEverySectionOpen() {
   const { axe } = window as unknown as { axe: { run(context: Document): Promise<AxeResults> } }
@@ -54,8 +55,10 @@ async function violationsWithEverySectionOpen() {
   // Contrast is only right once transitions and animations have finished
   const settle = async () => {
     await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)))
-    const finite = document.getAnimations().filter((animation) => animation.effect?.getTiming().iterations !== Infinity)
-    await Promise.all(finite.map((animation) => animation.finished))
+    const ending = document
+      .getAnimations()
+      .filter((animation) => animation.playState === "running" && animation.effect?.getTiming().iterations !== Infinity)
+    await Promise.all(ending.map((animation) => animation.finished))
   }
   const check = async () => {
     for (const { id, nodes } of (await axe.run(document)).violations) {
@@ -66,40 +69,41 @@ async function violationsWithEverySectionOpen() {
   await settle()
   await check()
   const headings = document.querySelectorAll("h1, h2, h3, h4, h5, h6, [role=heading]")
-  for (const section of [...headings].flatMap((heading) => [...heading.querySelectorAll("button")])) {
-    if (section.getAttribute("aria-expanded") === "false") {
-      section.click()
+  for (const trigger of [...headings].flatMap((heading) => [...heading.querySelectorAll("button")])) {
+    if (trigger.getAttribute("aria-expanded") === "false") {
+      trigger.click()
       await settle()
+      await check()
     }
-    await check()
   }
   return [...violations]
 }
 
-/** Whether the service worker keeps this page, every Wordlist and every file the page loaded */
-async function keptOffline(wordlists: string[]) {
+/** Whether the service worker keeps every page, every Wordlist and every file this page loaded */
+async function keptOffline(pages: string[], wordlists: string[]) {
   const loaded = performance
     .getEntriesByType("resource")
     .map((entry) => new URL(entry.name))
     .filter((url) => url.origin === location.origin && !url.search)
     .map((url) => url.pathname)
-  const kept = await Promise.all([location.pathname, ...wordlists, ...loaded].map((url) => caches.match(url)))
+  const kept = await Promise.all([...pages, ...wordlists, ...loaded].map((url) => caches.match(url)))
   return kept.every(Boolean)
 }
 
 describe.each(locales)("in %s", (locale) => {
   describe.each(themes)("in the %s theme", (theme) => {
-    it.each(pages)("serves the %s page in its language, with no axe violations", async (page) => {
+    it.each(pages)("serves the %s page with its language and title, and no axe violations", async (page) => {
       const tab = await running().chrome.newTab()
+      onTestFinished(() => tab.close())
       await tab.emulateColorScheme(theme)
       await tab.goto(running().server.origin + pagePath(page, locale))
       if (page === "passphrase" || page === "password") await tab.waitFor("a Secret", shownSecret)
 
       expect(await tab.evaluate(() => document.documentElement.lang)).toBe(locale)
+      expect(await tab.evaluate(() => document.title)).toBe(translations[locale].meta[page].title)
       expect(await tab.evaluate(() => [...document.documentElement.classList])).toContain(theme)
       await tab.addScript(axeSource)
       expect(await tab.evaluate(violationsWithEverySectionOpen)).toEqual([])
-      await tab.close()
     })
   })
 })
@@ -111,7 +115,13 @@ describe("offline", () => {
     const tab = await chrome.newTab({ isolated: true })
     await tab.goto(server.origin + pagePath("passphrase", "uk"))
     await tab.waitFor("a Passphrase", shownSecret)
-    await tab.waitFor("the service worker to keep the page", keptOffline, wordlistPaths())
+    // The pages app/components/offline-support.tsx hands over: every page, plus the root and old /privacy
+    await tab.waitFor(
+      "the service worker to keep the app",
+      keptOffline,
+      ["/", "/privacy", ...localizedPaths()],
+      wordlistPaths(),
+    )
 
     await server.stop()
     await expect(fetch(server.origin)).rejects.toThrow()

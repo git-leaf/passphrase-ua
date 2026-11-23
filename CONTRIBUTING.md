@@ -10,7 +10,7 @@ Security problems go through a [private security advisory](https://github.com/gi
 
 1. **Start from an issue** for features, bugs and review findings. Small chores (typos, config tweaks) can go straight to a PR.
 2. **Branch from `main`** as `<type>/<issue#>-<short-slug>`, where `<type>` is a Conventional Commit type (`feat`, `fix`, `refactor`, `docs`, `test`, `chore`, `ci`) and the issue number is optional, e.g. `feat/12-large-ukrainian-wordlist` or `fix/copy-button-focus`. `gh issue develop <n> --name <branch> --checkout` creates the branch and links it to the issue. Dependabot names its own branches.
-3. **Run `pnpm check`** before pushing, and `pnpm check:browser` when a change can affect what the browser shows or keeps offline. CI runs both.
+3. **Run `pnpm check` and `pnpm check:browser`** before pushing. CI runs both.
 4. **Open a PR** with a Conventional Commit title (`feat: add large Ukrainian wordlist`) and `Closes #<n>` in the body. Branch commits use Conventional Commits too. The PR is squash-merged, and its title becomes the one commit on `main`.
 5. **Check the Vercel preview** linked on the PR, then merge.
 
