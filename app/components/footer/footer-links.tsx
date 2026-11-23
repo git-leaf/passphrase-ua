@@ -1,7 +1,8 @@
 "use client"
 
-import { Github, Mail, Shield } from "lucide-react"
+import { Mail, Shield } from "lucide-react"
 import Link from "next/link"
+import { GithubIcon } from "@/app/components/footer/github-icon"
 import { useI18n } from "@/app/components/i18n-provider"
 import { pagePath } from "@/lib/i18n"
 
@@ -19,7 +20,7 @@ export function FooterLinks() {
         rel="noopener noreferrer"
         className="flex items-center gap-2 hover:text-foreground transition-colors"
       >
-        <Github className="h-4 w-4" />
+        <GithubIcon className="h-4 w-4" />
         {t.footer.sourceCode}
       </a>
       <span className="hidden sm:inline">•</span>
