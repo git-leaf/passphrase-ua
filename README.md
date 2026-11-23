@@ -49,7 +49,7 @@ Support the developer's personal charity efforts through [**Monobank Charity Jar
 
 - 📊 **Strength Meter** — Real-time entropy calculation and time-to-crack estimates
 - 🎨 **Dark/Light Modes** — System preference detection with manual toggle
-- ♿ **Accessible** — WCAG 2.1 AA compliant, keyboard navigation, screen reader support (automated axe checks in the tests; manual audit: [#25](https://github.com/git-leaf/passphrase-ua/issues/25))
+- ♿ **Accessible** — WCAG 2.1 AA compliant, keyboard navigation, screen reader support (automated axe checks in the tests and in a real browser, contrast included; manual audit: [#25](https://github.com/git-leaf/passphrase-ua/issues/25))
 - 📱 **Responsive** — Mobile-first design, works on all screen sizes
 
 ---
@@ -80,7 +80,8 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ```bash
 pnpm dev      # Start development server
-pnpm check    # Run every check CI runs: format, lint, types, tests with coverage, build
+pnpm check    # Format, lint, types, tests with coverage, build
+pnpm check:browser  # Build, then check contrast, <html lang> and offline use in Chrome
 pnpm format   # Format all files with Prettier
 pnpm lint     # Run ESLint
 pnpm test     # Run tests
