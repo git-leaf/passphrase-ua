@@ -361,6 +361,39 @@ describe("generator page", () => {
     expect(shownSecret()).toMatch(sixWords)
   })
 
+  it("generates a new Password with Ctrl+Enter, but leaves Ctrl+Enter on a link to open it in a new tab", async () => {
+    const user = await renderApp("/en/password")
+    await untilDefaultPasswordShown()
+    const first = shownSecret()
+
+    await user.keyboard("{Control>}{Enter}{/Control}")
+    expect(shownSecret()).not.toBe(first)
+    expect(shownSecret()).toMatch(DEFAULT_PASSWORD)
+
+    const second = shownSecret()
+    screen.getByRole("link", { name: en.tabs.passphrase }).focus()
+    await user.keyboard("{Control>}{Enter}{/Control}")
+    expect(shownSecret()).toBe(second)
+  })
+
+  it("tries again with Ctrl+Enter when the first Passphrase could not be generated", async () => {
+    const serve = globalThis.fetch
+    let offline = true
+    vi.stubGlobal("fetch", (input: RequestInfo | URL) =>
+      offline ? Promise.reject(new TypeError("Failed to fetch")) : serve(input),
+    )
+    const user = await renderApp("/en")
+    const sixWords = await ukrainianPassphrase(6, "-")
+    expect(await screen.findByText(en.toast.error)).toBeTruthy()
+    await untilPassphraseSettled()
+    expect(screen.queryByRole("code")).toBeNull()
+
+    offline = false
+    await user.keyboard("{Control>}{Enter}{/Control}")
+
+    await waitFor(() => expect(shownSecret()).toMatch(sixWords))
+  })
+
   it("names the shortcut on the Regenerate button in each language, with ⌘ on macOS", async () => {
     await renderApp("/uk/password")
     await untilDefaultPasswordShown()

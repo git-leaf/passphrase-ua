@@ -1,9 +1,9 @@
 "use client"
 
-import { useEffect, useEffectEvent, useSyncExternalStore } from "react"
 import { Button } from "@/app/components/ui/button"
 import { Copy, RefreshCw } from "lucide-react"
 import { useI18n } from "@/app/components/i18n-provider"
+import { useRegenerateShortcutKeys } from "@/app/hooks/use-regenerate-shortcut"
 import type { AttackerSettings } from "@/lib/strength/attacker-settings"
 import { StrengthMeter } from "./strength-meter"
 
@@ -17,17 +17,9 @@ interface SecretDisplayProps {
   isRegenerating?: boolean
 }
 
-/** Apple keyboards use ⌘ where others use Ctrl */
-const isApplePlatform = () => /Mac|iPhone|iPad|iPod/.test(navigator.platform)
-const neverChanges = () => () => {}
-
-/** Whether a keydown is Ctrl+Enter or Cmd+Enter, accepted on every platform */
-const isRegenerateShortcut = (event: KeyboardEvent) =>
-  event.key === "Enter" && (event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey
-
 /**
  * Displays the latest Secret with copy and regenerate actions, plus strength metrics.
- * Ctrl+Enter (⌘+Enter on Apple devices) regenerates from anywhere on the page.
+ * The regenerate action names its keyboard shortcut.
  */
 export function SecretDisplay({
   secret,
@@ -39,19 +31,7 @@ export function SecretDisplay({
   isRegenerating = false,
 }: SecretDisplayProps) {
   const { t } = useI18n()
-  const apple = useSyncExternalStore(neverChanges, isApplePlatform, () => false)
-
-  const regenerateOnShortcut = useEffectEvent((event: KeyboardEvent) => {
-    if (!isRegenerateShortcut(event)) return
-    // The shortcut is the app's, so the browser doesn't also act on it, e.g. on a focused button
-    event.preventDefault()
-    if (!event.repeat && !isRegenerating) onRegenerate()
-  })
-  useEffect(() => {
-    const listener = (event: KeyboardEvent) => regenerateOnShortcut(event)
-    document.addEventListener("keydown", listener)
-    return () => document.removeEventListener("keydown", listener)
-  }, [])
+  const shortcut = useRegenerateShortcutKeys()
 
   return (
     <div className="mt-8 space-y-4 rounded-lg border-2 bg-muted/30 p-6">
@@ -69,8 +49,8 @@ export function SecretDisplay({
               className="h-8 w-8"
               disabled={isRegenerating}
               aria-label={t.output.regenerate}
-              aria-keyshortcuts={apple ? "Meta+Enter" : "Control+Enter"}
-              title={t.output.regenerateWithShortcut.replace("{keys}", apple ? "⌘+Enter" : "Ctrl+Enter")}
+              aria-keyshortcuts={shortcut.aria}
+              title={t.output.regenerateWithShortcut.replace("{keys}", shortcut.label)}
             >
               <RefreshCw className={`h-4 w-4 ${isRegenerating ? "animate-spin" : ""}`} />
             </Button>
