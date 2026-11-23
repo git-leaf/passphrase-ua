@@ -30,12 +30,13 @@ export interface PasswordOptions {
 }
 
 /**
- * Allowed password lengths (inclusive)
+ * Allowed password lengths (inclusive), and the fewest characters a Character set needs:
+ * with one, every Password would be the same
  */
-export const PASSWORD_LIMITS = { minLength: 8, maxLength: 64 } as const
+export const PASSWORD_LIMITS = { minLength: 8, maxLength: 64, minCharacters: 2 } as const
 
 /** Every symbol a Symbol set may hold: the printable ASCII characters that are neither letters, digits nor space */
-export const SYMBOLS = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+const ASCII_SYMBOLS = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
 
 /** The symbols a Password draws from unless the visitor edits them */
 export const DEFAULT_SYMBOL_SET = "!@#$%^&*()_+-=[]{}|;:,.<>?"
@@ -57,17 +58,17 @@ const CHARACTER_CLASSES = {
 } as const
 
 /**
- * The Symbol set text holds: its SYMBOLS, each once, in the order they first appear.
+ * The Symbol set text holds: its ASCII symbols, each once, in the order they first appear.
  * Anything else is dropped, so every character of the Character set is drawn equally often.
  */
 export function toSymbolSet(text: string): string {
-  return [...new Set(text)].filter((char) => SYMBOLS.includes(char)).join("")
+  return [...new Set(text)].filter((char) => ASCII_SYMBOLS.includes(char)).join("")
 }
 
 /** Characters that look alike in many fonts, grouped by look-alike */
 export const AMBIGUOUS_CHARACTERS = "ilLI1|oO0"
 
-/** The Character set the options draw from, empty when no enabled class holds a character */
+/** The Character set the options draw from, even one too small to make a Password */
 export function passwordCharacterSet(options: PasswordOptions): string {
   let characters = ""
   if (options.includeLowercase) characters += CHARACTER_CLASSES.lowercase
@@ -97,8 +98,11 @@ function checkedCharacterSet(options: PasswordOptions): string {
   }
 
   const characters = passwordCharacterSet(options)
-  if (characters.length === 0) {
-    throw new GeneratorError("empty-character-set", "The enabled character classes hold no characters")
+  if (characters.length < PASSWORD_LIMITS.minCharacters) {
+    throw new GeneratorError(
+      "too-few-characters",
+      `The Character set must hold at least ${PASSWORD_LIMITS.minCharacters} characters`,
+    )
   }
   return characters
 }
@@ -106,7 +110,7 @@ function checkedCharacterSet(options: PasswordOptions): string {
 /**
  * The Entropy of any Password these options produce
  *
- * @throws GeneratorError `invalid-length`, `no-character-classes` or `empty-character-set`
+ * @throws GeneratorError `invalid-length`, `no-character-classes` or `too-few-characters`
  */
 export function passwordEntropy(options: PasswordOptions): number {
   return options.length * Math.log2(checkedCharacterSet(options).length)
@@ -117,7 +121,7 @@ export function passwordEntropy(options: PasswordOptions): number {
  *
  * @param options - Password options
  * @param bytes - Byte source; defaults to the platform CSPRNG
- * @throws GeneratorError `invalid-length`, `no-character-classes` or `empty-character-set`
+ * @throws GeneratorError `invalid-length`, `no-character-classes` or `too-few-characters`
  */
 export function generatePassword(options: PasswordOptions, bytes: RandomBytes = cryptoRandomBytes): GeneratedSecret {
   const characters = checkedCharacterSet(options)

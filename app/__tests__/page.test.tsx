@@ -312,13 +312,13 @@ describe("generator page", () => {
     expect(symbols).toHaveProperty("value", "!@#$%^&*()_+-=[]{}|;:,.<>?")
   })
 
-  it("asks for a symbol when no symbols are left to draw from", async () => {
+  it("asks for more symbols when too few are left to draw from", async () => {
     const user = await renderApp("/en/password?lower=0&upper=0&numbers=0")
     await user.click(screen.getByRole("button", { name: en.password.advancedOptions }))
 
     await user.clear(screen.getByRole("textbox", { name: en.password.symbolSet }))
 
-    expect(await screen.findByText(en.toast.generatorErrors["empty-character-set"])).toBeTruthy()
+    expect(await screen.findByText(en.toast.generatorErrors["too-few-characters"])).toBeTruthy()
     expect(screen.queryByRole("code")).toBeNull()
   })
 

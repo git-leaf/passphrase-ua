@@ -121,10 +121,12 @@ describe("generatePassword", () => {
 
   it.each([
     ["is empty", { symbolSet: "" }],
-    ["holds only ambiguous characters that are excluded", { symbolSet: "|", excludeAmbiguous: true }],
-  ])("rejects a Symbol set that %s, with no other class, with empty-character-set", (_, symbols) => {
+    ["holds one symbol", { symbolSet: "#" }],
+    ["keeps one symbol once ambiguous characters are excluded", { symbolSet: "|#", excludeAmbiguous: true }],
+  ])("rejects a Symbol set that %s, with no other class, with too-few-characters", (_, symbols) => {
+    // One character would make the same Password every time
     expect(() => generatePassword({ ...onlySymbols, ...symbols })).toThrow(
-      expect.objectContaining({ code: "empty-character-set" }),
+      expect.objectContaining({ code: "too-few-characters" }),
     )
   })
 

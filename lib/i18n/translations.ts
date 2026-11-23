@@ -605,7 +605,7 @@ export const translations: Record<Locale, Translations> = {
       generatorErrors: {
         "invalid-length": "Password length must be between 8 and 64 characters.",
         "no-character-classes": "Select at least one character type.",
-        "empty-character-set": "Add at least one symbol, or select another character type.",
+        "too-few-characters": "Too few characters to draw from: add symbols or select another character type.",
         "invalid-word-count": "Choose between 3 and 12 words.",
         "invalid-separator": "The separator can be at most 3 characters.",
         "separator-required": "This wordlist needs a separator between words.",
@@ -1098,7 +1098,7 @@ export const translations: Record<Locale, Translations> = {
       generatorErrors: {
         "invalid-length": "Довжина пароля має бути від 8 до 64 символів.",
         "no-character-classes": "Виберіть хоча б один тип символів.",
-        "empty-character-set": "Додайте хоча б один символ або виберіть інший тип символів.",
+        "too-few-characters": "Замало символів для вибору: додайте символи або виберіть інший тип символів.",
         "invalid-word-count": "Виберіть від 3 до 12 слів.",
         "invalid-separator": "Роздільник може містити не більше 3 символів.",
         "separator-required": "Для цього словника потрібен роздільник між словами.",

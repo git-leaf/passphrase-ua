@@ -121,14 +121,18 @@ describe("options query", () => {
     expect(optionsFromQuery("password", "symbolset=")).toEqual({ ...PASSWORD_DEFAULTS, symbolSet: "" })
   })
 
-  it("gets the default character classes back when the query's Character set would be empty", () => {
+  it("gets the default character classes back when the query's Character set would hold fewer than two characters", () => {
     expect(optionsFromQuery("password", "lower=0&upper=0&numbers=0&symbolset=")).toEqual({
       ...PASSWORD_DEFAULTS,
       symbolSet: "",
     })
-    expect(optionsFromQuery("password", "lower=0&upper=0&numbers=0&symbolset=%7C&unambiguous=1")).toEqual({
+    expect(optionsFromQuery("password", "lower=0&upper=0&numbers=0&symbolset=%23")).toEqual({
       ...PASSWORD_DEFAULTS,
-      symbolSet: "|",
+      symbolSet: "#",
+    })
+    expect(optionsFromQuery("password", "lower=0&upper=0&numbers=0&symbolset=%7C%23&unambiguous=1")).toEqual({
+      ...PASSWORD_DEFAULTS,
+      symbolSet: "|#",
       excludeAmbiguous: true,
     })
   })

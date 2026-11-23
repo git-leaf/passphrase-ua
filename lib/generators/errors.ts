@@ -8,7 +8,7 @@
 export type GeneratorErrorCode =
   | "invalid-length"
   | "no-character-classes"
-  | "empty-character-set"
+  | "too-few-characters"
   | "invalid-word-count"
   | "invalid-separator"
   | "separator-required"

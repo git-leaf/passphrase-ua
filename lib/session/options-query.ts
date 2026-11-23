@@ -74,7 +74,7 @@ const CHARACTER_CLASSES = [
 function passwordValues(options: PasswordOptions): Record<string, string> {
   const values: Record<string, string> = { length: String(options.length) }
   for (const [option, key] of CHARACTER_CLASSES) values[key] = switchValue(options[option])
-  values.symbolset = toSymbolSet(options.symbolSet)
+  values.symbolset = options.symbolSet
   values.unambiguous = switchValue(options.excludeAmbiguous)
   return values
 }
@@ -88,8 +88,8 @@ function passwordFromParams(params: URLSearchParams): PasswordOptions {
   const symbolSet = params.get("symbolset")
   if (symbolSet !== null && toSymbolSet(symbolSet) === symbolSet) options.symbolSet = symbolSet
 
-  // An empty Character set can't make a Password
-  if (passwordCharacterSet(options) === "") {
+  // Too small a Character set can't make a Password
+  if (passwordCharacterSet(options).length < PASSWORD_LIMITS.minCharacters) {
     for (const [option] of CHARACTER_CLASSES) options[option] = PASSWORD_DEFAULTS[option]
   }
   return options
