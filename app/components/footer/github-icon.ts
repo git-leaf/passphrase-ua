@@ -1,8 +1,9 @@
 import { createLucideIcon } from "lucide-react"
 
 /**
- * The GitHub logo as lucide-react 0.553 drew it. Lucide 1.0 dropped brand icons, so the
- * footer keeps the same paths, drawn through Lucide like every other icon in the app.
+ * The GitHub logo as lucide-react 0.553 drew it (paths from lucide-react 0.553.0, ISC).
+ * Lucide 1.0 dropped brand icons (https://github.com/lucide-icons/lucide/releases/tag/1.0.1),
+ * so the footer keeps the same paths, drawn through Lucide like every other icon in the app.
  */
 export const GithubIcon = createLucideIcon("github", [
   [

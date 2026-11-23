@@ -2,9 +2,9 @@
 
 import { Mail, Shield } from "lucide-react"
 import Link from "next/link"
+import { GithubIcon } from "@/app/components/footer/github-icon"
 import { useI18n } from "@/app/components/i18n-provider"
 import { pagePath } from "@/lib/i18n"
-import { GithubIcon } from "@/app/components/footer/github-icon"
 
 /**
  * Footer links for GitHub, contact information, and privacy policy
