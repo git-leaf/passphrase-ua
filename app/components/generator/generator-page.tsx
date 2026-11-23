@@ -8,6 +8,7 @@ import { LanguageToggle } from "@/app/components/language-toggle"
 import { OfflineIndicator } from "@/app/components/offline-indicator"
 import { useI18n } from "@/app/components/i18n-provider"
 import { useGeneratorSession } from "@/app/hooks/use-generator-session"
+import { useRegenerateShortcut } from "@/app/hooks/use-regenerate-shortcut"
 
 // Generator components
 import { MethodSelector, type GeneratorView } from "@/app/components/generator/method-selector"
@@ -40,6 +41,8 @@ export function GeneratorPage({ page }: { page: GeneratorView }) {
   })
 
   const latest = method && state[method].secret
+  const regenerating = method === "passphrase" && state.passphrase.pending
+  useRegenerateShortcut(method && !regenerating ? () => session.generate(method) : null)
 
   const copyToClipboard = async (secret: string) => {
     try {
@@ -109,7 +112,7 @@ export function GeneratorPage({ page }: { page: GeneratorView }) {
                   onAttackerChange={session.updateAttackerSettings}
                   onCopy={() => copyToClipboard(latest.secret)}
                   onRegenerate={() => session.generate(method)}
-                  isRegenerating={method === "passphrase" && state.passphrase.pending}
+                  isRegenerating={regenerating}
                 />
               )}
             </div>

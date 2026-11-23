@@ -3,6 +3,7 @@
 import { Button } from "@/app/components/ui/button"
 import { Copy, RefreshCw } from "lucide-react"
 import { useI18n } from "@/app/components/i18n-provider"
+import { useRegenerateShortcutKeys } from "@/app/hooks/use-regenerate-shortcut"
 import type { AttackerSettings } from "@/lib/strength/attacker-settings"
 import { StrengthMeter } from "./strength-meter"
 
@@ -17,7 +18,8 @@ interface SecretDisplayProps {
 }
 
 /**
- * Displays the latest Secret with copy and regenerate actions, plus strength metrics
+ * Displays the latest Secret with copy and regenerate actions, plus strength metrics.
+ * The regenerate action names its keyboard shortcut.
  */
 export function SecretDisplay({
   secret,
@@ -29,6 +31,7 @@ export function SecretDisplay({
   isRegenerating = false,
 }: SecretDisplayProps) {
   const { t } = useI18n()
+  const shortcut = useRegenerateShortcutKeys()
 
   return (
     <div className="mt-8 space-y-4 rounded-lg border-2 bg-muted/30 p-6">
@@ -46,6 +49,8 @@ export function SecretDisplay({
               className="h-8 w-8"
               disabled={isRegenerating}
               aria-label={t.output.regenerate}
+              aria-keyshortcuts={shortcut.aria}
+              title={t.output.regenerateWithShortcut.replace("{keys}", shortcut.label)}
             >
               <RefreshCw className={`h-4 w-4 ${isRegenerating ? "animate-spin" : ""}`} />
             </Button>

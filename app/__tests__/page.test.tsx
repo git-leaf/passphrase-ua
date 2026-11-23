@@ -344,6 +344,74 @@ describe("generator page", () => {
     expect(await screen.findByText(en.toast.copied)).toBeTruthy()
   })
 
+  it("generates a new Secret of the page's Generation method with Ctrl+Enter or Cmd+Enter, wherever the focus is", async () => {
+    const user = await renderApp("/en")
+    const sixWords = await ukrainianPassphrase(6, "-")
+    await untilPassphraseSettled()
+    const first = shownSecret()
+
+    screen.getByRole("button", { name: en.output.copy }).focus()
+    await user.keyboard("{Control>}{Enter}{/Control}")
+    await waitFor(() => expect(shownSecret()).not.toBe(first))
+    expect(shownSecret()).toMatch(sixWords)
+
+    const second = shownSecret()
+    await user.keyboard("{Meta>}{Enter}{/Meta}")
+    await waitFor(() => expect(shownSecret()).not.toBe(second))
+    expect(shownSecret()).toMatch(sixWords)
+  })
+
+  it("generates a new Password with Ctrl+Enter, but leaves Ctrl+Enter on a link to open it in a new tab", async () => {
+    const user = await renderApp("/en/password")
+    await untilDefaultPasswordShown()
+    const first = shownSecret()
+
+    await user.keyboard("{Control>}{Enter}{/Control}")
+    expect(shownSecret()).not.toBe(first)
+    expect(shownSecret()).toMatch(DEFAULT_PASSWORD)
+
+    const second = shownSecret()
+    screen.getByRole("link", { name: en.tabs.passphrase }).focus()
+    await user.keyboard("{Control>}{Enter}{/Control}")
+    expect(shownSecret()).toBe(second)
+  })
+
+  it("tries again with Ctrl+Enter when the first Passphrase could not be generated", async () => {
+    const serve = globalThis.fetch
+    let offline = true
+    vi.stubGlobal("fetch", (input: RequestInfo | URL) =>
+      offline ? Promise.reject(new TypeError("Failed to fetch")) : serve(input),
+    )
+    const user = await renderApp("/en")
+    const sixWords = await ukrainianPassphrase(6, "-")
+    expect(await screen.findByText(en.toast.error)).toBeTruthy()
+    await untilPassphraseSettled()
+    expect(screen.queryByRole("code")).toBeNull()
+
+    offline = false
+    await user.keyboard("{Control>}{Enter}{/Control}")
+
+    await waitFor(() => expect(shownSecret()).toMatch(sixWords))
+  })
+
+  it("names the shortcut on the Regenerate button in each language, with ⌘ on macOS", async () => {
+    await renderApp("/uk/password")
+    await untilDefaultPasswordShown()
+    const regenerate = () => screen.getByRole("button", { name: uk.output.regenerate })
+
+    expect(regenerate().title).toBe("Згенерувати знову (Ctrl+Enter)")
+    expect(regenerate().getAttribute("aria-keyshortcuts")).toBe("Control+Enter")
+
+    cleanup()
+    vi.spyOn(navigator, "platform", "get").mockReturnValue("MacIntel")
+    await renderApp("/en/password")
+    await untilDefaultPasswordShown()
+    const regenerateEn = screen.getByRole("button", { name: en.output.regenerate })
+
+    expect(regenerateEn.title).toBe("Regenerate (⌘+Enter)")
+    expect(regenerateEn.getAttribute("aria-keyshortcuts")).toBe("Meta+Enter")
+  })
+
   it("keeps each Generation method's options and latest Secret when moving between their pages", async () => {
     const user = await renderApp("/en/password")
     const sixWordsWithUnderscores = await ukrainianPassphrase(6, "_")
