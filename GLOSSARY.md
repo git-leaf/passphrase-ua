@@ -16,8 +16,12 @@ _Avoid_: mode, tab, type
 A Secret made of characters drawn uniformly from a Character set.
 
 **Character set**:
-The union of the character classes (lowercase, uppercase, numbers, symbols) enabled for a Password, optionally minus ambiguous characters such as `0`/`O`/`l`/`1`.
+The union of the character classes (lowercase, uppercase, numbers, symbols) enabled for a Password, with the Symbol set as its symbols, optionally minus ambiguous characters such as `0`/`O`/`l`/`1`.
 _Avoid_: charset, alphabet
+
+**Symbol set**:
+The symbols a Password's symbols class holds: by default 26 ASCII symbols, editable in the advanced options to match what a site accepts. It holds only printable ASCII symbols, each once, so every character of the Character set is equally likely.
+_Avoid_: special characters, custom symbols
 
 **Passphrase**:
 A Secret made of words drawn uniformly from the Word pool of one Wordlist, joined by a Separator, with optional capitalization and an appended number.

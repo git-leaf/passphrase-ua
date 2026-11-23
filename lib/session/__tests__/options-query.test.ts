@@ -89,14 +89,15 @@ describe("options query", () => {
       length: 32,
       includeLowercase: true,
       includeUppercase: false,
-      includeNumbers: true,
-      includeSymbols: false,
+      includeNumbers: false,
+      includeSymbols: true,
+      symbolSet: "#-_",
       excludeAmbiguous: true,
     }
 
     const query = optionsQuery("password", options)
 
-    expect(query).toBe("length=32&upper=0&symbols=0&unambiguous=1")
+    expect(query).toBe("length=32&upper=0&numbers=0&symbolset=%23-_&unambiguous=1")
     expect(optionsFromQuery("password", query)).toEqual(options)
     expect(optionsQuery("password", PASSWORD_DEFAULTS)).toBe("")
   })
@@ -108,8 +109,28 @@ describe("options query", () => {
     ["a length that isn't a number", "length=long"],
     ["a switch that is neither 1 nor 0", "symbols=no&unambiguous=true"],
     ["every character class turned off", "lower=0&upper=0&numbers=0&symbols=0"],
+    ["a Symbol set with a letter", "symbolset=%23a"],
+    ["a Symbol set with a space", "symbolset=%23+-"],
+    ["a Symbol set with a symbol twice", "symbolset=%23-%23"],
   ])("reads %s as the default Password options", (_, query) => {
     expect(optionsFromQuery("password", query)).toEqual(PASSWORD_DEFAULTS)
+  })
+
+  it("reads an empty Symbol set", () => {
+    expect(optionsQuery("password", { ...PASSWORD_DEFAULTS, symbolSet: "" })).toBe("symbolset=")
+    expect(optionsFromQuery("password", "symbolset=")).toEqual({ ...PASSWORD_DEFAULTS, symbolSet: "" })
+  })
+
+  it("gets the default character classes back when the query's Character set would be empty", () => {
+    expect(optionsFromQuery("password", "lower=0&upper=0&numbers=0&symbolset=")).toEqual({
+      ...PASSWORD_DEFAULTS,
+      symbolSet: "",
+    })
+    expect(optionsFromQuery("password", "lower=0&upper=0&numbers=0&symbolset=%7C&unambiguous=1")).toEqual({
+      ...PASSWORD_DEFAULTS,
+      symbolSet: "|",
+      excludeAmbiguous: true,
+    })
   })
 
   it("accepts a Separator of three characters outside the Basic Multilingual Plane", () => {

@@ -54,6 +54,10 @@ export interface Translations {
     symbols: string
     advancedOptions: string
     excludeAmbiguous: string
+    /** The field holding the Symbol set */
+    symbolSet: string
+    symbolSetHint: string
+    resetSymbolSet: string
     generate: string
   }
 
@@ -456,6 +460,9 @@ export const translations: Record<Locale, Translations> = {
       symbols: "Symbols (!@#$)",
       advancedOptions: "Advanced Options",
       excludeAmbiguous: "Exclude Ambiguous",
+      symbolSet: "Symbols to use",
+      symbolSetHint: "Keep only the symbols the site accepts.",
+      resetSymbolSet: "Reset symbols",
       generate: "Generate Password",
     },
 
@@ -598,6 +605,7 @@ export const translations: Record<Locale, Translations> = {
       generatorErrors: {
         "invalid-length": "Password length must be between 8 and 64 characters.",
         "no-character-classes": "Select at least one character type.",
+        "empty-character-set": "Add at least one symbol, or select another character type.",
         "invalid-word-count": "Choose between 3 and 12 words.",
         "invalid-separator": "The separator can be at most 3 characters.",
         "separator-required": "This wordlist needs a separator between words.",
@@ -946,6 +954,9 @@ export const translations: Record<Locale, Translations> = {
       symbols: "Символи (!@#$)",
       advancedOptions: "Додаткові налаштування",
       excludeAmbiguous: "Виключити неоднозначні символи",
+      symbolSet: "Символи, які можна використати",
+      symbolSetHint: "Залиште лише ті символи, які приймає сайт.",
+      resetSymbolSet: "Скинути символи",
       generate: "Згенерувати пароль",
     },
 
@@ -1087,6 +1098,7 @@ export const translations: Record<Locale, Translations> = {
       generatorErrors: {
         "invalid-length": "Довжина пароля має бути від 8 до 64 символів.",
         "no-character-classes": "Виберіть хоча б один тип символів.",
+        "empty-character-set": "Додайте хоча б один символ або виберіть інший тип символів.",
         "invalid-word-count": "Виберіть від 3 до 12 слів.",
         "invalid-separator": "Роздільник може містити не більше 3 символів.",
         "separator-required": "Для цього словника потрібен роздільник між словами.",
